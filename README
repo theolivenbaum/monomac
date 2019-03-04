@@ -7,6 +7,4 @@ Building:
 
 To build, you must be running on macOS with mono installed, then run the following on the command line:
 
-```bash
-./build.sh
-```
+> ./build.sh
