@@ -30,6 +30,23 @@ using System;
 using System.Collections.Generic;
 
 using MonoMac.Foundation;
+using MonoMac.ObjCRuntime;
+
+#if MAC64
+using nint = System.Int64;
+using nuint = System.UInt64;
+using nfloat = System.Double;
+#else
+using nint = System.Int32;
+using nuint = System.UInt32;
+using nfloat = System.Single;
+#if SDCOMPAT
+using CGPoint = System.Drawing.PointF;
+using CGSize = System.Drawing.SizeF;
+using CGRect = System.Drawing.RectangleF;
+#endif
+#endif
+
 
 namespace MonoMac.AppKit
 {
@@ -71,7 +88,7 @@ namespace MonoMac.AppKit
 			BeginSheet (window, null, null, IntPtr.Zero);
 		}
 
-		public void BeginSheet (NSWindow window, NSAction onEnded)
+		public void BeginSheet (NSWindow window, Action onEnded)
 		{
 			BeginSheetForResponse (window, r => {
 				if (onEnded != null)
@@ -84,12 +101,12 @@ namespace MonoMac.AppKit
 			BeginSheet (window, new NSAlertDidEndDispatcher (onEnded), NSAlertDidEndDispatcher.Selector, IntPtr.Zero);
 		}
 
-		public int RunSheetModal (NSWindow window)
+		public nint RunSheetModal (NSWindow window)
 		{
 			return RunSheetModal (window, NSApplication.SharedApplication);
 		}
 
-		public int RunSheetModal (NSWindow window, NSApplication application)
+		public nint RunSheetModal (NSWindow window, NSApplication application)
 		{
 			if (application == null)
 				throw new ArgumentNullException ("application");
@@ -98,7 +115,7 @@ namespace MonoMac.AppKit
 			if (window == null)
 				return RunModal ();
 
-			int returnCode = -1000;
+			nint returnCode = -1000;
 
 			BeginSheetForResponse (window, r => {
 				returnCode = r;

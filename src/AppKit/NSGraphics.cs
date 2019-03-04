@@ -21,23 +21,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using System.Drawing;
 using MonoMac.ObjCRuntime;
 using System.Runtime.InteropServices;
+using MonoMac.CoreGraphics;
 using MonoMac.Foundation;
 using MonoMac;
 
+#if MAC64
+using nint = System.Int64;
+using nuint = System.UInt64;
+using nfloat = System.Double;
+#else
+using nint = System.Int32;
+using nuint = System.UInt32;
+using nfloat = System.Single;
+#if SDCOMPAT
+using CGPoint = System.Drawing.PointF;
+using CGSize = System.Drawing.SizeF;
+using CGRect = System.Drawing.RectangleF;
+#endif
+#endif
+
 namespace MonoMac.AppKit {
 	public static class NSGraphics {
-		public static readonly float White = 1;
-		public static readonly float Black = 0;
-		public static readonly float LightGray = (float) 2/3.0f;
-		public static readonly float DarkGray = (float) 1/3.0f;
+		public static readonly nfloat White = 1;
+		public static readonly nfloat Black = 0;
+		public static readonly nfloat LightGray = (nfloat) (2/3.0);
+		public static readonly nfloat DarkGray = (nfloat) (1/3.0);
 		
 		[DllImport (Constants.AppKitLibrary)]
-		extern static NSWindowDepth NSBestDepth (IntPtr colorspaceHandle, int bitsPerSample, int bitsPerPixel, bool planar, ref bool exactMatch);
+		extern static NSWindowDepth NSBestDepth (IntPtr colorspaceHandle, nint bitsPerSample, nint bitsPerPixel, bool planar, ref bool exactMatch);
 		
-		public static NSWindowDepth BestDepth (NSString colorspace, int bitsPerSample, int bitsPerPixel, bool planar, ref bool exactMatch)
+		public static NSWindowDepth BestDepth (NSString colorspace, nint bitsPerSample, nint bitsPerPixel, bool planar, ref bool exactMatch)
 		{
 			if (colorspace == null)
 				throw new ArgumentNullException ("colorspace");
@@ -98,41 +113,41 @@ namespace MonoMac.AppKit {
 		}
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSRectFill")]
-		public extern static void RectFill (RectangleF rect);
+		public extern static void RectFill (CGRect rect);
 		
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSRectFillList")]
-		unsafe extern static void RectFillList (RectangleF *rects, int count);
+		unsafe extern static void RectFillList (CGRect *rects, int count);
 
-		public static void RectFill (RectangleF [] rects)
+		public static void RectFill (CGRect [] rects)
 		{
 			if (rects == null)
 				throw new ArgumentNullException ("rects");
 			unsafe {
-				fixed (RectangleF *ptr = &rects [0])
+				fixed (CGRect *ptr = &rects [0])
 					RectFillList (ptr, rects.Length);
 			}
 		}
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSRectClip")]
-		public extern static void RectClip (RectangleF rect);
+		public extern static void RectClip (CGRect rect);
 		
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSFrameRect")]
-		public extern static void FrameRect (RectangleF rect);		
+		public extern static void FrameRect (CGRect rect);		
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSFrameRectWithWidth")]
-		public extern static void FrameRect (RectangleF rect, float frameWidth);		
+		public extern static void FrameRect (CGRect rect, nfloat frameWidth);		
 
 		// Bad naming, added the overload above
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSFrameRectWithWidth")]
-		public extern static void FrameRectWithWidth (RectangleF rect, float frameWidth);		
+		public extern static void FrameRectWithWidth (CGRect rect, nfloat frameWidth);		
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSFrameRectWithWidthUsingOperation")]
-		public extern static void FrameRect (RectangleF rect, float frameWidth, NSCompositingOperation operation);		
+		public extern static void FrameRect (CGRect rect, nfloat frameWidth, NSCompositingOperation operation);		
 		
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSShowAnimationEffect")]
-		public extern static void ShowAnimationEffect (NSAnimationEffect animationEffect, PointF centerLocation, SizeF size, NSObject animationDelegate, Selector didEndSelector, IntPtr contextInfo);
+		public extern static void ShowAnimationEffect (NSAnimationEffect animationEffect, CGPoint centerLocation, CGSize size, NSObject animationDelegate, Selector didEndSelector, IntPtr contextInfo);
 
-		public static void ShowAnimationEffect (NSAnimationEffect animationEffect, PointF centerLocation, SizeF size, NSAction endedCallback)
+		public static void ShowAnimationEffect (NSAnimationEffect animationEffect, CGPoint centerLocation, CGSize size, Action endedCallback)
 		{
 			var d = new NSAsyncActionDispatcher (endedCallback);
 			ShowAnimationEffect (animationEffect, centerLocation, size, d, NSActionDispatcher.Selector, IntPtr.Zero);
@@ -167,24 +182,24 @@ namespace MonoMac.AppKit {
 #endif
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawWhiteBezel")]
-		public extern static void DrawWhiteBezel (RectangleF aRect, RectangleF clipRect);
+		public extern static void DrawWhiteBezel (CGRect aRect, CGRect clipRect);
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawLightBezel")]
-		public extern static void DrawLightBezel (RectangleF aRect, RectangleF clipRect);
+		public extern static void DrawLightBezel (CGRect aRect, CGRect clipRect);
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawGrayBezel")]
-		public extern static void DrawGrayBezel (RectangleF aRect, RectangleF clipRect);
+		public extern static void DrawGrayBezel (CGRect aRect, CGRect clipRect);
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawDarkBezel")]
-		public extern static void DrawDarkBezel (RectangleF aRect, RectangleF clipRect);
+		public extern static void DrawDarkBezel (CGRect aRect, CGRect clipRect);
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawGroove")]
-		public extern static void DrawGroove (RectangleF aRect, RectangleF clipRect);
+		public extern static void DrawGroove (CGRect aRect, CGRect clipRect);
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSDrawTiledRects")]
-		unsafe extern static RectangleF DrawTiledRects (RectangleF aRect, RectangleF clipRect, NSRectEdge* sides, float* grays, int count);
+		unsafe extern static CGRect DrawTiledRects (CGRect aRect, CGRect clipRect, NSRectEdge* sides, nfloat* grays, nint count);
 
-		public static RectangleF DrawTiledRects (RectangleF aRect, RectangleF clipRect, NSRectEdge[] sides, float[] grays)
+		public static CGRect DrawTiledRects (CGRect aRect, CGRect clipRect, NSRectEdge[] sides, nfloat[] grays)
 		{
 			if (sides == null)
 				throw new ArgumentNullException ("sides");
@@ -194,7 +209,7 @@ namespace MonoMac.AppKit {
 				throw new ArgumentOutOfRangeException ("grays", "Both array parameters must have the same length");
 			unsafe {
 				fixed (NSRectEdge *ptr = &sides [0])
-				fixed (float *ptr2 = &grays [0])
+				fixed (nfloat *ptr2 = &grays [0])
 					return DrawTiledRects (aRect, clipRect, ptr, ptr2, sides.Length);
 			}
 		}

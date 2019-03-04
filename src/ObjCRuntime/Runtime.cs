@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Diagnostics;
 
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
@@ -33,7 +34,7 @@ namespace MonoMac.ObjCRuntime {
 
 	public static class Runtime {
 		static List <Assembly> assemblies;
-		static Dictionary <IntPtr, WeakReference> object_map = new Dictionary <IntPtr, WeakReference> ();
+		static Dictionary <IntPtr, WeakReference> object_map = new Dictionary <IntPtr, WeakReference> (new IntPtrComparer());
 		static object lock_obj = new object ();
 		static IntPtr selClass = Selector.GetHandle ("class");
 
@@ -147,6 +148,27 @@ namespace MonoMac.ObjCRuntime {
 				}
 			}
 		}
+		
+		public static T GetNSObject<T> (IntPtr ptr)
+			where T: NSObject
+		{
+			var obj = GetNSObject(ptr);
+			var result = obj as T;
+			if (result == null && ptr != IntPtr.Zero)
+			{
+			  // native object is dead as we are passed a known handle but it is a different type
+			  // this should theoretically not happen, but it does quite often so this is done
+			  // for resiliency.
+			  Console.WriteLine("Object of type {0} has died but not cleaned up. New type is {1}. Handle: {2}", obj?.GetType(), typeof(T), ptr);
+		  
+			  // kill object in .NET
+			  NativeObjectHasDied (ptr);
+		  
+			  // re-wrap native handle in a new .NET object of the correct type
+			  result = (T)GetNSObject (ptr);
+			}
+			return result;
+		}
 
 		public static NSObject TryGetNSObject (IntPtr ptr) {
 			lock (lock_obj) {
@@ -179,7 +201,7 @@ namespace MonoMac.ObjCRuntime {
 			if (type != null) {
 				return (NSObject) Activator.CreateInstance (type, new object[] { ptr });
 			} else {
-				Console.WriteLine ("WARNING: Cannot find type for {0} ({1}) using NSObject", new Class (ptr).Name, ptr);
+				Debug.WriteLine ("WARNING: Cannot find type for {0} ({1}) using NSObject", new Class (ptr).Name, ptr);
 				return new NSObject (ptr);
 			}
 		}

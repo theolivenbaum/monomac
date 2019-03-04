@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
+    <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Platform) == 'x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64</BaseDefines>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Platform) == 'x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC</BaseDefines>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <DefineConstants>$(BaseDefines);GENERATOR;MONOMAC_BOOTSTRAP</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Apis Include="@(SharedApis)" />
+    <Apis Include="appkit.cs" />
+    <Apis Include="corewlan.cs" />
+    <Apis Include="foundation-desktop.cs" />
+    <Apis Include="imagekit.cs" />
+    <Apis Include="qtkit.cs" />
+    <Apis Include="pdfkit.cs" />
+    <Apis Include="webkit.cs" />
+    <Apis Include="composer.cs" />
+    <Apis Include="scriptingbridge.cs" />
+    
+    <CurrentOutputs Include="$(GeneratedOutputDir)**\*" />
+    
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="generator.cs" />
+    <Compile Include="error.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="btouch.cs" />
+  </ItemGroup>
+  
+  <Target Name="GenerateSources">
+    <ItemGroup>
+      <BaseDefineItems Include="$(BaseDefines)" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+      <GeneratorParameters>$(GeneratorParameters) --compiler=csc -a --core -v</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir)"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(Apis-&gt;'%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems-&gt;'-d=%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "--baselib=$(TargetDir)core.dll"</GeneratorParameters>
+      <GeneratorParameters>$(GeneratorParameters) "--ns=$(BaseNamespace)"</GeneratorParameters>
+      
+    </PropertyGroup>
+    <Exec Command="$(TargetPath) $(GeneratorParameters)" />
+    
+  </Target>
+</Project>

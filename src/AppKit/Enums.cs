@@ -24,24 +24,39 @@
 using System;
 using MonoMac.ObjCRuntime;
 
-namespace MonoMac.AppKit {
+#if MAC64
+using nint = System.Int64;
+using nuint = System.UInt64;
+using nfloat = System.Double;
+#else
+using nint = System.Int32;
+using nuint = System.UInt32;
+using nfloat = System.Single;
+#if SDCOMPAT
+using CGPoint = System.Drawing.PointF;
+using CGSize = System.Drawing.SizeF;
+using CGRect = System.Drawing.RectangleF;
+#endif
+#endif
 
-	public enum NSRunResponse {
+namespace MonoMac.AppKit {
+	
+	public enum NSRunResponse : nint {
 		Stopped = -1000,
-	        Aborted = -1001,
-                Continues = -1002
+		Aborted = -1001,
+		Continues = -1002
 	}
 
-	public enum NSApplicationActivationOptions {
+	public enum NSApplicationActivationOptions : nuint {
 		ActivateAllWindows = 1,
 		ActivateIgnoringOtherWindows = 2
 	}
-
-	public enum NSApplicationActivationPolicy {
+	
+	public enum NSApplicationActivationPolicy : nint {
 		Regular, Accessory, Prohibited
 	}
 	
-	public enum NSApplicationPresentationOptions {
+	public enum NSApplicationPresentationOptions : nuint {
 		Default                    = 0,
 		AutoHideDock               = (1 <<  0),
 		HideDock                   = (1 <<  1),
@@ -60,35 +75,35 @@ namespace MonoMac.AppKit {
 		AutoHideToolbar            = (1 << 11)
 	}
 
-	public enum NSApplicationDelegateReply {
+	public enum NSApplicationDelegateReply : nuint {
 		Success,
 		Cancel,
 		Failure
 	}
 
-	public enum NSRequestUserAttentionType {
+	public enum NSRequestUserAttentionType : nuint {
 		CriticalRequest = 0,
 		InformationalRequest = 10
 	}
 
-	public enum NSApplicationTerminateReply {
+	public enum NSApplicationTerminateReply : nuint {
 		Cancel, Now, Later
 	}
 
-	public enum NSApplicationPrintReply {
+	public enum NSApplicationPrintReply : nuint {
 		Cancelled, Success, Failure, ReplyLater
 	}
 
-	public enum NSApplicationLayoutDirection {
+	public enum NSApplicationLayoutDirection : nint {
 		LeftToRight = 0,
 		RightToLeft = 1
 	}
 
-	public enum NSImageInterpolation {
+	public enum NSImageInterpolation : nuint {
 		Default, None, Low, Medium, High
 	}
 
-	public enum NSComposite {
+	public enum NSComposite : nuint {
 		Clear,
 		Copy,
 		SourceOver,
@@ -105,23 +120,23 @@ namespace MonoMac.AppKit {
 		PlusLighter,
 	}
 
-	public enum NSBackingStore {
+	public enum NSBackingStore : nuint {
 		Retained, Nonretained, Buffered
 	}
 
-	public enum NSWindowOrderingMode {
-		Below = -1, Out, Above,
+	public enum NSWindowOrderingMode : nint {
+		Below = -1, Out, Above
 	}
 
-	public enum NSFocusRingPlacement {
+	public enum NSFocusRingPlacement : nuint {
 		RingOnly, RingBelow, RingAbove,
 	}
 
-	public enum NSFocusRingType {
+	public enum NSFocusRingType : nuint {
 		Default, None, Exterior
 	}
 	
-	public enum NSColorRenderingIntent {
+	public enum NSColorRenderingIntent : nint {
 		Default,
 		AbsoluteColorimetric,
 		RelativeColorimetric,
@@ -134,12 +149,12 @@ namespace MonoMac.AppKit {
 		MinXEdge, MinYEdge, MaxXEdge, MaxYEdge
 	}
 
-	public enum NSUserInterfaceLayoutDirection {
+	public enum NSUserInterfaceLayoutDirection : nint {
 		LeftToRight, RightToLeft
 	}
 
 #region NSColorSpace
-	public enum NSColorSpaceModel {
+	public enum NSColorSpaceModel : nint {
 		Unknown = -1,
 		Gray,
 		RGB,
@@ -153,17 +168,17 @@ namespace MonoMac.AppKit {
 
 #region NSFileWrapper
 	[Flags]
-	public enum NSFileWrapperReadingOptions {
+	public enum NSFileWrapperReadingOptions : nuint {
 		Immediate = 1, WithoutMapping = 2
 	}
 #endregion
 	
 #region NSParagraphStyle
-	public enum NSTextTabType {
+	public enum NSTextTabType : nuint {
 		Left, Right, Center, Decimal
 	}
 
-	public enum NSLineBreakMode {
+	public enum NSLineBreakMode : nuint {
 		ByWordWrapping,
 		CharWrapping,
 		Clipping,
@@ -176,7 +191,7 @@ namespace MonoMac.AppKit {
 	
 #region NSCell Defines 
 
-	public enum NSType {
+	public enum NSType : nuint {
 	    Any			= 0,
 	    Int			= 1,
 	    PositiveInt		= 2,
@@ -186,13 +201,13 @@ namespace MonoMac.AppKit {
 	    PositiveDouble	= 7
 	}
 	
-	public enum NSCellType {
+	public enum NSCellType : nuint {
 	    Null,
 	    Text,
 	    Image
 	}
 	
-	public enum NSCellAttribute {
+	public enum NSCellAttribute : nuint {
 		CellDisabled,
 		CellState,
 		PushInCell,
@@ -212,7 +227,7 @@ namespace MonoMac.AppKit {
 		CellAllowsMixedState,
 	}
 	
-	public enum NSCellImagePosition {
+	public enum NSCellImagePosition : nuint {
 		NoImage,
 		ImageOnly,
 		ImageLeft,
@@ -222,57 +237,57 @@ namespace MonoMac.AppKit {
 		ImageOverlaps,
 	}
 	
-	public enum NSImageScale {
+	public enum NSImageScale : nuint {
 		ProportionallyDown = 0,
 		AxesIndependently,     
 		None,                 
 		ProportionallyUpOrDown
 	}
 	
-	public enum NSCellStateValue {
+	public enum NSCellStateValue : nint {
 		Mixed = -1,
 		Off,
 		On
 	}
-
+	
 	[Flags]
-	public enum NSCellMask {
+	public enum NSCellMask : nuint {
 		NoCell = 0,
 		ContentsCell = 1 << 0,
 		PushInCell = 1 << 1, 
 		ChangeGrayCell = 1 << 2,
 		ChangeBackgroundCell = 1 << 3
 	}
-
+	
 	[Flags]
-	public enum NSCellHit {
+	public enum NSCellHit : nuint {
 		None,
 		ContentArea = 1,
 		EditableTextArea = 2,
 		TrackableArae = 4
 	}
 	
-	public enum NSControlTint : uint {
+	public enum NSControlTint : nuint {
 		Default  = 0,	// system 'default'
 		Blue     = 1,
 		Graphite = 6,
 		Clear    = 7
 	}
 	
-	public enum NSControlSize {
+	public enum NSControlSize : nuint {
 		Regular, 
 		Small,
 		Mini
 	}
 
-	public enum NSBackgroundStyle {
+	public enum NSBackgroundStyle : nint {
 		Light, Dark, Raised, Lowered
 	}
 #endregion
 
 #region NSImage
 	
-	public enum NSImageLoadStatus {
+	public enum NSImageLoadStatus : nuint {
 	    		Completed,
 	    		Cancelled,
 	    		InvalidData,
@@ -280,7 +295,7 @@ namespace MonoMac.AppKit {
 	    		ReadError
 	}
 	
-	public enum NSImageCacheMode {
+	public enum NSImageCacheMode : nuint {
 		Default, 
 		Always,  
 		BySize,  
@@ -290,14 +305,14 @@ namespace MonoMac.AppKit {
 #endregion
 	
 #region NSAlert
-	public enum NSAlertStyle {
+	public enum NSAlertStyle : nuint {
 		Warning, Informational, Critical
 	}
 #endregion
 
 #region NSEvent
-	public enum NSEventType {
-		LeftMouseDown = 1,            
+	public enum NSEventType : nuint {
+		LeftMouseDown = 1,
 		LeftMouseUp = 2,
 		RightMouseDown = 3,
 		RightMouseUp = 4,
@@ -337,40 +352,40 @@ namespace MonoMac.AppKit {
 
 	[Flags]
 	public enum NSEventMask : ulong {
-		LeftMouseDown         = 1 << NSEventType.LeftMouseDown,
-		LeftMouseUp           = 1 << NSEventType.LeftMouseUp,
-		RightMouseDown        = 1 << NSEventType.RightMouseDown,
-		RightMouseUp          = 1 << NSEventType.RightMouseUp,
-		MouseMoved            = 1 << NSEventType.MouseMoved,
-		LeftMouseDragged      = 1 << NSEventType.LeftMouseDragged,
-		RightMouseDragged     = 1 << NSEventType.RightMouseDragged,
-		MouseEntered          = 1 << NSEventType.MouseEntered,
-		MouseExited           = 1 << NSEventType.MouseExited,
-		KeyDown               = 1 << NSEventType.KeyDown,
-		KeyUp                 = 1 << NSEventType.KeyUp,
-		FlagsChanged          = 1 << NSEventType.FlagsChanged,
-		AppKitDefined         = 1 << NSEventType.AppKitDefined,
-		SystemDefined         = 1 << NSEventType.SystemDefined,
-		ApplicationDefined    = 1 << NSEventType.ApplicationDefined,
-		Periodic              = 1 << NSEventType.Periodic,
-		CursorUpdate          = 1 << NSEventType.CursorUpdate,
-		ScrollWheel           = 1 << NSEventType.ScrollWheel,
-		TabletPoint           = 1 << NSEventType.TabletPoint,
-		TabletProximity       = 1 << NSEventType.TabletProximity,
-		OtherMouseDown        = 1 << NSEventType.OtherMouseDown,
-		OtherMouseUp          = 1 << NSEventType.OtherMouseUp,
-		OtherMouseDragged     = 1 << NSEventType.OtherMouseDragged,
-		EventGesture          = 1 << NSEventType.Gesture,
-		EventMagnify          = (uint)1 << NSEventType.Magnify,
-		EventSwipe            = (uint)1 << NSEventType.Swipe,
-		EventRotate           = (uint)1 << NSEventType.Rotate,
-		EventBeginGesture     = (uint)1 << NSEventType.BeginGesture,
-		EventEndGesture       = (uint)1 << NSEventType.EndGesture,
+		LeftMouseDown         = 1 << (int)NSEventType.LeftMouseDown,
+		LeftMouseUp           = 1 << (int)NSEventType.LeftMouseUp,
+		RightMouseDown        = 1 << (int)NSEventType.RightMouseDown,
+		RightMouseUp          = 1 << (int)NSEventType.RightMouseUp,
+		MouseMoved            = 1 << (int)NSEventType.MouseMoved,
+		LeftMouseDragged      = 1 << (int)NSEventType.LeftMouseDragged,
+		RightMouseDragged     = 1 << (int)NSEventType.RightMouseDragged,
+		MouseEntered          = 1 << (int)NSEventType.MouseEntered,
+		MouseExited           = 1 << (int)NSEventType.MouseExited,
+		KeyDown               = 1 << (int)NSEventType.KeyDown,
+		KeyUp                 = 1 << (int)NSEventType.KeyUp,
+		FlagsChanged          = 1 << (int)NSEventType.FlagsChanged,
+		AppKitDefined         = 1 << (int)NSEventType.AppKitDefined,
+		SystemDefined         = 1 << (int)NSEventType.SystemDefined,
+		ApplicationDefined    = 1 << (int)NSEventType.ApplicationDefined,
+		Periodic              = 1 << (int)NSEventType.Periodic,
+		CursorUpdate          = 1 << (int)NSEventType.CursorUpdate,
+		ScrollWheel           = 1 << (int)NSEventType.ScrollWheel,
+		TabletPoint           = 1 << (int)NSEventType.TabletPoint,
+		TabletProximity       = 1 << (int)NSEventType.TabletProximity,
+		OtherMouseDown        = 1 << (int)NSEventType.OtherMouseDown,
+		OtherMouseUp          = 1 << (int)NSEventType.OtherMouseUp,
+		OtherMouseDragged     = 1 << (int)NSEventType.OtherMouseDragged,
+		EventGesture          = 1 << (int)NSEventType.Gesture,
+		EventMagnify          = (uint)1 << (int)NSEventType.Magnify,
+		EventSwipe            = (uint)1 << (int)NSEventType.Swipe,
+		EventRotate           = (uint)1 << (int)NSEventType.Rotate,
+		EventBeginGesture     = (uint)1 << (int)NSEventType.BeginGesture,
+		EventEndGesture       = (uint)1 << (int)NSEventType.EndGesture,
 		AnyEvent              = UInt32.MaxValue
 	}
 
 	[Flags]
-	public enum NSEventModifierMask : uint {
+	public enum NSEventModifierMask : nuint {
 		AlphaShiftKeyMask         = 1 << 16,
 		ShiftKeyMask              = 1 << 17,
 		ControlKeyMask            = 1 << 18,
@@ -382,7 +397,7 @@ namespace MonoMac.AppKit {
 		DeviceIndependentModifierFlagsMask    = 0xffff0000
 	}
 
-	public enum NSPointingDeviceType {
+	public enum NSPointingDeviceType : nuint {
 		Unknown, Pen, Cursor, Eraser
 	}
 
@@ -391,7 +406,7 @@ namespace MonoMac.AppKit {
 		Pen = 1, PenLower = 2, PenUpper = 4
 	}
 
-	public enum NSKey {
+	public enum NSKey : nuint {
 		A              = 0x00,
 		S              = 0x01,
 		D              = 0x02,
@@ -548,7 +563,7 @@ namespace MonoMac.AppKit {
 		ModeSwitch     = 0xF747
 	}
 
-	public enum NSEventSubtype {
+	public enum NSEventSubtype : nuint {
 		WindowExposed = 0,
 		ApplicationActivated = 1,
 		ApplicationDeactivated = 2,
@@ -557,7 +572,7 @@ namespace MonoMac.AppKit {
 		AWT = 16
 	}
 
-	public enum NSSystemDefinedEvents {
+	public enum NSSystemDefinedEvents : nuint {
 		NSPowerOffEventType = 1
 	}
 
@@ -569,7 +584,7 @@ namespace MonoMac.AppKit {
 
 #region NSView
 	[Flags]
-	public enum NSViewResizingMask {
+	public enum NSViewResizingMask : nuint {
 		NotSizable		=  0,
 		MinXMargin		=  1,
 		WidthSizable		=  2,
@@ -579,7 +594,7 @@ namespace MonoMac.AppKit {
 		MaxYMargin		= 32
 	}
 	
-	public enum NSBorderType {
+	public enum NSBorderType : nuint {
 		NoBorder, LineBorder, BezelBorder, GrooveBorder
 	}
 
@@ -587,11 +602,11 @@ namespace MonoMac.AppKit {
 		Square, Rounded
 	}
 	
-	public enum NSViewLayerContentsRedrawPolicy {
+	public enum NSViewLayerContentsRedrawPolicy : nint {
 		Never, OnSetNeedsDisplay, DuringViewResize, BeforeViewResize
 	}
 
-	public enum NSViewLayerContentsPlacement {
+	public enum NSViewLayerContentsPlacement : nint {
 		ScaleAxesIndependently,
 		ScaleProportionallyToFit,
 		ScaleProportionallyToFill,
@@ -610,7 +625,7 @@ namespace MonoMac.AppKit {
 	
 #region NSWindow
 	[Flags]
-	public enum NSWindowStyle {
+	public enum NSWindowStyle : nuint {
 		Borderless	       = 0,
 		Titled		       = 1 << 0,
 		Closable	       = 1 << 1,
@@ -626,16 +641,16 @@ namespace MonoMac.AppKit {
 		FullScreenWindow       = 1 << 14
 	}
 
-	public enum NSWindowSharingType {
+	public enum NSWindowSharingType : nuint {
 		None, ReadOnly, ReadWrite
 	}
 
-	public enum NSWindowBackingLocation {
+	public enum NSWindowBackingLocation : nuint {
 		Default, VideoMemory, MainMemory,
 	}
 
 	[Flags]
-	public enum NSWindowCollectionBehavior {
+	public enum NSWindowCollectionBehavior : nuint {
 		Default = 0,
 		CanJoinAllSpaces = 1 << 0,
 		MoveToActiveSpace = 1 << 1,
@@ -645,26 +660,30 @@ namespace MonoMac.AppKit {
 		ParticipatesInCycle = 1 << 5,
 		IgnoresCycle = 1 << 6,
 		FullScreenPrimary = 1 << 7,
-		FullScreenAuxiliary = 1 << 8
+		FullScreenAuxiliary = 1 << 8,
+		
+		[ElCapitan]
+		FullScreenAllowsTiling = 1 << 11,
+		[ElCapitan]
+		FullScreenDisallowsTiling = 1 << 12
 	}
 
-	public enum NSWindowNumberListOptions {
+	public enum NSWindowNumberListOptions : nuint {
 		AllApplication = 1 << 0,
 		AllSpaces = 1 << 4
 	}
 
-	public enum NSSelectionDirection {
+	public enum NSSelectionDirection : nuint {
 		Direct = 0,
 		Next,
 		Previous
 	}
 
-	public enum NSWindowButton {
+	public enum NSWindowButton : nuint {
 		CloseButton, MiniaturizeButton, ZoomButton, ToolbarButton, DocumentIconButton, DocumentVersionsButton = 6, FullScreenButton
 	}
 
-	[Flags]
-	public enum NSTouchPhase {
+	public enum NSTouchPhase : nuint {
 		Began           = 1 << 0,
 		Moved           = 1 << 1,
 		Stationary      = 1 << 2,
@@ -672,19 +691,19 @@ namespace MonoMac.AppKit {
 		Cancelled       = 1 << 4,
 		
 		Touching        = Began | Moved | Stationary,
-		Any             = -1
+		Any             = nuint.MaxValue
 	}
 #endregion
 #region NSAnimation
 	
-	public enum NSAnimationCurve {
+	public enum NSAnimationCurve : nuint {
 		EaseInOut,
 		EaseIn,
 		EaseOut,
 		Linear
 	};
 	
-	public enum NSAnimationBlockingMode {
+	public enum NSAnimationBlockingMode : nuint {
 		Blocking,
 		Nonblocking,
 		NonblockingThreaded
@@ -713,7 +732,7 @@ namespace MonoMac.AppKit {
 #endregion
 
 #region NSButtonCell
-	public enum NSButtonType {
+	public enum NSButtonType : nuint {
 		MomentaryLightButton,
 		PushOnPushOff,
 		Toggle,
@@ -724,7 +743,7 @@ namespace MonoMac.AppKit {
 		MomentaryPushIn
 	}
 	
-	public enum NSBezelStyle {
+	public enum NSBezelStyle : nuint {
 		Rounded = 1,
 		RegularSquare,
 		ThickSquare,
@@ -742,7 +761,7 @@ namespace MonoMac.AppKit {
 		Inline
 	}
 
-	public enum NSGradientType {
+	public enum NSGradientType : nuint {
 		None,
 		ConcaveWeak,
 		ConcaveStrong,
@@ -753,13 +772,13 @@ namespace MonoMac.AppKit {
 #endregion
 
 #region NSGraphics
-	public enum NSWindowDepth {
+	public enum NSWindowDepth : nint {
 		TwentyfourBitRgb = 0x208,
 		SixtyfourBitRgb = 0x210,
 		OneHundredTwentyEightBitRgb = 0x220	
 	}
 
-	public enum NSCompositingOperation {
+	public enum NSCompositingOperation : nuint {
 		Clear,
 		Copy,
 		SourceOver,
@@ -776,12 +795,12 @@ namespace MonoMac.AppKit {
 		PlusLighter,
 	}
 
-	public enum NSAnimationEffect {
+	public enum NSAnimationEffect : nuint {
 		DissapearingItemDefault = 0,
 		EffectPoof = 10
 	}
 #endregion
-	
+
 #region NSMatrix
 	public enum NSMatrixMode {
 		Radio, Highlight, List, Track
@@ -789,17 +808,17 @@ namespace MonoMac.AppKit {
 #endregion
 
 #region NSBrowser
-	public enum NSBrowserColumnResizingType {
+	public enum NSBrowserColumnResizingType : nuint {
 		None, Auto, User
 	}
 
-	public enum NSBrowserDropOperation {
+	public enum NSBrowserDropOperation : nuint {
 		On, Above
 	}
 #endregion
 
 #region NSColorPanel
-	public enum NSColorPanelMode {
+	public enum NSColorPanelMode : nint {
 		None = -1,
 		Gray = 0,
 		RGB,
@@ -826,12 +845,12 @@ namespace MonoMac.AppKit {
 #endregion
 #region NSDocument
 
-	public enum NSDocumentChangeType  {
+	public enum NSDocumentChangeType : nuint {
 		Done, Undone, Cleared, ReadOtherContents, Autosaved, Redone,
 		Discardable = 256 /* New in Lion */
 	}
 
-	public enum NSSaveOperationType  {
+	public enum NSSaveOperationType : nuint  {
 		Save, SaveAs, SaveTo,
 		Autosave = 3,	/* Deprecated name in Lion */
 		Elsewhere = 3,	/* New Lion name */
@@ -867,7 +886,7 @@ namespace MonoMac.AppKit {
 #endregion
 	
 	[Flags]
-	public enum NSDragOperation : uint {
+	public enum NSDragOperation : nuint {
 		None,
 		Copy = 1,
 		Link = 2,
@@ -876,21 +895,21 @@ namespace MonoMac.AppKit {
 		AllObsolete = 15,
 		Move = 16,
 		Delete = 32,
-		All = UInt32.MaxValue
+		All = nuint.MaxValue
 	}
 
-	public enum NSTextAlignment {
+	public enum NSTextAlignment : nuint {
 		Left, Right, Center, Justified, Natural
 	}
-
+	
 	[Flags]
-	public enum NSWritingDirection {
+	public enum NSWritingDirection : nint {
 		Natural = -1, LeftToRight, RightToLeft,
 		Embedding = 0,
 		Override = 2,
 	}
 
-	public enum NSTextMovement {
+	public enum NSTextMovement : nuint {
 		Other = 0,
 		Return = 0x10,
 		Tab = 0x11,
@@ -903,7 +922,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[Flags]
-	public enum NSMenuProperty {
+	public enum NSMenuProperty : nuint {
 		Title = 1 << 0,
 		AttributedTitle = 1 << 1,
 		KeyEquivalent = 1 << 2,
@@ -912,12 +931,12 @@ namespace MonoMac.AppKit {
 		AccessibilityDescription = 1 << 5
 	}
 
-	public enum NSFontRenderingMode {
+	public enum NSFontRenderingMode : nuint {
 		Default, Antialiased, IntegerAdvancements, AntialiasedIntegerAdvancements
 	}
 
 	[Flags]
-	public enum NSPasteboardReadingOptions {
+	public enum NSPasteboardReadingOptions : nuint {
 		AsData = 0,
 		AsString = 1,
 		AsPropertyList = 2,
@@ -939,17 +958,17 @@ namespace MonoMac.AppKit {
 		DashDotDot        = 0x0400
 	}
 
-	public enum NSSelectionAffinity {
+	public enum NSSelectionAffinity : nuint {
 		Upstream, Downstream
 	}
 
-	public enum NSSelectionGranularity {
+	public enum NSSelectionGranularity : nuint {
 		Character, Word, Paragraph
 	}
 
 #region NSTrackingArea
 	[Flags]
-	public enum NSTrackingAreaOptions {
+	public enum NSTrackingAreaOptions : nuint {
 		MouseEnteredAndExited     = 0x01,
 		MouseMoved                = 0x02,
 		CursorUpdate 		  = 0x04,
@@ -963,18 +982,18 @@ namespace MonoMac.AppKit {
 	}
 #endregion
 
-	public enum NSLineSweepDirection {
+	public enum NSLineSweepDirection : nuint {
 		NSLineSweepLeft,
 		NSLineSweepRight,
 		NSLineSweepDown,
 		NSLineSweepUp
 	}
 
-	public enum NSLineMovementDirection {
+	public enum NSLineMovementDirection : nuint {
 		None, Left, Right, Down, Up
 	}
 
-	public enum  NSTiffCompression {
+	public enum  NSTiffCompression : nuint {
 		None = 1,
 		CcittFax3 = 3,
 		CcittFax4 = 4,
@@ -989,7 +1008,7 @@ namespace MonoMac.AppKit {
 		OldJpeg		= 32865
 	}
 
-	public enum NSBitmapImageFileType {
+	public enum NSBitmapImageFileType : nuint {
 		Tiff,
 		Bmp,
 		Gif,
@@ -998,7 +1017,7 @@ namespace MonoMac.AppKit {
 		Jpeg2000
 	}
 
-	public enum NSImageRepLoadStatus {
+	public enum NSImageRepLoadStatus : nint {
 		UnknownType     = -1,
 		ReadingHeader   = -2,
 		WillNeedAllData = -3,
@@ -1008,54 +1027,59 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSBitmapFormat {
-		AlphaFirst = 1,
-		AlphaNonpremultiplied = 2,
-		FloatingPointSamples = 4
-	}
+	public enum NSBitmapFormat : nuint {
+        AlphaFirst                  = 1 << 0,
+        AlphaNonpremultiplied       = 1 << 1,
+        FloatingPointSamples        = 1 << 2,
+   
+        LittleEndian16Bit           = 1 << 8,
+        LittleEndian32Bit           = 1 << 9,
+        BigEndian16Bit              = 1 << 10,
+        BigEndian32Bit              = 1 << 11
+    }
 
-	public enum NSPrintingOrientation {
+	public enum NSPrintingOrientation : nuint {
 		Portrait, Landscape
 	}
 	
-	public enum NSPrintingPaginationMode {
+	public enum NSPrintingPaginationMode : nuint {
 		Auto, Fit, Clip
 	}
 
 	[Flags]
-	public enum NSGlyphStorageOptions {
+	public enum NSGlyphStorageOptions : nuint {
 		ShowControlGlyphs = 1,
 		ShowInvisibleGlyphs = 2,
 		WantsBidiLevels = 4
 	}
 
 	[Flags]
-	public enum NSTextStorageEditedFlags {
+	public enum NSTextStorageEditedFlags : nuint {
 		EditedAttributed = 1,
 		EditedCharacters = 2
 	}
 
-	public enum NSPrinterTableStatus {
+	public enum NSPrinterTableStatus : nuint {
 		Ok, NotFound, Error
 	}
 
-	public enum NSScrollArrowPosition {
+	public enum NSScrollArrowPosition : nuint {
 		MaxEnd, MinEnd, DefaultSetting, None
 	}
 
-	public enum NSUsableScrollerParts {
+	public enum NSUsableScrollerParts : nuint {
 		NoScroller, OnlyArrows, All
 	}
 
-	public enum NSScrollerPart {
+	public enum NSScrollerPart : nuint {
 		None, DecrementPage, Knob, IncrementPage, DecrementLine, IncrementLine, KnobSlot
 	}
 
-	public enum NSScrollerArrow {
+	public enum NSScrollerArrow : nuint {
 		IncrementArrow, DecrementArrow
 	}
 
-	public enum NSPrintingPageOrder {
+	public enum NSPrintingPageOrder : nint {
 		Descending = -1,
 		Special,
 		Ascending,
@@ -1063,7 +1087,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSPrintPanelOptions {
+	public enum NSPrintPanelOptions : nuint {
 		ShowsCopies = 1,
 		ShowsPageRange = 2,
 		ShowsPaperSize = 4,
@@ -1074,28 +1098,28 @@ namespace MonoMac.AppKit {
 		ShowsPreview = 131072
 	}
 
-	public enum NSTextBlockValueType {
+	public enum NSTextBlockValueType : nuint {
 		Absolute, Percentage
 	}
 
-	public enum NSTextBlockDimension {
+	public enum NSTextBlockDimension : nuint {
 		Width, MinimumWidth, MaximumWidth, Height, MinimumHeight, MaximumHeight
 	}
 	
-	public enum NSTextBlockLayer {
+	public enum NSTextBlockLayer : nint {
 		Padding = -1, Border, Margin
 	}
 
-	public enum NSTextBlockVerticalAlignment {
+	public enum NSTextBlockVerticalAlignment : nuint {
 		Top, Middle, Bottom, Baseline
 	}
 
-	public enum NSTextTableLayoutAlgorithm {
+	public enum NSTextTableLayoutAlgorithm : nuint {
 		Automatic, Fixed
 	}
 
 	[Flags]
-	public enum NSTextListOptions {
+	public enum NSTextListOptions : nuint {
 		PrependEnclosingMarker = 1
 	}
 
@@ -1125,7 +1149,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSFontTraitMask {
+	public enum NSFontTraitMask : nuint {
 		Italic = 1,
 		Bold = 2,
 		Unbold = 4,
@@ -1141,16 +1165,15 @@ namespace MonoMac.AppKit {
 	}
 	
 	[Flags]
-	public enum NSPasteboardWritingOptions	 {
+	public enum NSPasteboardWritingOptions : nuint {
 		WritingPromised = 1 << 9
 	}
 
-
-	public enum NSToolbarDisplayMode {
+	public enum NSToolbarDisplayMode : nuint {
 		Default, IconAndLabel, Icon, Label
 	}
 
-	public enum NSToolbarSizeMode {
+	public enum NSToolbarSizeMode : nuint {
 		Default, Regular, Small
 	}
 
@@ -1165,7 +1188,7 @@ namespace MonoMac.AppKit {
 		Cancel, Ok
 	}
 
-	public enum NSTableViewColumnAutoresizingStyle {
+	public enum NSTableViewColumnAutoresizingStyle : nuint {
 		None = 0,
 		Uniform,
 		Sequential,
@@ -1174,32 +1197,32 @@ namespace MonoMac.AppKit {
 		FirstColumnOnly
 	}
 
-	public enum NSTableViewSelectionHighlightStyle {
+	public enum NSTableViewSelectionHighlightStyle : nint {
 		None = -1,
 		Regular = 0,
 		SourceList = 1
 	}
 
-	public enum NSTableViewDraggingDestinationFeedbackStyle {
+	public enum NSTableViewDraggingDestinationFeedbackStyle : nint {
 		None = -1,
 		Regular = 0,
 		SourceList = 1
 	}
 
-	public enum NSTableViewDropOperation {
+	public enum NSTableViewDropOperation : nuint {
 		On,
 		Above
 	}
 
 	[Flags]
-	public enum NSTableColumnResizing {
-		None = -1,
+	public enum NSTableColumnResizing : nuint {
+		None = 0,
 		Autoresizing = ( 1 << 0 ),
 		UserResizingMask = ( 1 << 1 )
 	} 
 
 	[Flags]
-	public enum NSTableViewGridStyle {
+	public enum NSTableViewGridStyle : nuint {
 		None = 0,
 		SolidVerticalLine   = 1 << 0,
 		SolidHorizontalLine = 1 << 1,
@@ -1207,13 +1230,13 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSGradientDrawingOptions {
+	public enum NSGradientDrawingOptions : nuint {
 		None = 0,
 		BeforeStartingLocation =   (1 << 0),
 		AfterEndingLocation =    (1 << 1)
 	}
 	
-	public enum NSImageAlignment {
+	public enum NSImageAlignment : nuint {
 		Center = 0,
 		Top,
 		TopLeft,
@@ -1225,7 +1248,7 @@ namespace MonoMac.AppKit {
 		Right
 	}
 	
-	public enum NSImageFrameStyle {
+	public enum NSImageFrameStyle : nuint {
 		None = 0,
 		Photo,
 		GrayBezel,
@@ -1233,26 +1256,26 @@ namespace MonoMac.AppKit {
 		Button
 	}
 	
-	public enum NSSpeechBoundary {
+	public enum NSSpeechBoundary : nuint {
 		Immediate =  0,
 		hWord,
 		Sentence
 	}
 
-	public enum NSSplitViewDividerStyle {
+	public enum NSSplitViewDividerStyle : nint {
 		Thick = 1,
 		Thin = 2,
 		PaneSplitter = 3
 	}
 	
-	public enum NSImageScaling {
+	public enum NSImageScaling : nuint {
 		ProportionallyDown = 0,
 		AxesIndependently,
 		None,
 		ProportionallyUpOrDown
 	}
 	
-	public enum NSSegmentStyle {
+	public enum NSSegmentStyle : nint {
 		Automatic = 0,
 		Rounded = 1,
 		TexturedRounded = 2,
@@ -1262,32 +1285,33 @@ namespace MonoMac.AppKit {
 		SmallSquare = 6
 	}
 	
-	public enum NSSegmentSwitchTracking {
+	public enum NSSegmentSwitchTracking : nuint {
 		SelectOne = 0,
 		SelectAny = 1,
-		Momentary = 2
+		Momentary = 2,
+		MomentaryAccelerator = 3
 	}
 	
-	public enum NSTickMarkPosition {
+	public enum NSTickMarkPosition : nuint {
 		Below,
 		Above,
-		Left,
-		Right
+		Left = Above,
+		Right = Below
 	}
 	
-	public enum NSSliderType {
+	public enum NSSliderType : nuint {
 		Linear   = 0,
 		Circular = 1
 	}
 	
-	public enum NSTokenStyle {
+	public enum NSTokenStyle : nuint {
 		Default,
 		PlainText,
 		Rounded
 	}
 
 	[Flags]
-	public enum NSWorkspaceLaunchOptions {
+	public enum NSWorkspaceLaunchOptions : nuint {
 		Print = 2,
 		InhibitingBackgroundOnly = 0x80,
 		WithoutAddingToRecents = 0x100,
@@ -1302,18 +1326,18 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSWorkspaceIconCreationOptions {
+	public enum NSWorkspaceIconCreationOptions : nuint {
 		NSExcludeQuickDrawElements   = 1 << 1,
 		NSExclude10_4Elements       = 1 << 2
 	}
 
-	public enum NSPathStyle {
+	public enum NSPathStyle : nint {
 		NSPathStyleStandard,
 		NSPathStyleNavigationBar,
 		NSPathStylePopUp
 	}
 
-	public enum NSTabViewType {
+	public enum NSTabViewType : nuint {
 		NSTopTabsBezelBorder,
 		NSLeftTabsBezelBorder,
 		NSBottomTabsBezelBorder,
@@ -1323,35 +1347,35 @@ namespace MonoMac.AppKit {
 		NSNoTabsNoBorder,
 	}
 
-	public enum NSTabState {
+	public enum NSTabState : nuint {
 		Selected, Background, Pressed
 	}
 
-	public enum NSLevelIndicatorStyle {
+	public enum NSLevelIndicatorStyle : nuint {
 		Relevancy, ContinuousCapacity, DiscreteCapacity, RatingLevel
 	}
 
 	[Flags]
-	public enum NSFontCollectionOptions {
+	public enum NSFontCollectionOptions : nuint {
 		ApplicationOnlyMask = 1
 	}
 
-	public enum NSCollectionViewDropOperation {
+	public enum NSCollectionViewDropOperation : nint {
 		On = 0, Before = 1
 	}
 
-	public enum NSDatePickerStyle {
+	public enum NSDatePickerStyle : nuint {
 		TextFieldAndStepper,
 		ClockAndCalendar,
 		TextField
 	}
 
-	public enum NSDatePickerMode {
+	public enum NSDatePickerMode : nuint {
 		Single, Range
 	}
 
 	[Flags]
-	public enum NSDatePickerElementFlags {
+	public enum NSDatePickerElementFlags : nuint {
 		HourMinute = 0xc,
 		HourMinuteSecond = 0xe,
 		TimeZone = 0x10,
@@ -1361,7 +1385,7 @@ namespace MonoMac.AppKit {
 		Era = 0x100
 	}
 
-	public enum NSOpenGLContextParameter {
+	public enum NSOpenGLContextParameter : nint {
 		[Obsolete] SwapRectangle = 200,
 		[Obsolete] SwapRectangleEnable = 201,
 		[Obsolete] RasterizationEnable = 221,
@@ -1478,18 +1502,18 @@ namespace MonoMac.AppKit {
 		Aux0 = 0x0409
 	}
 
-	public enum NSProgressIndicatorThickness {
+	public enum NSProgressIndicatorThickness : nuint {
 		Small = 10,
 		Regular = 14,
 		Aqua = 12,
 		Large = 18
 	}
 
-	public enum NSProgressIndicatorStyle {
+	public enum NSProgressIndicatorStyle : nuint {
 		Bar, Spinning
 	}
 
-	public enum NSPopUpArrowPosition {
+	public enum NSPopUpArrowPosition : nuint {
 		None,
 		Center,
 		Bottom
@@ -1502,14 +1526,14 @@ namespace MonoMac.AppKit {
 	}
 	
 	// These constants specify the possible states of a drawer.
-	public enum NSDrawerState {
+	public enum NSDrawerState : nuint {
 		Closed = 0,
 		Opening = 1,
 		Open = 2,
 		Closing = 3
 	}
 
-	public enum NSWindowLevel {
+	public enum NSWindowLevel : nint {
 		Normal = 0,
 		Dock = 20,
 		Floating = 3,
@@ -1522,23 +1546,23 @@ namespace MonoMac.AppKit {
 		TornOffMenu = 3
 	}
 	
-	public enum NSRuleEditorRowType{
+	public enum NSRuleEditorRowType : nuint {
 		Simple = 0,
 		Compound
 	}
    
-	public enum NSRuleEditorNestingMode {
+	public enum NSRuleEditorNestingMode : nuint {
 		Single,
 		List,
 		Compound,
 		Simple
 	}
 
-	public enum NSGlyphInscription {
+	public enum NSGlyphInscription : nuint {
 		Base, Below, Above, Overstrike, OverBelow
 	}
 
-	public enum NSTypesetterBehavior {
+	public enum NSTypesetterBehavior : nint {
 		Latest = -1,
 		Original = 0,
 		Specific_10_2_WithCompatibility = 1,
@@ -1549,61 +1573,64 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSRemoteNotificationType {
+	public enum NSRemoteNotificationType : nuint {
 		None = 0,
-		Badge = 1
+		Badge = 1,
+		Sound = 2,
+		Alert = 4
 	}
 	
-	public enum NSScrollViewFindBarPosition {
+	public enum NSScrollViewFindBarPosition : nint {
 		AboveHorizontalRuler = 0,
 		AboveContent,
 		BelowContent
 	}
 	
-	public enum NSScrollerStyle {
+	public enum NSScrollerStyle : nint {
    		Legacy = 0,
 		Overlay
 	}
 	
-	public enum  NSScrollElasticity {
+	public enum  NSScrollElasticity : nint {
 		Automatic = 0,
    		None,
 		Allowed
 	}
 	
-	public enum  NSScrollerKnobStyle {
+	public enum  NSScrollerKnobStyle : nint {
 		Default  = 0,
 		Dark     = 1,
 		Light    = 2
 	}
 
 	[Flags]
-	public enum NSEventPhase {
-		None,
-		Began = 1,
-		Stationary = 2,
-		Changed = 4,
-		Ended = 8,
-		Cancelled = 16
+	public enum NSEventPhase : nuint {
+        None        = 0,
+        Began       = 1 << 0,
+        Stationary  = 1 << 1,
+        Changed     = 1 << 2,
+        Ended       = 1 << 3,
+        Cancelled   = 1 << 4,
+        MayBegin    = 1 << 5,
 	}
 
 	[Flags]
-	public enum NSEventSwipeTrackingOptions {
+	public enum NSEventSwipeTrackingOptions : nuint {
 		LockDirection = 1,
 		ClampGestureAmount = 2
 	}
 
-	public enum NSEventGestureAxis {
+	public enum NSEventGestureAxis : nint {
 		None, Horizontal, Vertical
 	}
 
-	public enum NSLayoutRelation {
+	public enum NSLayoutRelation : nint {
 		LessThanOrEqual = -1,
 		Equal = 0,
 		GreaterThanOrEqual = 1
 	}
 
-	public enum NSLayoutAttribute {
+	public enum NSLayoutAttribute : nint {
 		NoAttribute = 0,
 		Left = 1,
 		Right,
@@ -1618,18 +1645,18 @@ namespace MonoMac.AppKit {
 		Baseline
 	}
 
-	public enum NSLayoutFormatOptions {
+	public enum NSLayoutFormatOptions : nuint {
 		None = 0,
 
-		AlignAllLeft = (1 << NSLayoutAttribute.Left),
-		AlignAllRight = (1 << NSLayoutAttribute.Right),
-		AlignAllTop = (1 << NSLayoutAttribute.Top),
-		AlignAllBottom = (1 << NSLayoutAttribute.Bottom),
-		AlignAllLeading = (1 << NSLayoutAttribute.Leading),
-		AlignAllTrailing = (1 << NSLayoutAttribute.Trailing),
-		AlignAllCenterX = (1 << NSLayoutAttribute.CenterX),
-		AlignAllCenterY = (1 << NSLayoutAttribute.CenterY),
-		AlignAllBaseline = (1 << NSLayoutAttribute.Baseline),
+		AlignAllLeft = (1 << (int)NSLayoutAttribute.Left),
+		AlignAllRight = (1 << (int)NSLayoutAttribute.Right),
+		AlignAllTop = (1 << (int)NSLayoutAttribute.Top),
+		AlignAllBottom = (1 << (int)NSLayoutAttribute.Bottom),
+		AlignAllLeading = (1 << (int)NSLayoutAttribute.Leading),
+		AlignAllTrailing = (1 << (int)NSLayoutAttribute.Trailing),
+		AlignAllCenterX = (1 << (int)NSLayoutAttribute.CenterX),
+		AlignAllCenterY = (1 << (int)NSLayoutAttribute.CenterY),
+		AlignAllBaseline = (1 << (int)NSLayoutAttribute.Baseline),
 		
 		AlignmentMask = 0xFFFF,
 		
@@ -1642,7 +1669,7 @@ namespace MonoMac.AppKit {
 		DirectionMask = 0x3 << 16,
 	}
 
-	public enum NSLayoutConstraintOrientation {
+	public enum NSLayoutConstraintOrientation : nint {
 		Horizontal, Vertical
 	}
 
@@ -1656,46 +1683,46 @@ namespace MonoMac.AppKit {
 		FittingSizeCompression = 50,
 	}
 
-	public enum NSPopoverAppearance {
+	public enum NSPopoverAppearance : nint {
 		Minimal, HUD
 	}
 
-	public enum NSPopoverBehavior {
+	public enum NSPopoverBehavior : nint {
 		ApplicationDefined, Transient, Semitransient
 	}
 
-	public enum NSTableViewRowSizeStyle {
+	public enum NSTableViewRowSizeStyle : nint {
 		Default = -1,
 		Custom = 0,
 		Small, Medium, Large
 	}
 
 	[Flags]
-	public enum NSTableViewAnimation {
+	public enum NSTableViewAnimation : nuint {
 		None, Fade = 1, Gap = 2,
 		SlideUp = 0x10, SlideDown = 0x20, SlideLeft = 0x30, SlideRight = 0x40
 	}
 
 	[Flags]
-	public enum NSDraggingItemEnumerationOptions {
+	public enum NSDraggingItemEnumerationOptions : nuint {
 		Concurrent = 1 << 0,
 		ClearNonenumeratedImages = 1 << 16
 	}
 
-	public enum NSDraggingFormation {
+	public enum NSDraggingFormation : nint {
 		Default, None, Pile, List, Stack
 	}
 
-	public enum NSDraggingContext {
+	public enum NSDraggingContext : nint {
 		OutsideApplication, WithinApplication
 	}
 
-	public enum NSWindowAnimationBehavior {
+	public enum NSWindowAnimationBehavior : nint {
 		Default = 0, None = 2, DocumentWindow, UtilityWindow, AlertPanel
 	}
 
 	[Lion]
-	public enum NSTextFinderAction {
+	public enum NSTextFinderAction : nint {
 		ShowFindInterface = 1,
 		NextMatch = 2,
 		PreviousMatch = 3,
@@ -1727,13 +1754,13 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSFontCollectionVisibility {
+	public enum NSFontCollectionVisibility : nuint {
 		Process = 1 << 0,
 		User = 1 << 1,
 		Computer = 1 << 2,
 	}
 
-	public enum NSSharingContentScope {
+	public enum NSSharingContentScope : nint {
 		Item,
 		Partial,
 		Full
@@ -1758,7 +1785,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[Flags]
-	public enum NSTypesetterControlCharacterAction {
+	public enum NSTypesetterControlCharacterAction : nuint {
 		ZeroAdvancement = 1 << 0,
 		Whitespace = 1 << 1,
 		HorizontalTab = 1 << 2,
@@ -1766,4 +1793,57 @@ namespace MonoMac.AppKit {
 		ParagraphBreak = 1 << 4,
 		ContainerBreak = 1 << 5,
 	}
+	
+	public enum NSStatusItemLength {
+		Variable = -1,
+		Square = -2
+	}
+	
+	[Mac (10,12)]
+	//[Native]
+	public enum NSWindowTabbingMode : nint
+	{
+		Automatic,
+		Preferred,
+		Disallowed
+	}
+
+	[Mac (10,12)]
+	//[Native]
+	public enum NSWindowUserTabbingPreference : nint
+	{
+		Manual,
+		Always,
+		InFullScreen
+	}
+
+    [Mac(10, 13)]
+    //[Native]
+    public enum NSColorType : long
+    {
+        ComponentBased,
+        Pattern,
+        Catalog,
+    }
+
+    [Mac(10, 14, onlyOn64: true)]
+    //[Native]
+    public enum NSColorSystemEffect : long
+    {
+        None,
+        Pressed,
+        DeepPressed,
+        Disabled,
+        Rollover,
+    }
+
+    [Mac(10, 13)]
+    //[Native]
+    public enum NSSegmentDistribution : long
+    {
+        Fit = 0,
+        Fill,
+        FillEqually,
+        FillProportionally,
+    }
 }

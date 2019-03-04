@@ -25,87 +25,109 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 using MonoMac.Foundation;
 
-namespace MonoMac.ObjCRuntime {
-	internal abstract class NativeImplementationBuilder {
-		internal static AssemblyBuilder builder;
-		internal static ModuleBuilder module;
+namespace MonoMac.ObjCRuntime
+{
+    internal abstract class NativeImplementationBuilder
+    {
+        internal static AssemblyBuilder builder;
+        internal static ModuleBuilder module;
 
 #if !MONOMAC_BOOTSTRAP
-		private static MethodInfo convertarray = typeof (NSArray).GetMethod ("ArrayFromHandle", new Type [] { typeof (IntPtr) });
-		private static MethodInfo convertsarray = typeof (NSArray).GetMethod ("StringArrayFromHandle", new Type [] { typeof (IntPtr) });
-		private static MethodInfo convertstring = typeof (NSString).GetMethod ("ToString", Type.EmptyTypes);
-		private static MethodInfo getobject = typeof (Runtime).GetMethod ("GetNSObject", BindingFlags.Static | BindingFlags.Public);
-		private static MethodInfo gethandle = typeof (NSObject).GetMethod ("get_Handle", BindingFlags.Instance | BindingFlags.Public);
-		private static FieldInfo intptrzero = typeof (IntPtr).GetField ("Zero", BindingFlags.Static | BindingFlags.Public);
+        private static MethodInfo convertarray = typeof(NSArray).GetMethod("ArrayFromHandle", new Type[] { typeof(IntPtr) });
+        private static MethodInfo convertsarray = typeof(NSArray).GetMethod("StringArrayFromHandle", new Type[] { typeof(IntPtr) });
+        private static MethodInfo convertstring = typeof(NSString).GetMethod("ToString", Type.EmptyTypes);
+        private static MethodInfo getobject = typeof(Runtime).GetMethods().First(m => m.Name == "GetNSObject" && !m.IsGenericMethod);
+        private static MethodInfo gethandle = typeof(NSObject).GetMethod("get_Handle", BindingFlags.Instance | BindingFlags.Public);
+        private static FieldInfo intptrzero = typeof(IntPtr).GetField("Zero", BindingFlags.Static | BindingFlags.Public);
 #endif
 
-		private Delegate del;
-				
-		static NativeImplementationBuilder () {
-			builder = AppDomain.CurrentDomain.DefineDynamicAssembly (new AssemblyName {Name = "ObjCImplementations"}, AssemblyBuilderAccess.Run, null, null, null,  null, null, true);
+        private Delegate del;
+
+        static NativeImplementationBuilder()
+        {
+#if NETSTANDARD
+            builder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName { Name = "ObjCImplementations" }, AssemblyBuilderAccess.Run);
+            module = builder.DefineDynamicModule("Implementations");
+#else
+            builder = AppDomain.CurrentDomain.DefineDynamicAssembly (new AssemblyName {Name = "ObjCImplementations"}, AssemblyBuilderAccess.Run, null, true, null);
 			module = builder.DefineDynamicModule ("Implementations", false);
-		}
+#endif
+        }
 
-		internal abstract Delegate CreateDelegate ();
+        internal abstract Delegate CreateDelegate();
 
-		internal int ArgumentOffset {
-			get; set;
-		}
+        internal int ArgumentOffset
+        {
+            get; set;
+        }
 
-		internal IntPtr Selector {
-			get; set;
-		}
+        internal IntPtr Selector
+        {
+            get; set;
+        }
 
-		internal Type [] ParameterTypes {
-			get; set;
-		}
+        internal Type[] ParameterTypes
+        {
+            get; set;
+        }
 
-		internal ParameterInfo [] Parameters {
-			get; set;
-		}
+        internal ParameterInfo[] Parameters
+        {
+            get; set;
+        }
 
-		internal Delegate Delegate {
-			get {
-				if (del == null)
-					del = CreateDelegate ();
+        internal Delegate Delegate
+        {
+            get
+            {
+                if (del == null)
+                    del = CreateDelegate();
 
-				return del;
-			}
-		}
-		
-		internal Type DelegateType {
-			get; set;
-		}
+                return del;
+            }
+        }
 
-		internal string Signature {
-			get; set;
-		}
+        internal Type DelegateType
+        {
+            get; set;
+        }
 
-		protected Type CreateDelegateType (Type return_type, Type [] argument_types) {
-			TypeBuilder type = module.DefineType (Guid.NewGuid ().ToString (), TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.AnsiClass | TypeAttributes.AutoClass, typeof (MulticastDelegate));
-			type.SetCustomAttribute (new CustomAttributeBuilder (typeof (MarshalAsAttribute).GetConstructor (new Type [] { typeof (UnmanagedType) }), new object [] { UnmanagedType.FunctionPtr }));
+        internal string Signature
+        {
+            get; set;
+        }
 
-			ConstructorBuilder constructor = type.DefineConstructor (MethodAttributes.Public, CallingConventions.Standard, new Type [] { typeof (object), typeof (int) });
+        protected Type CreateDelegateType(Type return_type, Type[] argument_types)
+        {
+            TypeBuilder type = module.DefineType(Guid.NewGuid().ToString(), TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.AnsiClass | TypeAttributes.AutoClass, typeof(MulticastDelegate));
+            type.SetCustomAttribute(new CustomAttributeBuilder(typeof(MarshalAsAttribute).GetConstructor(new Type[] { typeof(UnmanagedType) }), new object[] { UnmanagedType.FunctionPtr }));
 
-			constructor.SetImplementationFlags (MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+            ConstructorBuilder constructor = type.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[] { typeof(object), typeof(int) });
 
-			MethodBuilder method = null;
+            constructor.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
-			method = type.DefineMethod ("Invoke", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual, return_type, argument_types);
+            MethodBuilder method = null;
 
-			if (NeedsCustomMarshaler (return_type))
-				SetupParameter (method, 0, return_type);
+            method = type.DefineMethod("Invoke", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual, return_type, argument_types);
 
-			for (int i = 1; i <= argument_types.Length; i++)
-				if (NeedsCustomMarshaler (argument_types [i - 1]))
-					SetupParameter (method, i, argument_types [i - 1]);
-			
-			method.SetImplementationFlags (MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+            if (NeedsCustomMarshaler(return_type))
+                SetupParameter(method, 0, return_type);
 
-			return type.CreateType ();
+            for (int i = 1; i <= argument_types.Length; i++)
+                if (NeedsCustomMarshaler(argument_types[i - 1]))
+                    SetupParameter(method, i, argument_types[i - 1]);
+
+            method.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+
+#if NETSTANDARD
+            return type.CreateTypeInfo().AsType();
+#else
+            return type.CreateType ();
+#endif
 		}
 
 		private bool NeedsCustomMarshaler (Type t) {
@@ -148,12 +170,12 @@ namespace MonoMac.ObjCRuntime {
 				ParameterTypes = new Type [ArgumentOffset + parms.Length];
 				ParameterTypes [0] = typeof (IntPtr);
 				ParameterTypes [1] = isstatic ? typeof (IntPtr) : typeof (NSObject);
-				ParameterTypes [2] = typeof (Selector);
+				ParameterTypes [2] = typeof (IntPtr);
 			} else {
 				ArgumentOffset = 2;
 				ParameterTypes = new Type [ArgumentOffset + parms.Length];
 				ParameterTypes [0] = isstatic ? typeof (IntPtr) : typeof (NSObject);
-				ParameterTypes [1] = typeof (Selector);
+				ParameterTypes [1] = typeof (IntPtr);
 			}
 
 			for (int i = 0; i < Parameters.Length; i++) {

@@ -1,5 +1,7 @@
+artifacts/
+.DS_Store
 *.g.cs
+*.pdb
 *.exe
-*.mdb
 *.dll
 src/generated_sources

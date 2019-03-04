@@ -26,11 +26,12 @@ using System.Runtime.InteropServices;
 using MonoMac.Foundation;
 
 namespace MonoMac.ObjCRuntime {
+
 	public class NSObjectMarshaler<T> : ICustomMarshaler where T : NSObject {
 		static NSObjectMarshaler<T> marshaler;
 
 		public object MarshalNativeToManaged (IntPtr handle) {
-			return (T) Runtime.GetNSObject (handle);
+			return Runtime.GetNSObject<T> (handle);
 		}
 
 		public IntPtr MarshalManagedToNative (object obj) {

@@ -25,6 +25,21 @@
 //
 using MonoMac.Foundation;
 
+#if MAC64
+using nint = System.Int64;
+using nuint = System.UInt64;
+using nfloat = System.Double;
+#else
+using nint = System.Int32;
+using nuint = System.UInt32;
+using nfloat = System.Single;
+#if SDCOMPAT
+using CGPoint = System.Drawing.PointF;
+using CGSize = System.Drawing.SizeF;
+using CGRect = System.Drawing.RectangleF;
+#endif
+#endif
+
 namespace MonoMac.AppKit {
 
 	public partial class NSTableView {
@@ -42,12 +57,12 @@ namespace MonoMac.AppKit {
 			}
 		}
 
-		public void SelectRow (int row, bool byExtendingSelection)
+		public void SelectRow (nuint row, bool byExtendingSelection)
 		{
 			SelectRows (NSIndexSet.FromIndex (row), byExtendingSelection);
 		}
 
-		public void SelectColumn (int column, bool byExtendingSelection)
+		public void SelectColumn (nuint column, bool byExtendingSelection)
 		{
 			SelectColumns (NSIndexSet.FromIndex (column), byExtendingSelection);
 		}

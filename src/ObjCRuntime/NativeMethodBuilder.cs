@@ -56,7 +56,7 @@ namespace MonoMac.ObjCRuntime {
 			rettype = ConvertReturnType (minfo.ReturnType);
 
 			// FIXME: We should detect if this is in a bound assembly or not and only alloc if needed
-			Selector = new Selector (ea.Selector ?? minfo.Name, true).Handle;
+			Selector = MonoMac.ObjCRuntime.Selector.GetHandle(ea.Selector ?? minfo.Name);
 			Signature = string.Format ("{0}@:", TypeConverter.ToNative (minfo.ReturnType));
 
 			ConvertParameters (Parameters, minfo.IsStatic, isstret);
@@ -65,6 +65,9 @@ namespace MonoMac.ObjCRuntime {
 
 			this.minfo = minfo;
 			this.type = type;
+#if DUMP_CALLS
+			Console.WriteLine(string.Format("Creating method {0} with signature {1}", minfo, Signature));
+#endif
 		}
 
 		internal override Delegate CreateDelegate () {
@@ -115,7 +118,7 @@ namespace MonoMac.ObjCRuntime {
 		}
 
 		private Type ConvertReturnType (Type type) {
-			if (type.IsValueType && !type.IsEnum && type.Assembly != typeof (object).Assembly && Marshal.SizeOf (type) > 8) {
+			if (type.IsValueType && !type.IsEnum && type.Assembly != typeof (object).Assembly && Marshal.SizeOf (type) > IntPtr.Size * 2) {
 				isstret = true;
 				return typeof (void);
 			}

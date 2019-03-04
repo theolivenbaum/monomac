@@ -25,15 +25,16 @@
 //
 using System;
 using MonoMac.Foundation;
-using System.Collections;
+using MonoMac.ObjCRuntime;
+using System.Collections.Generic;
 
 namespace MonoMac.AppKit {
 
 	// Keeps references to the taerget objects alive until the method is invoked
 	internal static class OneShotTracker {
-		static ArrayList pendingInvokes = new ArrayList ();
+		static List<NSObject> pendingInvokes = new List<NSObject> ();
 
-		public static NSObject Create (NSAction action)
+		public static NSObject Create (Action action)
 		{
 			var ret = new Dispatcher (action);
 			pendingInvokes.Add (ret);
@@ -42,9 +43,9 @@ namespace MonoMac.AppKit {
 
 		[Register ("__MonoMac_OnEndTrackerDispatch")]
 		internal class Dispatcher : NSObject {
-			NSAction action;
+			Action action;
 
-			public Dispatcher (NSAction action)
+			public Dispatcher (Action action)
 			{
 				this.action = action;
 			}
@@ -68,7 +69,7 @@ namespace MonoMac.AppKit {
 			BeginSheet (sheet, docWindow, null, null, IntPtr.Zero);
 		}
 		
-		public void BeginSheet (NSWindow sheet, NSWindow docWindow, NSAction onEnded)
+		public void BeginSheet (NSWindow sheet, NSWindow docWindow, Action onEnded)
 		{
 			var obj = OneShotTracker.Create (onEnded);
 			BeginSheet (sheet, docWindow, obj, NSActionDispatcher.Selector, IntPtr.Zero);
@@ -81,7 +82,7 @@ namespace MonoMac.AppKit {
 			BeginSheet (directory, fileName, fileTypes, modalForWindow, null, null, IntPtr.Zero);
 		}
 		
-		public void BeginSheet (string directory, string fileName, string []fileTypes, NSWindow modalForWindow, NSAction onEnded)
+		public void BeginSheet (string directory, string fileName, string []fileTypes, NSWindow modalForWindow, Action onEnded)
 		{
 			var obj = OneShotTracker.Create (onEnded);
 			BeginSheet (directory, fileName, fileTypes, modalForWindow, obj, NSActionDispatcher.Selector, IntPtr.Zero);
@@ -94,7 +95,7 @@ namespace MonoMac.AppKit {
 			BeginSheet (printInfo, docWindow, null, null, IntPtr.Zero);
 		}
 		
-		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow, NSAction onEnded)
+		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow, Action onEnded)
 		{
 			var obj = OneShotTracker.Create (onEnded);
 			BeginSheet (printInfo, docWindow, obj, NSActionDispatcher.Selector, IntPtr.Zero);

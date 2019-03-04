@@ -43,10 +43,25 @@ using System;
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
 using MonoMac.AppKit;
-using System.Drawing;
 using MonoMac.CoreAnimation;
 using MonoMac.CoreVideo;
 using MonoMac.CoreImage;
+using MonoMac.CoreGraphics;
+
+#if MAC64
+using nint = System.Int64;
+using nuint = System.UInt64;
+using nfloat = System.Double;
+#else
+using nint = System.Int32;
+using nuint = System.UInt32;
+using nfloat = System.Single;
+#if SDCOMPAT
+using CGPoint = System.Drawing.PointF;
+using CGSize = System.Drawing.SizeF;
+using CGRect = System.Drawing.RectangleF;
+#endif
+#endif
 
 namespace MonoMac.QTKit
 {
@@ -312,7 +327,7 @@ namespace MonoMac.QTKit
 
 		//Detected properties
 		[Export ("maximumVideoSize")]
-		SizeF MaximumVideoSize { get; set; }
+		CGSize MaximumVideoSize { get; set; }
 
 		[Export ("minimumVideoFrameInterval")]
 		double MinimumVideoFrameInterval { get; set; }
@@ -436,7 +451,7 @@ namespace MonoMac.QTKit
 		QTCaptureConnection [] AvailableVideoPreviewConnections { get; }
 
 		[Export ("previewBounds")]
-		RectangleF PreviewBounds { get; }
+		CGRect PreviewBounds { get; }
 
 		//Detected properties
 		[Export ("captureSession")]
@@ -730,10 +745,10 @@ namespace MonoMac.QTKit
 		NSColor FillColor { get; set; }
 			
 		[Export ("movieBounds")]
-		RectangleF MovieBounds { get; }
+		CGRect MovieBounds { get; }
 
 		[Export ("movieControllerBounds")]
-		RectangleF MovieControllerBounds { get; }
+		CGRect MovieControllerBounds { get; }
 		
 		[Export ("setShowsResizeIndicator:")]
 		void SetShowsResizeIndicator (bool show);
@@ -1459,10 +1474,10 @@ namespace MonoMac.QTKit
 		NSDictionary TrackAttributes { get; set; }
 
 		[Export ("apertureModeDimensionsForMode:")]
-		SizeF ApertureModeDimensionsForMode (string mode);
+		CGSize ApertureModeDimensionsForMode (string mode);
 
 		[Export ("setApertureModeDimensions:forMode:")]
-		void SetApertureModeDimensionsforMode (SizeF dimensions, string mode);
+		void SetApertureModeDimensionsforMode (CGSize dimensions, string mode);
 
 		[Export ("generateApertureModeDimensions")]
 		void GenerateApertureModeDimensions ();
