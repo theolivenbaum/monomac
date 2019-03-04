@@ -88,6 +88,11 @@ namespace MonoMac.AppKit {
 		NSObject DefaultAnimationFor (NSString key);
 	}
 	
+	public interface NSAnimationProgressMarkEventArgs {
+		[Export ("NSAnimationProgressMark")]
+		float Progress { get; }
+	}
+
 	[BaseType (typeof (NSObject), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSAnimationDelegate)})]
 	public interface NSAnimation {
 		[Export ("initWithDuration:animationCurve:")]
@@ -148,7 +153,7 @@ namespace MonoMac.AppKit {
 		//[Export ("runLoopModesForAnimating")]
 		//NSArray* runLoopModesForAnimating ();
 
-		[Field ("NSAnimationProgressMarkNotification")]
+		[Notification (typeof (NSAnimationProgressMarkEventArgs)), Field ("NSAnimationProgressMarkNotification")]
 		NSString ProgressMarkNotification { get; }
 
 		[Field ("NSAnimationProgressMark")]
@@ -181,7 +186,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSAnimationContext {
+	public partial interface NSAnimationContext {
 		[Static]
 		[Export ("beginGrouping")]
 		void BeginGrouping ();
@@ -206,7 +211,10 @@ namespace MonoMac.AppKit {
 		void RunAnimation (Action<NSAnimationContext> changes, NSAction completionHandler);
     
 		[Lion, Export ("timingFunction")]
-		CAMediaTimingFunction TimingFunction { get; set; }		
+		CAMediaTimingFunction TimingFunction { get; set; }
+
+		[MountainLion, Export ("allowsImplicitAnimation")]
+		bool AllowsImplicitAnimation { get; set; }
 	}
 	
 	[BaseType (typeof (NSObject), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSAlertDelegate)})]
@@ -274,10 +282,18 @@ namespace MonoMac.AppKit {
 		bool ShowHelp (NSAlert  alert);
 	}
 
+	public interface NSApplicationDidFinishLaunchingEventArgs {
+		[Export ("NSApplicationLaunchIsDefaultLaunchKey")]
+		bool IsLaunchDefault { get; }
+
+		[ProbePresence, Export ("NSApplicationLaunchUserNotificationKey")]
+		bool IsLaunchFromUserNotification { get; }
+	}
+
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSApplicationDelegate) })]
 	[DisableDefaultCtor] // An uncaught exception was raised: Creating more than one Application
 	public interface NSApplication : NSWindowRestoration {
-		[Export ("sharedApplication"), Static]
+		[Export ("sharedApplication"), Static, ThreadSafe]
 		NSApplication SharedApplication { get; }
 	
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
@@ -346,7 +362,7 @@ namespace MonoMac.AppKit {
 		[Export ("stopModalWithCode:")]
 		void StopModalWithCode (int returnCode);
 	
-		[Export ("abortModal")]
+		[Export ("abortModal"), ThreadSafe]
 		void AbortModal ();
 	
 		[Export ("modalWindow")]
@@ -385,6 +401,7 @@ namespace MonoMac.AppKit {
 		[Export ("discardEventsMatchingMask:beforeEvent:"), Protected]
 		void DiscardEvents (uint mask, NSEvent lastEvent);
 	
+                [ThreadSafe]
 		[Export ("postEvent:atStart:")]
 		void PostEvent (NSEvent theEvent, bool atStart);
 	
@@ -505,10 +522,10 @@ namespace MonoMac.AppKit {
 		[Export ("orderFrontColorPanel:")]
 		void OrderFrontColorPanel (NSObject sender);
 
-		[Lion, Export ("disableRelaunchOnLogin")]
+		[Lion, Export ("disableRelaunchOnLogin"), ThreadSafe]
 		void DisableRelaunchOnLogin ();
 
-		[Lion, Export ("enableRelaunchOnLogin")]
+		[Lion, Export ("enableRelaunchOnLogin"), ThreadSafe]
 		void EnableRelaunchOnLogin ();
 
 		[Lion, Export ("enabledRemoteNotificationTypes")]
@@ -520,46 +537,46 @@ namespace MonoMac.AppKit {
 		[Lion, Export ("unregisterForRemoteNotifications")]
 		void UnregisterForRemoteNotifications ();
 
-		[Field ("NSApplicationDidBecomeActiveNotification")]
+		[Notification, Field ("NSApplicationDidBecomeActiveNotification")]
 		NSString DidBecomeActiveNotification { get; }
 
-		[Field ("NSApplicationDidHideNotification")]
+		[Notification, Field ("NSApplicationDidHideNotification")]
 		NSString DidHideNotification { get; }
 
-		[Field ("NSApplicationDidFinishLaunchingNotification")]
+		[Notification (typeof (NSApplicationDidFinishLaunchingEventArgs)), Field ("NSApplicationDidFinishLaunchingNotification")]
 		NSString DidFinishLaunchingNotification { get; }
 
-		[Field ("NSApplicationDidResignActiveNotification")]
+		[Notification, Field ("NSApplicationDidResignActiveNotification")]
 		NSString DidResignActiveNotification { get; }
 
-		[Field ("NSApplicationDidUnhideNotification")]
+		[Notification, Field ("NSApplicationDidUnhideNotification")]
 		NSString DidUnhideNotification { get; }
 
-		[Field ("NSApplicationDidUpdateNotification")]
+		[Notification, Field ("NSApplicationDidUpdateNotification")]
 		NSString DidUpdateNotification { get; }
 
-		[Field ("NSApplicationWillBecomeActiveNotification")]
+		[Notification, Field ("NSApplicationWillBecomeActiveNotification")]
 		NSString WillBecomeActiveNotification { get; }
 
-		[Field ("NSApplicationWillHideNotification")]
+		[Notification, Field ("NSApplicationWillHideNotification")]
 		NSString WillHideNotification { get; }
 
-		[Field ("NSApplicationWillFinishLaunchingNotification")]
+		[Notification, Field ("NSApplicationWillFinishLaunchingNotification")]
 		NSString WillFinishLaunchingNotification { get; }
 
-		[Field ("NSApplicationWillResignActiveNotification")]
+		[Notification, Field ("NSApplicationWillResignActiveNotification")]
 		NSString WillResignActiveNotification { get; }
 
-		[Field ("NSApplicationWillUnhideNotification")]
+		[Notification, Field ("NSApplicationWillUnhideNotification")]
 		NSString WillUnhideNotification { get; }
 
-		[Field ("NSApplicationWillUpdateNotification")]
+		[Notification, Field ("NSApplicationWillUpdateNotification")]
 		NSString WillUpdateNotification { get; }
 
-		[Field ("NSApplicationWillTerminateNotification")]
+		[Notification, Field ("NSApplicationWillTerminateNotification")]
 		NSString WillTerminateNotification { get; }
 
-		[Field ("NSApplicationDidChangeScreenParametersNotification")]
+		[Notification, Field ("NSApplicationDidChangeScreenParametersNotification")]
 		NSString DidChangeScreenParametersNotification { get; }
 
 		[Lion, Field ("NSApplicationLaunchIsDefaultLaunchKey")]
@@ -568,7 +585,7 @@ namespace MonoMac.AppKit {
 		[Lion, Field ("NSApplicationLaunchRemoteNotificationKey")]
 		NSString LaunchRemoteNotificationKey { get; }
 
-		[Field ("NSApplicationDidFinishRestoringWindowsNotification")]
+		[Notification, Field ("NSApplicationDidFinishRestoringWindowsNotification")]
 		NSString DidFinishRestoringWindowsNotification { get; }
 	}
 	
@@ -1003,7 +1020,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSBitmapImageRep init]: unrecognized selector sent to instance 0x686880
-	public interface NSBitmapImageRep {
+	public partial interface NSBitmapImageRep {
 		[Export ("initWithFocusedViewRect:")]
 		IntPtr Constructor (RectangleF rect);
 
@@ -1021,6 +1038,7 @@ namespace MonoMac.AppKit {
 		[Export ("initWithCIImage:")]
 		IntPtr Constructor (MonoMac.CoreImage.CIImage ciImage);
 
+		[Static]
 		[Export ("imageRepsWithData:")]
 		NSImageRep [] ImageRepsWithData (NSData data);
 
@@ -1059,10 +1077,10 @@ namespace MonoMac.AppKit {
 		NSBitmapFormat BitmapFormat { get; }
 
 		[Export ("getCompression:factor:")]
-		void GetCompressionfactor (out NSTiffCompression compression, out float factor);
+		void GetCompressionFactor (out NSTiffCompression compression, out float factor);
 
 		[Export ("setCompression:factor:")]
-		void SetCompressionfactor (NSTiffCompression compression, float factor);
+		void SetCompressionFactor (NSTiffCompression compression, float factor);
 
 		[Export ("TIFFRepresentation")]
 		NSData TiffRepresentation { get; }
@@ -1228,7 +1246,7 @@ namespace MonoMac.AppKit {
 		
 	[BaseType (typeof (NSControl))]
 		// , Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSBrowserDelegate)})]
-	public interface NSBrowser {
+	public partial interface NSBrowser {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -1245,7 +1263,7 @@ namespace MonoMac.AppKit {
 		NSObject ItemAtIndexPath (NSIndexPath indexPath);
 
 		[Export ("itemAtRow:inColumn:")]
-		NSObject ItemAtRowinColumn (int row, int column);
+		NSObject GetItem (int row, int column);
 
 		[Export ("indexPathForColumn:")]
 		NSIndexPath IndexPathForColumn (int column);
@@ -1444,7 +1462,10 @@ namespace MonoMac.AppKit {
 
 		[Static]
 		[Export ("cellClass")]
-		Class CellClass { get; set; }
+		Class CellClass { get; }
+
+		[Export ("setCellClass:")]
+		void SetCellClass (Class factoryId);
 
 		[Export ("cellPrototype")]
 		NSObject CellPrototype { get; set; }
@@ -1544,7 +1565,7 @@ namespace MonoMac.AppKit {
 		bool SelectCellWithString (NSBrowser sender, string title, int column);
 
 		[Export ("browser:selectRow:inColumn:")]
-		bool SelectRowinColumn (NSBrowser sender, int row, int column);
+		bool SelectRowInColumn (NSBrowser sender, int row, int column);
 
 		[Export ("browser:isColumnValid:")]
 		bool IsColumnValid (NSBrowser sender, int column);
@@ -1603,7 +1624,7 @@ namespace MonoMac.AppKit {
 		NSViewController HeaderViewControllerForItem (NSBrowser browser, NSObject item);
 
 		[Export ("browser:didChangeLastColumn:toColumn:")]
-		void DidChangeLastColumntoColumn (NSBrowser browser, int oldLastColumn, int column);
+		void DidChangeLastColumn (NSBrowser browser, int oldLastColumn, int toColumn);
 
 		[Export ("browser:selectionIndexesForProposedSelection:inColumn:")]
 		NSIndexSet SelectionIndexesForProposedSelection (NSBrowser browser, NSIndexSet proposedSelectionIndexes, int inColumn);
@@ -1767,10 +1788,10 @@ namespace MonoMac.AppKit {
 		[Export ("alternateTitle")]
 		string AlternateTitle { get; set; }
 	
-		[Export ("image")]
+		[Export ("image"), NullAllowed]
 		NSImage Image { get; set; }
 	
-		[Export ("alternateImage")]
+		[Export ("alternateImage"), NullAllowed]
 		NSImage AlternateImage  { get; set; }
 	
 		[Export ("imagePosition")]
@@ -1972,7 +1993,10 @@ namespace MonoMac.AppKit {
 	
 		[Export ("controlTint")]
 		NSControlTint ControlTint { get; set; }
-	
+
+		[Notification, Field ("NSControlTintDidChangeNotification")]
+		NSString ControlTintChangedNotification { get; }
+
 		[Export ("controlSize")]
 		NSControlSize ControlSize { get; set; }
 	
@@ -2317,7 +2341,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[Model]
-	public interface NSCollectionViewDelegate {
+	public partial interface NSCollectionViewDelegate {
 		[Export ("collectionView:canDragItemsAtIndexes:withEvent:")]
 		bool CanDragItems (NSCollectionView collectionView, NSIndexSet indexes, NSEvent evt);
 
@@ -2336,12 +2360,11 @@ namespace MonoMac.AppKit {
 
 		[Export ("collectionView:acceptDrop:index:dropOperation:")]
 		bool AcceptDrop (NSCollectionView collectionView, NSDraggingInfo draggingInfo, int index, NSCollectionViewDropOperation dropOperation);
-
 	}
 	
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // -colorSpaceName not valid for the NSColor <NSColor: 0x1b94780>; need to first convert colorspace.
-	public interface NSColor {
+	public partial interface NSColor {
 		[Static]
 		[Export ("colorWithCalibratedWhite:alpha:")]
 		NSColor FromCalibratedWhite (float white, float alpha);
@@ -2562,6 +2585,11 @@ namespace MonoMac.AppKit {
 		[Export ("alternateSelectedControlTextColor")]
 		NSColor AlternateSelectedControlText { get; }
 
+		[MountainLion]
+		[Static]
+		[Export ("underPageBackgroundColor")]
+		NSColor UnderPageBackground { get; }
+
 		[Static]
 		[Export ("controlAlternatingRowBackgroundColors")]
 		NSColor [] ControlAlternatingRowBackgroundColors ();
@@ -2620,46 +2648,46 @@ namespace MonoMac.AppKit {
 		string LocalizedColorNameComponent { get; }
 
 		[Export ("redComponent")]
-		float RedComponent { get; }
+		float RedComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("greenComponent")]
-		float GreenComponent { get; }
+		float GreenComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("blueComponent")]
-		float BlueComponent { get; }
+		float BlueComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("getRed:green:blue:alpha:")]
 		void GetRgba (out float red, out float green, out float blue, out float alpha);
 
 		[Export ("hueComponent")]
-		float HueComponent { get; }
+		float HueComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("saturationComponent")]
-		float SaturationComponent { get; }
+		float SaturationComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("brightnessComponent")]
-		float BrightnessComponent { get; }
+		float BrightnessComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("getHue:saturation:brightness:alpha:")]
 		void GetHsba (out float hue, out float saturation, out float brightness, out float alpha);
 
 		[Export ("whiteComponent")]
-		float WhiteComponent { get; }
+		float WhiteComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("getWhite:alpha:")]
 		void GetWhiteAlpha (out float white, out float alpha);
 
 		[Export ("cyanComponent")]
-		float CyanComponent { get; }
+		float CyanComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("magentaComponent")]
-		float MagentaComponent { get; }
+		float MagentaComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("yellowComponent")]
-		float YellowComponent { get; }
+		float YellowComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("blackComponent")]
-		float BlackComponent { get; }
+		float BlackComponent { [MarshalNativeExceptions] get; }
 
 		[Export ("getCyan:magenta:yellow:black:alpha:")]
 		void GetCmyka (out float cyan, out float magenta, out float yellow, out float black, out float alpha);
@@ -2674,7 +2702,7 @@ namespace MonoMac.AppKit {
 		void _GetComponents (IntPtr components);
 
 		[Export ("alphaComponent")]
-		float AlphaComponent { get; }
+		float AlphaComponent { [MarshalNativeExceptions] get; }
 
 		[Static]
 		[Export ("colorFromPasteboard:")]
@@ -2689,6 +2717,10 @@ namespace MonoMac.AppKit {
 
 		[Export ("patternImage")]
 		NSImage PatternImage { get; }
+
+		[MountainLion]
+		[Export ("CGColor")]
+		CGColor CGColor { get; }
 
 		[Export ("drawSwatchInRect:")]
 		void DrawSwatchInRect (RectangleF rect);
@@ -2747,7 +2779,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSPanel))]
-	public interface NSColorPanel {
+	public partial interface NSColorPanel {
 		[Static, Export ("sharedColorPanel")]
 		NSColorPanel SharedColorPanel { get; }
 
@@ -2965,7 +2997,8 @@ namespace MonoMac.AppKit {
 
 
 	[BaseType (typeof (NSTextField))]
-	public interface NSComboBox {
+	public partial interface NSComboBox {
+
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 		
@@ -3005,7 +3038,6 @@ namespace MonoMac.AppKit {
 		[Export ("deselectItemAtIndex:")]
 		void DeselectItem (int itemIndex);
 
-		//- (NSInteger)indexOfSelectedItem;
 		[Export ("indexOfSelectedItem")]
 		int SelectedIndex { get; }
 
@@ -3022,18 +3054,144 @@ namespace MonoMac.AppKit {
 		void Add (NSObject object1);
 
 		[Export ("addItemsWithObjectValues:")]
+		[PostGet ("Values")]
 		void Add (NSObject [] items);
 
 		[Export ("insertItemWithObjectValue:atIndex:")]
+		[PostGet ("Values")]
 		void Insert (NSObject object1, int index);
 
 		[Export ("removeItemWithObjectValue:")]
+		[PostGet ("Values")]
 		void Remove (NSObject object1);
 
 		[Export ("removeItemAtIndex:")]
+		[PostGet ("Values")]
 		void RemoveAt (int index);
 
 		[Export ("removeAllItems")]
+		[PostGet ("Values")]
+		void RemoveAll ();
+
+		[Export ("selectItemWithObjectValue:")]
+		void Select (NSObject object1);
+
+		[Export ("itemObjectValueAtIndex:")]
+		NSComboBox GetItem (int index);
+
+		[Export ("objectValueOfSelectedItem")]
+		NSObject SelectedValue { get; }
+
+		[Export ("indexOfItemWithObjectValue:")]
+		int IndexOf (NSObject object1);
+
+		[Export ("objectValues")]
+		NSObject [] Values { get; }
+
+		[Notification, Field ("NSComboBoxSelectionDidChangeNotification")]
+		NSString SelectionDidChangeNotification { get; }
+
+		[Notification, Field ("NSComboBoxSelectionIsChangingNotification")]
+		NSString SelectionIsChangingNotification { get; }
+
+		[Notification, Field ("NSComboBoxWillDismissNotification")]
+		NSString WillDismissNotification { get; }
+
+		[Notification, Field ("NSComboBoxWillPopUpNotification")]
+		NSString WillPopUpNotification { get; }
+	}
+
+	[BaseType (typeof (NSObject))]
+	[Model]
+	public interface NSComboBoxDataSource {
+		[Export ("comboBox:objectValueForItemAtIndex:")]
+		NSObject ObjectValueForItem (NSComboBox comboBox, int index);
+		
+		[Export ("numberOfItemsInComboBox:")]
+		int ItemCount (NSComboBox comboBox);
+		
+		[Export ("comboBox:completedString:")]
+		string CompletedString (NSComboBox comboBox, string uncompletedString);
+		
+		[Export ("comboBox:indexOfItemWithStringValue:")]
+		int IndexOfItem (NSComboBox comboBox, string value);
+	}
+
+	[BaseType (typeof (NSTextFieldCell))]
+	public partial interface NSComboBoxCell {
+
+		[Export ("initWithFrame:")]
+		IntPtr Constructor (RectangleF frameRect);
+
+		[Export ("hasVerticalScroller")]
+		bool HasVerticalScroller { get; set; }
+
+		[Export ("intercellSpacing")]
+		SizeF IntercellSpacing { get; set; }
+
+		[Export ("itemHeight")]
+		float ItemHeight { get; set; }
+
+		[Export ("numberOfVisibleItems")]
+		int VisibleItems { get; set; }
+
+		[Export ("buttonBordered")]
+		bool ButtonBordered { [Bind ("isButtonBordered")] get; set; }
+
+		[Export ("reloadData")]
+		void ReloadData ();
+
+		[Export ("noteNumberOfItemsChanged")]
+		void NoteNumberOfItemsChanged ();
+
+		[Export ("usesDataSource")]
+		bool UsesDataSource { get; set; }
+
+		[Export ("scrollItemAtIndexToTop:")]
+		void ScrollItemAtIndexToTop (int scrollItemIndex);
+
+		[Export ("scrollItemAtIndexToVisible:")]
+		void ScrollItemAtIndexToVisible (int scrollItemIndex);
+
+		[Export ("selectItemAtIndex:")]
+		void SelectItem (int itemIndex);
+
+		[Export ("deselectItemAtIndex:")]
+		void DeselectItem (int itemIndex);
+
+		[Export ("indexOfSelectedItem")]
+		int SelectedIndex { get; }
+
+		[Export ("numberOfItems")]
+		int Count { get; }
+
+		[Export ("completes")]
+		bool Completes { get; set; }
+
+		[Export ("dataSource")]
+		NSComboBoxCellDataSource DataSource { get; set; }
+
+		[Export ("addItemWithObjectValue:")]
+		void Add (NSObject object1);
+
+		[Export ("addItemsWithObjectValues:")]
+		[PostGet ("Values")]
+		void Add (NSObject [] items);
+
+		[Export ("insertItemWithObjectValue:atIndex:")]
+		[PostGet ("Values")]
+		void Insert (NSObject object1, int index);
+
+		[Export ("removeItemWithObjectValue:")]
+		[PostGet ("Values")]
+		void Remove (NSObject object1);
+
+		[Export ("removeItemAtIndex:")]
+		[PostGet ("Values")]
+		void RemoveAt (int index);
+
+		[Export ("removeAllItems")]
+		[PostGet ("Values")]
 		void RemoveAll ();
 
 		[Export ("selectItemWithObjectValue:")]
@@ -3054,22 +3212,22 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[Model]
-	public interface NSComboBoxDataSource {
-		[Export ("comboBox:objectValueForItemAtIndex:")]
-		NSObject ObjectValueForItem (NSComboBox comboBox, int index);
-		
-		[Export ("numberOfItemsInComboBox:")]
-		int ItemCount (NSComboBox comboBox);
-		
-		[Export ("comboBox:completedString:")]
-		string CompletedString (NSComboBox comboBox, string uncompletedString);
-		
-		[Export ("comboBox:indexOfItemWithStringValue:")]
-		int IndexOfItem (NSComboBox comboBox, string value);
+	public partial interface NSComboBoxCellDataSource {
+		[Export ("comboBoxCell:objectValueForItemAtIndex:")]
+		NSObject ObjectValueForItem (NSComboBoxCell comboBox, int index);
+
+		[Export ("numberOfItemsInComboBoxCell:")]
+		int ItemCount (NSComboBoxCell comboBox);
+
+		[Export ("comboBoxCell:completedString:")]
+		string CompletedString (NSComboBoxCell comboBox, string uncompletedString);
+
+		[Export ("comboBoxCell:indexOfItemWithStringValue:")]
+		uint IndexOfItem (NSComboBoxCell comboBox, string value);
 	}
 	
 	[BaseType (typeof (NSView))]
-	public interface NSControl {
+	public partial interface NSControl {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -3138,6 +3296,9 @@ namespace MonoMac.AppKit {
 
 		[Export ("takeIntegerValueFrom:")]
 		void TakeIntegerValueFrom (NSObject sender);
+
+		[Export ("invalidateIntrinsicContentSizeForCell:"), Lion]
+		void InvalidateIntrinsicContentSizeForCell (NSCell cell);
 
 		//Detected properties
 		[Static]
@@ -3311,7 +3472,7 @@ namespace MonoMac.AppKit {
 		NSCursor IBeamCursorForVerticalLayout { get; }
 		
 		[Export ("initWithImage:hotSpot:")]
-		NSObject InitWithImagehotSpot (NSImage newImage, PointF aPoint);
+		IntPtr Constructor (NSImage newImage, PointF aPoint);
 
 		[Export ("initWithImage:foregroundColorHint:backgroundColorHint:hotSpot:")]
 		IntPtr Constructor (NSImage newImage, NSColor fg, NSColor bg, PointF hotSpot);
@@ -3368,7 +3529,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSCustomImageRep init]: unrecognized selector sent to instance 0x54a870
-	public interface NSCustomImageRep {
+	public partial interface NSCustomImageRep {
 		[Export ("initWithDrawSelector:delegate:")]
 		IntPtr Constructor (Selector drawSelectorMethod, NSObject delegateObject);
 
@@ -3540,7 +3701,7 @@ namespace MonoMac.AppKit {
 	public delegate void NSDocumentCompletionHandler (IntPtr nsErrorPointerOrZero);
 	
 	[BaseType (typeof (NSObject))]
-	public interface NSDocument {
+	public partial interface NSDocument {
 		[Export ("initWithType:error:")]
 		IntPtr Constructor (string typeName, out NSError outError);
 
@@ -3693,9 +3854,11 @@ namespace MonoMac.AppKit {
 		void SetWindow (NSWindow window);
 
 		[Export ("addWindowController:")]
+		[PostGet ("WindowControllers")]
 		void AddWindowController (NSWindowController windowController);
 
 		[Export ("removeWindowController:")]
+		[PostGet ("WindowControllers")]
 		void RemoveWindowController (NSWindowController windowController);
 
 		[Export ("showWindows")]
@@ -3846,7 +4009,7 @@ namespace MonoMac.AppKit {
 	public delegate void OpenDocumentCompletionHandler (NSDocument document, bool documentWasAlreadyOpen, NSError error);
 
 	[BaseType (typeof (NSObject))]
-	public interface NSDocumentController : NSWindowRestoration {
+	public partial interface NSDocumentController : NSWindowRestoration {
 		[Static, Export ("sharedDocumentController")]
 		NSObject SharedDocumentController { get; }
 
@@ -3860,15 +4023,17 @@ namespace MonoMac.AppKit {
 		string CurrentDirectory { get; }
 
 		[Export ("documentForURL:")]
-		NSDocument DocumentForUrl (NSUrl absoluteUrl);
+		NSDocument DocumentForUrl (NSUrl url);
 
 		[Export ("documentForWindow:")]
 		NSDocument DocumentForWindow (NSWindow window);
 
 		[Export ("addDocument:")]
+		[PostGet ("Documents")]
 		void AddDocument (NSDocument document);
 
 		[Export ("removeDocument:")]
+		[PostGet ("Documents")]
 		void RemoveDocument (NSDocument document);
 
 		[Export ("newDocument:")]
@@ -3887,23 +4052,23 @@ namespace MonoMac.AppKit {
 		NSUrl [] UrlsFromRunningOpenPanel ();
 
 		[Export ("runModalOpenPanel:forTypes:")]
-		int RunModalOpenPanelforTypes (NSOpenPanel openPanel, string [] types);
+		int RunModalOpenPanel (NSOpenPanel openPanel, string [] types);
 
 		[Export ("openDocumentWithContentsOfURL:display:error:")]
-		NSObject OpenDocument (NSUrl absoluteUrl, bool displayDocument, out NSError outError);
+		NSObject OpenDocument (NSUrl url, bool displayDocument, out NSError outError);
 
 		[Lion]
 		[Export ("openDocumentWithContentsOfURL:display:completionHandler:")]
 		void OpenDocument (NSUrl url, bool display, OpenDocumentCompletionHandler completionHandler);
 
 		[Export ("makeDocumentWithContentsOfURL:ofType:error:")]
-		NSObject MakeDocument (NSUrl absoluteUrl, string typeName, out NSError outError);
+		NSObject MakeDocument (NSUrl url, string typeName, out NSError outError);
 
 		[Export ("reopenDocumentForURL:withContentsOfURL:error:")]
-		bool ReopenDocument (NSUrl absoluteDocumentUrl, NSUrl absoluteDocumentContentsUrl, out NSError outError);
+		bool ReopenDocument (NSUrl url, NSUrl contentsUrl, out NSError outError);
 
 		[Export ("makeDocumentForURL:withContentsOfURL:ofType:error:")]
-		NSObject MakeDocument (NSUrl absoluteDocumentUrl, NSUrl absoluteDocumentContentsUrl, string typeName, out NSError outError);
+		NSObject MakeDocument ([NullAllowed] NSUrl urlOrNil, NSUrl contentsUrl, string typeName, out NSError outError);
 
 		[Export ("saveAllDocuments:")]
 		void SaveAllDocuments ([NullAllowed] NSObject sender);
@@ -3936,7 +4101,7 @@ namespace MonoMac.AppKit {
 		void NoteNewRecentDocument (NSDocument document);
 
 		[Export ("noteNewRecentDocumentURL:")]
-		void NoteNewRecentDocumentURL (NSUrl absoluteUrl);
+		void NoteNewRecentDocumentURL (NSUrl url);
 
 		[Export ("recentDocumentURLs")]
 		NSUrl [] RecentDocumentUrls { get; }
@@ -3945,7 +4110,7 @@ namespace MonoMac.AppKit {
 		string DefaultType { get; }
 
 		[Export ("typeForContentsOfURL:error:")]
-		string TypeForUrl (NSUrl inAbsoluteUrl, out NSError outError);
+		string TypeForUrl (NSUrl url, out NSError outError);
 
 		[Export ("documentClassNames")]
 		string [] DocumentClassNames  {get; }
@@ -4149,7 +4314,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSDrawerDelegate)})]
-	public interface NSDrawer {
+	public partial interface NSDrawer {
 		[Export ("initWithContentSize:preferredEdge:")]
 		IntPtr Constructor (SizeF contentSize, NSRectEdge edge);
 
@@ -4236,7 +4401,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // crash at runtime (e.g. description). Documentation state: "You don’t create NSFont objects using the alloc and init methods."
-	public interface NSFont {
+	public partial interface NSFont {
 		[Static]
 		[Export ("fontWithName:size:")]
 		NSFont FromFontName (string fontName, float fontSize);
@@ -4439,6 +4604,21 @@ namespace MonoMac.AppKit {
 	}
 
 	[Lion]
+	public interface NSFontCollectionChangedEventArgs {
+		[Internal, Export ("NSFontCollectionActionKey")]
+		NSString _Action { get; }
+
+		[Export ("NSFontCollectionNameKey")]
+		string Name { get; }
+
+		[Export ("NSFontCollectionOldNameKey")]
+		string OldName { get; }
+
+		[Internal, Export ("NSFontCollectionVisibilityKey")]
+		NSNumber _Visibility { get; }
+	}
+
+	[Lion]
 	[BaseType (typeof (NSObject))]
 	interface NSFontCollection {
 		[Static]
@@ -4504,8 +4684,8 @@ namespace MonoMac.AppKit {
 		[Field ("NSFontCollectionDisallowAutoActivationOption")]
 		NSString DisallowAutoActivationOption { get; }
 		
-		[Field ("NSFontCollectionDidChangeNotification")]
-		NSString DidChangeNotification { get; }
+		[Notification (typeof (NSFontCollectionChangedEventArgs)), Field ("NSFontCollectionDidChangeNotification")]
+		NSString ChangedNotification { get; }
 		
 		[Field ("NSFontCollectionActionKey")]
 		NSString ActionKey { get; }
@@ -4794,7 +4974,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSMatrix))]
-	public interface NSForm  {
+	public partial interface NSForm  {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -4863,7 +5043,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSActionCell))]
-	public interface NSFormCell {
+	public partial interface NSFormCell {
 		[Export ("initTextCell:")]
 		IntPtr Constructor (string aString);
 	
@@ -4957,6 +5137,7 @@ namespace MonoMac.AppKit {
 		NSColor GetInterpolatedColor(float location);
 	}
 
+	[ThreadSafe] // CurrentContext returns a context that can be used from the current thread
 	[BaseType (typeof (NSObject))]
 	public interface NSGraphicsContext {
 		[Static, Export ("graphicsContextWithAttributes:")]
@@ -5003,7 +5184,7 @@ namespace MonoMac.AppKit {
 
 		// keep signature in sync with 'graphicsContextWithGraphicsPort:flipped:'
 		[Export ("graphicsPort")]
-		IntPtr GraphicsPort {get; }
+		IntPtr GraphicsPortHandle {get; }
 	
 		[Export ("isFlipped")]
 		bool IsFlipped { get; }
@@ -5025,6 +5206,11 @@ namespace MonoMac.AppKit {
 
 		[Export ("CIContext")]
 		MonoMac.CoreImage.CIContext CIContext { get; } 
+	}
+
+	[BaseType (typeof (NSGraphicsContext))]
+	[DisableDefaultCtor]
+	public interface NSPrintPreviewGraphicsContext {
 	}
 
 	[BaseType (typeof (NSImageRep))]
@@ -5239,7 +5425,7 @@ namespace MonoMac.AppKit {
 		bool IsEnteringProximity { get; }
 
 		[Export ("touchesMatchingPhase:inView:")]
-		NSSet TouchesMatchingPhaseinView (NSTouchPhase phase, NSView view);
+		NSSet TouchesMatchingPhase (NSTouchPhase phase, NSView view);
 
 		[Static]
 		[Export ("startPeriodicEventsAfterDelay:withPeriod:")]
@@ -5347,7 +5533,8 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSMenu {
+	[Dispose ("__mt_items_var = null;")]
+	public partial interface NSMenu {
 		[Export ("initWithTitle:")]
 		IntPtr Constructor (string aTitle);
 
@@ -5363,27 +5550,34 @@ namespace MonoMac.AppKit {
 		bool PopUpMenu ([NullAllowed] NSMenuItem item, PointF location, [NullAllowed] NSView view);
 
 		[Export ("insertItem:atIndex:")]
-		void InsertItematIndex (NSMenuItem newItem, int index);
+		[PostSnippet ("__mt_items_var = ItemArray();")]
+		void InsertItem (NSMenuItem newItem, int index);
 
 		[Export ("addItem:")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		void AddItem (NSMenuItem newItem);
 
 		[Export ("insertItemWithTitle:action:keyEquivalent:atIndex:")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		NSMenuItem InsertItem (string title, [NullAllowed] Selector action, string charCode, int index);
 
 		[Export ("addItemWithTitle:action:keyEquivalent:")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		NSMenuItem AddItem (string title, [NullAllowed] Selector action, string charCode);
 
 		[Export ("removeItemAtIndex:")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		void RemoveItemAt (int index);
 
 		[Export ("removeItem:")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		void RemoveItem (NSMenuItem item);
 
 		[Export ("setSubmenu:forItem:")]
 		void SetSubmenu (NSMenu aMenu, NSMenuItem anItem);
 
 		[Export ("removeAllItems")]
+		[PostSnippet ("__mt_items_var = ItemArray();")]
 		void RemoveAllItems ();
 
 		[Export ("itemArray")]
@@ -5578,7 +5772,7 @@ namespace MonoMac.AppKit {
 		[Export ("keyEquivalentModifierMask")]
 		NSEventModifierMask KeyEquivalentModifierMask { get; set; }
 
-		[Export ("image")]
+		[Export ("image"), NullAllowed]
 		NSImage Image { get; set; }
 
 		[Export ("state")]
@@ -5701,8 +5895,9 @@ namespace MonoMac.AppKit {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frame);
 
-		[Export ("initAsTearOff")]
-		IntPtr Constructor (int tokenInitAsTearOff);
+		// <quote>Deprecated. Tear-off menus are not supported in OS X.</quote>
+		//[Export ("initAsTearOff")]
+		//IntPtr Constructor (int tokenInitAsTearOff);
 
 		[Export ("itemChanged:")]
 		void ItemChanged (NSNotification notification);
@@ -5806,7 +6001,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSNib {
+	public partial interface NSNib {
 		[Export ("initWithContentsOfURL:")]
 		IntPtr Constructor (NSUrl nibFileUrl);
 
@@ -5969,6 +6164,7 @@ namespace MonoMac.AppKit {
 		[Export ("flushBuffer")]
 		void FlushBuffer ();
 
+                [ThreadSafe]
 		[Export ("makeCurrentContext")]
 		void MakeCurrentContext ();
 
@@ -6021,7 +6217,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSView))]
-	public interface NSOpenGLView {
+	public partial interface NSOpenGLView {
 		[Static]
 		[Export ("defaultPixelFormat")]
 		NSOpenGLPixelFormat DefaultPixelFormat { get; }
@@ -6141,7 +6337,7 @@ namespace MonoMac.AppKit {
 
 	
 	[BaseType (typeof (NSTableView))]
-	public interface NSOutlineView {
+	public partial interface NSOutlineView {
 		[Export ("outlineTableColumn"), NullAllowed]
 		NSTableColumn OutlineTableColumn { get; set; }
 
@@ -6149,19 +6345,19 @@ namespace MonoMac.AppKit {
 		bool IsExpandable (NSObject item);
 
 		[Export ("expandItem:expandChildren:")]
-		void ExpandItem (NSObject item, bool expandChildren);
+		void ExpandItem ([NullAllowed] NSObject item, bool expandChildren);
 
 		[Export ("expandItem:")]
 		void ExpandItem (NSObject item);
 
 		[Export ("collapseItem:collapseChildren:")]
-		void CollapseItem (NSObject item, bool collapseChildren);
+		void CollapseItem ([NullAllowed] NSObject item, bool collapseChildren);
 
 		[Export ("collapseItem:")]
 		void CollapseItem (NSObject item);
 
 		[Export ("reloadItem:reloadChildren:")]
-		void ReloadItem (NSObject item, bool reloadChildren);
+		void ReloadItem ([NullAllowed] NSObject item, bool reloadChildren);
 
 		[Export ("reloadItem:")]
 		void ReloadItem (NSObject item);
@@ -6176,7 +6372,7 @@ namespace MonoMac.AppKit {
 		int RowForItem (NSObject item);
 
 		[Export ("levelForItem:")]
-		int LevelForItem (NSObject item);
+		int LevelForItem ([NullAllowed] NSObject item);
 
 		[Export ("levelForRow:")]
 		int LevelForRow (int row);
@@ -6220,7 +6416,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[Model]
-	public interface NSOutlineViewDelegate {
+	public partial interface NSOutlineViewDelegate {
 		[Export ("outlineView:willDisplayCell:forTableColumn:item:")]
 		void WillDisplayCell (NSOutlineView outlineView, NSObject cell, NSTableColumn tableColumn, NSObject item);
 	
@@ -6248,9 +6444,8 @@ namespace MonoMac.AppKit {
 		[Export ("outlineView:didDragTableColumn:")]
 		void DidDragTableColumn (NSOutlineView outlineView, NSTableColumn tableColumn);
 		
-		//FIXME: Binding NSRectPointer	
-		//[Export ("outlineView:toolTipForCell:rect:tableColumn:item:mouseLocation:")]
-		//string ToolTipForCell (NSOutlineView outlineView, NSCell cell, NSRectPointer rect, NSTableColumn tableColumn, NSObject item, PointF mouseLocation);
+		[Export ("outlineView:toolTipForCell:rect:tableColumn:item:mouseLocation:")]
+		string ToolTipForCell (NSOutlineView outlineView, NSCell cell, ref RectangleF rect, NSTableColumn tableColumn, NSObject item, PointF mouseLocation);
 	
 		[Export ("outlineView:heightOfRowByItem:"), NoDefaultValue]
 		float GetRowHeight (NSOutlineView outlineView, NSObject item);
@@ -6324,9 +6519,9 @@ namespace MonoMac.AppKit {
 	
 	[BaseType (typeof (NSObject))]
 	[Model]
-	public interface NSOutlineViewDataSource {
+	public partial interface NSOutlineViewDataSource {
 		[Export ("outlineView:child:ofItem:")]
-		NSObject GetChild (NSOutlineView outlineView, int childIndex, NSObject ofItem);
+		NSObject GetChild (NSOutlineView outlineView, int childIndex, NSObject item);
 	
 		[Export ("outlineView:isItemExpandable:")]
 		bool ItemExpandable (NSOutlineView outlineView, NSObject item);
@@ -6335,7 +6530,7 @@ namespace MonoMac.AppKit {
 		int GetChildrenCount (NSOutlineView outlineView, NSObject item);
 	
 		[Export ("outlineView:objectValueForTableColumn:byItem:")]
-		NSObject GetObjectValue (NSOutlineView outlineView, NSTableColumn forTableColumn, NSObject byItem);
+		NSObject GetObjectValue (NSOutlineView outlineView, NSTableColumn tableColumn, NSObject item);
 	
 		[Export ("outlineView:setObjectValue:forTableColumn:byItem:")]
 		void SetObjectValue (NSOutlineView outlineView, NSObject theObject, NSTableColumn tableColumn, NSObject item);
@@ -6364,7 +6559,7 @@ namespace MonoMac.AppKit {
 	
 
 	[BaseType (typeof (NSObject))]
-	public interface NSHelpManager {
+	public partial interface NSHelpManager {
 		[Static]
 		[Export ("sharedHelpManager")]
 		NSHelpManager SharedHelpManager ();
@@ -6397,7 +6592,8 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSImageDelegate)})]
-	public interface NSImage {
+	[Dispose ("__mt_reps_var = null;")]
+	public partial interface NSImage {
 		[Static]
 		[Export ("imageNamed:")]
 		NSImage ImageNamed (string name);
@@ -6454,12 +6650,15 @@ namespace MonoMac.AppKit {
 		NSImageRep [] Representations ();
 
 		[Export ("addRepresentations:")]
+		[PostSnippet ("__mt_reps_var = Representations();")]
 		void AddRepresentations (NSImageRep [] imageReps);
 
 		[Export ("addRepresentation:")]
+		[PostSnippet ("__mt_reps_var = Representations();")]
 		void AddRepresentation (NSImageRep imageRep);
 
 		[Export ("removeRepresentation:")]
+		[PostSnippet ("__mt_reps_var = Representations();")]
 		void RemoveRepresentation (NSImageRep imageRep);
 
 		[Export ("isValid")]
@@ -6571,6 +6770,123 @@ namespace MonoMac.AppKit {
 		
 		[Obsolete ("On 10.6 and newer use DrawInRect with respectContextIsFlipped instead"), Export ("flipped")]
 		bool Flipped { [Bind ("isFlipped")] get; set; }
+
+		[Internal, Field ("NSImageNameQuickLookTemplate")]
+		NSString NSImageNameQuickLookTemplate { get; }
+
+		[Internal, Field ("NSImageNameBluetoothTemplate")]
+		NSString NSImageNameBluetoothTemplate { get; }
+
+		[Internal, Field ("NSImageNameIChatTheaterTemplate")]
+		NSString NSImageNameIChatTheaterTemplate { get; }
+
+		[Internal, Field ("NSImageNameSlideshowTemplate")]
+		NSString NSImageNameSlideshowTemplate { get; }
+
+		[Internal, Field ("NSImageNameActionTemplate")]
+		NSString NSImageNameActionTemplate { get; }
+
+		[Internal, Field ("NSImageNameSmartBadgeTemplate")]
+		NSString NSImageNameSmartBadgeTemplate { get; }
+
+		[Internal, Field ("NSImageNamePathTemplate")]
+		NSString NSImageNamePathTemplate { get; }
+
+		[Internal, Field ("NSImageNameInvalidDataFreestandingTemplate")]
+		NSString NSImageNameInvalidDataFreestandingTemplate { get; }
+
+		[Internal, Field ("NSImageNameLockLockedTemplate")]
+		NSString NSImageNameLockLockedTemplate { get; }
+
+		[Internal, Field ("NSImageNameLockUnlockedTemplate")]
+		NSString NSImageNameLockUnlockedTemplate { get; }
+
+		[Internal, Field ("NSImageNameGoRightTemplate")]
+		NSString NSImageNameGoRightTemplate { get; }
+
+		[Internal, Field ("NSImageNameGoLeftTemplate")]
+		NSString NSImageNameGoLeftTemplate { get; }
+
+		[Internal, Field ("NSImageNameRightFacingTriangleTemplate")]
+		NSString NSImageNameRightFacingTriangleTemplate { get; }
+
+		[Internal, Field ("NSImageNameLeftFacingTriangleTemplate")]
+		NSString NSImageNameLeftFacingTriangleTemplate { get; }
+
+		[Internal, Field ("NSImageNameAddTemplate")]
+		NSString NSImageNameAddTemplate { get; }
+
+		[Internal, Field ("NSImageNameRemoveTemplate")]
+		NSString NSImageNameRemoveTemplate { get; }
+
+		[Internal, Field ("NSImageNameRevealFreestandingTemplate")]
+		NSString NSImageNameRevealFreestandingTemplate { get; }
+
+		[Internal, Field ("NSImageNameFollowLinkFreestandingTemplate")]
+		NSString NSImageNameFollowLinkFreestandingTemplate { get; }
+
+		[Internal, Field ("NSImageNameEnterFullScreenTemplate")]
+		NSString NSImageNameEnterFullScreenTemplate { get; }
+
+		[Internal, Field ("NSImageNameExitFullScreenTemplate")]
+		NSString NSImageNameExitFullScreenTemplate { get; }
+
+		[Internal, Field ("NSImageNameStopProgressTemplate")]
+		NSString NSImageNameStopProgressTemplate { get; }
+
+		[Internal, Field ("NSImageNameStopProgressFreestandingTemplate")]
+		NSString NSImageNameStopProgressFreestandingTemplate { get; }
+
+		[Internal, Field ("NSImageNameRefreshTemplate")]
+		NSString NSImageNameRefreshTemplate { get; }
+
+		[Internal, Field ("NSImageNameRefreshFreestandingTemplate")]
+		NSString NSImageNameRefreshFreestandingTemplate { get; }
+
+		[Internal, Field ("NSImageNameFolder")]
+		NSString NSImageNameFolder { get; }
+
+		[Internal, Field ("NSImageNameTrashEmpty")]
+		NSString NSImageNameTrashEmpty { get; }
+
+		[Internal, Field ("NSImageNameTrashFull")]
+		NSString NSImageNameTrashFull { get; }
+
+		[Internal, Field ("NSImageNameHomeTemplate")]
+		NSString NSImageNameHomeTemplate { get; }
+
+		[Internal, Field ("NSImageNameBookmarksTemplate")]
+		NSString NSImageNameBookmarksTemplate { get; }
+
+		[Internal, Field ("NSImageNameCaution")]
+		NSString NSImageNameCaution { get; }
+
+		[Internal, Field ("NSImageNameStatusAvailable")]
+		NSString NSImageNameStatusAvailable { get; }
+
+		[Internal, Field ("NSImageNameStatusPartiallyAvailable")]
+		NSString NSImageNameStatusPartiallyAvailable { get; }
+
+		[Internal, Field ("NSImageNameStatusUnavailable")]
+		NSString NSImageNameStatusUnavailable { get; }
+
+		[Internal, Field ("NSImageNameStatusNone")]
+		NSString NSImageNameStatusNone { get; }
+
+		[Internal, Field ("NSImageNameApplicationIcon")]
+		NSString NSImageNameApplicationIcon { get; }
+
+		[Internal, Field ("NSImageNameMenuOnStateTemplate")]
+		NSString NSImageNameMenuOnStateTemplate { get; }
+
+		[Internal, Field ("NSImageNameMenuMixedStateTemplate")]
+		NSString NSImageNameMenuMixedStateTemplate { get; }
+
+		[Internal, Field ("NSImageNameUserGuest")]
+		NSString NSImageNameUserGuest { get; }
+
+		[Internal, Field ("NSImageNameMobileMe")]
+		NSString NSImageNameMobileMe { get; }
 	}
 
 	[BaseType (typeof (NSObject))]
@@ -6606,7 +6922,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSImageRep {
+	public partial interface NSImageRep {
 		[Export ("draw")]
 		bool Draw ();
 
@@ -6739,7 +7055,7 @@ namespace MonoMac.AppKit {
 
 		//Detected properties
 		[Export ("image")]
-		NSImage Image { get; set; }
+		NSImage Image { get; [NullAllowed] set; }
 
 		[Export ("imageAlignment")]
 		NSImageAlignment ImageAlignment { get; set; }
@@ -6761,7 +7077,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSControl), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSMatrixDelegate)})]
-	public interface NSMatrix {
+	public partial interface NSMatrix {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -6772,7 +7088,7 @@ namespace MonoMac.AppKit {
 		IntPtr Constructor (RectangleF frameRect, NSMatrixMode aMode, Class factoryId, int rowsHigh, int colsWide);
 
 		[Export ("makeCellAtRow:column:")]
-		NSCell MakeCellAtRowcolumn (int row, int col);
+		NSCell MakeCell (int row, int col);
 
 		[Export ("sendAction:to:forAllCells:")]
 		void SendAction (Selector aSelector, NSObject anObject, bool forAllCells);
@@ -6810,7 +7126,7 @@ namespace MonoMac.AppKit {
 		void DeselectAllCells ();
 
 		[Export ("selectCellAtRow:column:")]
-		void SelectCellAtRowcolumn (int row, int col);
+		void SelectCell (int row, int column);
 
 		[Export ("selectAll:")]
 		void SelectAll (NSObject sender);
@@ -6822,7 +7138,7 @@ namespace MonoMac.AppKit {
 		void SetScrollable (bool flag);
 
 		[Export ("setState:atRow:column:")]
-		void SetState (int state, int row, int col);
+		void SetState (int state, int row, int column);
 
 		[Export ("getNumberOfRows:columns:")]
 		void GetRowsAndColumnsCount (out int rowCount, out int colCount);
@@ -6834,22 +7150,22 @@ namespace MonoMac.AppKit {
 		int Columns { get; }
 
 		[Export ("cellAtRow:column:")][Internal]
-		NSCell CellAtRowColumn (int row, int col);
+		NSCell CellAtRowColumn (int row, int column);
 
 		[Export ("cellFrameAtRow:column:")]
-		RectangleF CellFrameAtRowColumn (int row, int col);
+		RectangleF CellFrameAtRowColumn (int row, int column);
 
 		[Export ("getRow:column:ofCell:")]
-		bool GetRowColumn (out int row, out int col, NSCell aCell);
+		bool GetRowColumn (out int row, out int column, NSCell aCell);
 
 		[Export ("getRow:column:forPoint:")]
-		bool GetRowcolumnForPoint (out int row, out int col, PointF aPoint);
+		bool GetRowColumnForPoint (out int row, out int column, PointF aPoint);
 
 		[Export ("renewRows:columns:")]
 		void RenewRowsColumns (int newRows, int newCols);
 
 		[Export ("putCell:atRow:column:")]
-		void PutCellatRowColumn (NSCell newCell, int row, int col);
+		void PutCell (NSCell newCell, int row, int column);
 
 		[Export ("addRow")]
 		void AddRow ();
@@ -6876,7 +7192,7 @@ namespace MonoMac.AppKit {
 		void InsertColumn (int column);
 
 		[Export ("insertColumn:withCells:")]
-		void InsertColumnwithCells (int column, NSCell [] newCells);
+		void InsertColumn (int column, NSCell [] newCells);
 
 		[Export ("removeColumn:")]
 		void RemoveColumn (int col);
@@ -6891,13 +7207,13 @@ namespace MonoMac.AppKit {
 		void SetValidateSize (bool flag);
 
 		[Export ("drawCellAtRow:column:")]
-		void DrawCellAtRowColumn (int row, int col);
+		void DrawCellAtRowColumn (int row, int column);
 
 		[Export ("highlightCell:atRow:column:")]
-		void HighlightCellatRowColumn (bool highlight, int row, int col);
+		void HighlightCell (bool highlight, int row, int column);
 
 		[Export ("scrollCellToVisibleAtRow:column:")]
-		void ScrollCellToVisibleAtRowcolumn (int row, int col);
+		void ScrollCellToVisible (int row, int column);
 
 		[Export ("mouseDownFlags")]
 		int MouseDownFlags ();
@@ -6933,7 +7249,7 @@ namespace MonoMac.AppKit {
 		void SelectText (NSObject sender);
 
 		[Export ("selectTextAtRow:column:")]
-		NSObject SelectTextAtRowColumn (int row, int col);
+		NSObject SelectTextAtRowColumn (int row, int column);
 
 		[Export ("acceptsFirstMouse:")]
 		bool AcceptsFirstMouse (NSEvent theEvent);
@@ -6942,7 +7258,7 @@ namespace MonoMac.AppKit {
 		void ResetCursorRects ();
 
 		[Export ("setToolTip:forCell:")]
-		void SetToolTipforCell (string toolTipString, NSCell cell);
+		void SetToolTipForCell (string toolTipString, NSCell cell);
 
 		[Export ("toolTipForCell:")]
 		string ToolTipForCell (NSCell cell);
@@ -7087,11 +7403,11 @@ namespace MonoMac.AppKit {
 	public interface NSLayoutConstraint : NSAnimatablePropertyContainer {
 		[Static]
 		[Export ("constraintsWithVisualFormat:options:metrics:views:")]
-		NSLayoutConstraint [] FromVisualFormat (string format, NSLayoutFormatOptions formatOptions, NSDictionary metrics, NSDictionary views);
+		NSLayoutConstraint [] FromVisualFormat (string format, NSLayoutFormatOptions formatOptions, [NullAllowed] NSDictionary metrics, NSDictionary views);
 
 		[Static]
 		[Export ("constraintWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:")]
-		NSLayoutConstraint Create (NSObject view1, NSLayoutAttribute attribute1, NSLayoutRelation relation, NSObject view2, NSLayoutAttribute attribute2, float multiplier, float constant);
+		NSLayoutConstraint Create (NSObject view1, NSLayoutAttribute attribute1, NSLayoutRelation relation, [NullAllowed] NSObject view2, NSLayoutAttribute attribute2, float multiplier, float constant);
 		
 		[Export ("priority")]
 		float Priority { get; set;  }
@@ -7122,7 +7438,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSObject))]
-	public interface NSLayoutManager {
+	public partial interface NSLayoutManager {
 		[Export ("attributedString")]
 		NSAttributedString AttributedString { get; }
 
@@ -7133,12 +7449,15 @@ namespace MonoMac.AppKit {
 		NSTextContainer [] TextContainers { get; }
 
 		[Export ("addTextContainer:")]
+		[PostGet ("TextContainers")]
 		void AddTextContainer (NSTextContainer container);
 
 		[Export ("insertTextContainer:atIndex:")]
+		[PostGet ("TextContainers")]
 		void InsertTextContainer (NSTextContainer container, int index);
 
 		[Export ("removeTextContainerAtIndex:")]
+		[PostGet ("TextContainers")]
 		void RemoveTextContainer (int index);
 
 		[Export ("textContainerChangedGeometry:")]
@@ -7495,15 +7814,18 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
+	[Dispose ("__mt_accessory_var = null;")]
 	public interface NSPageLayout {
 		[Static]
 		[Export ("pageLayout")]
 		NSPageLayout PageLayout { get; }
 
 		[Export ("addAccessoryController:")]
+		[PostSnippet ("__mt_accessory_var = AccessoryControllers();")]
 		void AddAccessoryController (NSViewController accessoryController);
 
 		[Export ("removeAccessoryController:")]
+		[PostSnippet ("__mt_accessory_var = AccessoryControllers();")]
 		void RemoveAccessoryController (NSViewController accessoryController);
 
 		[Export ("accessoryControllers")]
@@ -7608,9 +7930,11 @@ namespace MonoMac.AppKit {
 	public interface NSMutableParagraphStyle {
 
 		[Export ("addTabStop:")]
+		[PostGet ("TabStops")]
 		void AddTabStop (NSTextTab anObject);
 
 		[Export ("removeTabStop:")]
+		[PostGet ("TabStops")]
 		void RemoveTabStop (NSTextTab anObject);
 
 		[Export ("tabStops")]
@@ -7693,7 +8017,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // An uncaught exception was raised: +[NSPasteboard alloc]: unrecognized selector sent to class 0xac3dcbf0
-	public interface NSPasteboard {
+	public partial interface NSPasteboard {
 		[Static]
 		[Export ("generalPasteboard")]
 		NSPasteboard GeneralPasteboard { get; }
@@ -8100,19 +8424,24 @@ namespace MonoMac.AppKit {
 		[Field ("NSPopoverCloseReasonDetachToWindow")]
 		NSString CloseReasonDetachToWindow { get; }
 		
-		[Field ("NSPopoverWillShowNotification")]
+		[Notification, Field ("NSPopoverWillShowNotification")]
 		NSString WillShowNotification { get; }
 		
-		[Field ("NSPopoverDidShowNotification")]
+		[Notification, Field ("NSPopoverDidShowNotification")]
 		NSString DidShowNotification { get; }
 		
-		[Field ("NSPopoverWillCloseNotification")]
+		[Notification (typeof (NSPopoverCloseEventArgs)), Field ("NSPopoverWillCloseNotification")]
 		NSString WillCloseNotification { get; }
 		
-		[Field ("NSPopoverDidCloseNotification")]
+		[Notification (typeof (NSPopoverCloseEventArgs)), Field ("NSPopoverDidCloseNotification")]
 		NSString DidCloseNotification { get; }
 	}
-	
+
+	public partial interface NSPopoverCloseEventArgs {
+		[Internal, Export ("NSPopoverCloseReasonKey")]
+		NSString _Reason { get; }
+	}
+
 	[BaseType (typeof (NSObject))]
 	[Model]
 	interface NSPopoverDelegate {
@@ -8136,7 +8465,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSButton))]
-	public interface NSPopUpButton {
+	public partial interface NSPopUpButton {
 		[Export ("initWithFrame:pullsDown:")]
 		IntPtr Constructor (RectangleF buttonFrame, bool pullsDown);
 
@@ -8238,7 +8567,7 @@ namespace MonoMac.AppKit {
 
 
 	[BaseType (typeof (NSMenuItemCell))]
-	public interface NSPopUpButtonCell {
+	public partial interface NSPopUpButtonCell {
 		[Export ("initTextCell:")]
 		IntPtr Constructor (string aString);
 	
@@ -8519,7 +8848,7 @@ namespace MonoMac.AppKit {
 
 
 	[BaseType (typeof (NSObject))]
-	public interface NSPrintOperation {
+	public partial interface NSPrintOperation {
 		[Static]
 		[Export ("printOperationWithView:printInfo:")]
 		NSPrintOperation FromView (NSView view, NSPrintInfo printInfo);
@@ -8625,15 +8954,18 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
+	[Dispose ("__mt_accessory_var = null;")] 
 	public interface NSPrintPanel {
 		[Static]
 		[Export ("printPanel")]
 		NSPrintPanel PrintPanel { get; }
 
 		[Export ("addAccessoryController:")]
+		[PostSnippet ("__mt_accessory_var = AccessoryControllers();")]
 		void AddAccessoryController (NSViewController accessoryController);
 
 		[Export ("removeAccessoryController:")]
+		[PostSnippet ("__mt_accessory_var = AccessoryControllers();")]
 		void RemoveAccessoryController (NSViewController accessoryController);
 
 		[Export ("accessoryControllers")]
@@ -8715,7 +9047,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSResponder {
+	public partial interface NSResponder {
 		[Export ("tryToPerform:with:")]
 		bool TryToPerformwith (Selector anAction, NSObject anObject);
 
@@ -8906,7 +9238,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSView))]
-	public interface NSRulerView {
+	public partial interface NSRulerView {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -8924,9 +9256,11 @@ namespace MonoMac.AppKit {
 		float RequiredThickness { get; }
 
 		[Export ("addMarker:")]
+		[PostGet ("Markers")]
 		void AddMarker (NSRulerMarker marker);
 
 		[Export ("removeMarker:")]
+		[PostGet ("Markers")]
 		void RemoveMarker (NSRulerMarker marker);
 
 		[Export ("trackMarker:withMouseEvent:")]
@@ -9086,7 +9420,7 @@ namespace MonoMac.AppKit {
 	public interface NSRemoteSavePanel {}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSScreen {
+	public partial interface NSScreen {
 		[Static]
 		[Export ("screens")]
 		NSScreen [] Screens { get; }
@@ -9160,7 +9494,7 @@ namespace MonoMac.AppKit {
 		NSUsableScrollerParts UsableParts { get; }
 
 		[Export ("drawArrow:highlight:")]
-		void DrawArrowhighlight (NSScrollerArrow whichArrow, bool highlight);
+		void DrawArrow (NSScrollerArrow whichArrow, bool highlight);
 
 		[Export ("drawKnob")]
 		void DrawKnob ();
@@ -9214,13 +9548,13 @@ namespace MonoMac.AppKit {
 		[Lion, Export ("scrollerWidthForControlSize:scrollerStyle:")]
 		float GetScrollerWidth (NSControlSize forControlSize, NSScrollerStyle scrollerStyle);
 		
-		[Field ("NSPreferredScrollerStyleDidChangeNotification")]
-		NSString NSPreferredScrollerStyleDidChangeNotification { get; }
+		[Notification, Field ("NSPreferredScrollerStyleDidChangeNotification")]
+		NSString PreferredStyleChangedNotification { get; }
 
 	}
 
 	[BaseType (typeof (NSView))]
-	public interface NSScrollView : NSTextFinderBarContainer {
+	public partial interface NSScrollView : NSTextFinderBarContainer {
 		[Static]
 		[Export ("frameSizeForContentSize:hasHorizontalScroller:hasVerticalScroller:borderType:")]
 		SizeF FrameSizeForContentSize (SizeF cSize, bool hFlag, bool vFlag, NSBorderType aType);
@@ -9819,7 +10153,7 @@ namespace MonoMac.AppKit {
 		void DidFinishSpeaking (NSSpeechSynthesizer sender, bool finishedSpeaking);
 
 		[Export ("speechSynthesizer:willSpeakWord:ofString:")]
-		void WillSpeakWordofString (NSSpeechSynthesizer sender, NSRange characterRange, string theString);
+		void WillSpeakWord (NSSpeechSynthesizer sender, NSRange wordCharacterRange, string ofString);
 
 		[Export ("speechSynthesizer:willSpeakPhoneme:")]
 		void WillSpeakPhoneme (NSSpeechSynthesizer sender, short phonemeOpcode);
@@ -9832,7 +10166,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSSpellChecker {
+	public partial interface NSSpellChecker {
 		[Static]
 		[Export ("sharedSpellChecker")]
 		NSSpellChecker SharedSpellChecker { get; }
@@ -9961,6 +10295,7 @@ namespace MonoMac.AppKit {
 		[Export ("canInitWithPasteboard:")]
 		bool CanCreateFromPasteboard (NSPasteboard pasteboard);
 
+		[Static]
 		[Export ("soundUnfilteredTypes")]
 		string [] SoundUnfilteredTypes ();
 
@@ -10025,7 +10360,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSView))]
-	public interface NSSplitView {
+	public partial interface NSSplitView {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -10051,7 +10386,7 @@ namespace MonoMac.AppKit {
 		float MaxPositionOfDivider (int dividerIndex);
 
 		[Export ("setPosition:ofDividerAtIndex:")]
-		void SetPositionofDivider (float position, int dividerIndex);
+		void SetPositionOfDivider (float position, int dividerIndex);
 
 		//Detected properties
 		[Export ("vertical")]
@@ -10080,10 +10415,10 @@ namespace MonoMac.AppKit {
 		bool ShouldCollapseForDoubleClick (NSSplitView splitView, NSView subview, int doubleClickAtDividerIndex);
 
 		[Export ("splitView:constrainMinCoordinate:ofSubviewAt:")]
-		float SetMinCoordinateofSubview (NSSplitView splitView, float proposedMinimumPosition, int subviewDividerIndex);
+		float SetMinCoordinateOfSubview (NSSplitView splitView, float proposedMinimumPosition, int subviewDividerIndex);
 
 		[Export ("splitView:constrainMaxCoordinate:ofSubviewAt:")]
-		float SetMaxCoordinateofSubview (NSSplitView splitView, float proposedMaximumPosition, int subviewDividerIndex);
+		float SetMaxCoordinateOfSubview (NSSplitView splitView, float proposedMaximumPosition, int subviewDividerIndex);
 
 		[Export ("splitView:constrainSplitPosition:ofSubviewAt:")]
 		float ConstrainSplitPosition (NSSplitView splitView, float proposedPosition, int subviewDividerIndex);
@@ -10130,7 +10465,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[PrivateDefaultCtor]
-	public interface NSStatusItem {
+	public partial interface NSStatusItem {
 		[Export ("statusBar")]
 		NSStatusBar StatusBar { get; }
 
@@ -10147,7 +10482,7 @@ namespace MonoMac.AppKit {
 		void PopUpStatusItemMenu (NSMenu menu);
 
 		[Export ("drawStatusBarBackgroundInRect:withHighlight:")]
-		void DrawStatusBarBackgroundInRectwithHighlight (RectangleF rect, bool highlight);
+		void DrawStatusBarBackground (RectangleF rect, bool highlight);
 
 		//Detected properties
 		[Export ("doubleAction")]
@@ -10212,7 +10547,7 @@ namespace MonoMac.AppKit {
 
 	[Lion]
 	[Model]
-	interface NSTextFinderClient {
+	partial interface NSTextFinderClient {
 		[Abstract]
 		[Export ("allowsMultipleSelection")]
 		bool AllowsMultipleSelection { get;  }
@@ -10278,7 +10613,7 @@ namespace MonoMac.AppKit {
 		void DrawCharactersInRangeforContentView (NSRange range, NSView view);
 	}
 
- 	public interface NSTextFinderBarContainer {
+ 	public partial interface NSTextFinderBarContainer {
 		[Abstract, Export ("findBarVisible"), Lion]
 		bool FindBarVisible { [Bind ("isFindBarVisible")] get; set;  }
 
@@ -10294,7 +10629,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[Lion]
-	interface NSTextFinder {
+	partial interface NSTextFinder {
 		[Export ("client")]
 		NSTextFinderClient Client { set; }
 
@@ -10328,7 +10663,8 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSResponder))]
-	public interface NSView : NSDraggingDestination, NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification  {
+	[Dispose ("__mt_tracking_var = null;")]
+	public partial interface NSView : NSDraggingDestination, NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification  {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -10532,13 +10868,13 @@ namespace MonoMac.AppKit {
 		void DrawRect (RectangleF dirtyRect);
 
 		[Export ("displayRectIgnoringOpacity:inContext:")]
-		void DisplayRectIgnoringOpacityinContext (RectangleF aRect, NSGraphicsContext context);
+		void DisplayRectIgnoringOpacity (RectangleF aRect, NSGraphicsContext context);
 
 		[Export ("bitmapImageRepForCachingDisplayInRect:")]
 		NSBitmapImageRep BitmapImageRepForCachingDisplayInRect (RectangleF rect);
 
 		[Export ("cacheDisplayInRect:toBitmapImageRep:")]
-		void CacheDisplayInRecttoBitmapImageRep (RectangleF rect, NSBitmapImageRep bitmapImageRep);
+		void CacheDisplay (RectangleF rect, NSBitmapImageRep bitmapImageRep);
 
 		[Export ("viewWillDraw")]
 		void ViewWillDraw ();
@@ -10571,16 +10907,16 @@ namespace MonoMac.AppKit {
 		RectangleF AdjustScroll (RectangleF newVisible);
 
 		[Export ("scrollRect:by:")]
-		void ScrollRectby (RectangleF aRect, SizeF delta);
+		void ScrollRect (RectangleF aRect, SizeF delta);
 
 		[Export ("translateRectsNeedingDisplayInRect:by:")]
-		void TranslateRectsNeedingDisplayInRectby (RectangleF clipRect, SizeF delta);
+		void TranslateRectsNeedingDisplay (RectangleF clipRect, SizeF delta);
 
 		[Export ("hitTest:")]
 		NSView HitTest (PointF aPoint);
 
 		[Export ("mouse:inRect:")]
-		bool MouseinRect (PointF aPoint, RectangleF aRect);
+		bool IsMouseInRect (PointF aPoint, RectangleF aRect);
 
 		[Export ("viewWithTag:")]
 		NSObject ViewWithTag (int aTag);
@@ -10624,10 +10960,10 @@ namespace MonoMac.AppKit {
 		[Export ("makeBackingLayer")]
 		CALayer MakeBackingLayer ();
 
-		[Export ("addTrackingArea:")][PostGet ("TrackingAreas ()")]
+		[Export ("addTrackingArea:")][PostSnippet ("__mt_tracking_var = TrackingAreas ();")]
 		void AddTrackingArea (NSTrackingArea trackingArea);
 
-		[Export ("removeTrackingArea:")][PostGet ("TrackingAreas ()")]
+		[Export ("removeTrackingArea:")][PostSnippet ("__mt_tracking_var = TrackingAreas ();")]
 		void RemoveTrackingArea (NSTrackingArea trackingArea);
 
 		[Export ("trackingAreas")]
@@ -10798,20 +11134,20 @@ namespace MonoMac.AppKit {
 		[Field ("NSFullScreenModeWindowLevel")]
 		NSString NSFullScreenModeWindowLevel { get; }
 
-		[Field ("NSViewFrameDidChangeNotification")]
-		NSString NSViewFrameDidChangeNotification { get; }
+		[Notification, Field ("NSViewFrameDidChangeNotification")]
+		NSString FrameChangedNotification { get; }
  
-		[Field ("NSViewFocusDidChangeNotification")]
-		NSString NSViewFocusDidChangeNotification { get; }
+		[Notification, Field ("NSViewFocusDidChangeNotification")]
+		NSString FocusChangedNotification { get; }
 
-		[Field ("NSViewBoundsDidChangeNotification")]
-		NSString NSViewBoundsDidChangeNotification { get; }
+		[Notification, Field ("NSViewBoundsDidChangeNotification")]
+		NSString BoundsChangedNotification { get; }
 
-		[Field ("NSViewGlobalFrameDidChangeNotification")]
-		NSString NSViewGlobalFrameDidChangeNotification { get; }
+		[Notification, Field ("NSViewGlobalFrameDidChangeNotification")]
+		NSString GlobalFrameChangedNotification { get; }
 
-		[Field ("NSViewDidUpdateTrackingAreasNotification")]
-		NSString NSViewDidUpdateTrackingAreasNotification { get; }
+		[Notification, Field ("NSViewDidUpdateTrackingAreasNotification")]
+		NSString UpdatedTrackingAreasNotification { get; }
 
 		[Lion, Export ("constraints")]
 		NSLayoutConstraint [] Constraints { get; }
@@ -10876,7 +11212,7 @@ namespace MonoMac.AppKit {
 		float GetContentHuggingPriorityForOrientation (NSLayoutConstraintOrientation orientation);
 
 		[Lion, Export ("setContentHuggingPriority:forOrientation:")]
-		void SetContentHuggingPriorityforOrientation (float priority, NSLayoutConstraintOrientation orientation);
+		void SetContentHuggingPriorityForOrientation (float priority, NSLayoutConstraintOrientation orientation);
 
 		[Lion, Export ("contentCompressionResistancePriorityForOrientation:")]
 		float GetContentCompressionResistancePriority (NSLayoutConstraintOrientation orientation);
@@ -10932,6 +11268,9 @@ namespace MonoMac.AppKit {
 
 		[Export ("noteFocusRingMaskChanged")]
 		void NoteFocusRingMaskChanged ();
+
+		[Lion, Export ("isDrawingFindIndicator")]
+		bool IsDrawingFindIndicator { get; }
 		
 		[Export ("dataWithEPSInsideRect:")]
 		NSData DataWithEpsInsideRect (RectangleF rect);
@@ -10983,7 +11322,10 @@ namespace MonoMac.AppKit {
 		
 		[Export ("locationOfPrintRect:")]
 		PointF LocationOfPrintRect (RectangleF aRect);
-		
+
+		[Lion, Export ("wantsBestResolutionOpenGLSurface")]
+		bool WantsBestResolutionOpenGLSurface { get; set; }
+
 		[Lion, Export ("backingAlignedRect:options:")]
 		RectangleF BackingAlignedRect (RectangleF aRect, NSAlignmentOptions options);
 
@@ -11101,8 +11443,14 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSTableColumn {
-		[Export ("initWithIdentifier:")]
+	public partial interface NSTableColumn : NSUserInterfaceItemIdentification {
+		[Lion, Export ("initWithIdentifier:")]
+		IntPtr Constructor (string identifier);
+
+		[Lion, Export ("initWithIdentifier:")]
+		IntPtr Constructor (NSString identifier);
+
+		[Obsolete, Export ("initWithIdentifier:")]
 		IntPtr Constructor (NSObject identifier);
 	
 		[Export ("dataCellForRow:")]
@@ -11110,10 +11458,6 @@ namespace MonoMac.AppKit {
 		
 		[Export ("sizeToFit")]
 		void SizeToFit ();
-
-		//Detected properties
-		[Export ("identifier")]
-		NSObject Identifier { get; set; }
 		
 		[Export ("tableView")]
 		NSTableView TableView { get; set; }
@@ -11186,7 +11530,7 @@ namespace MonoMac.AppKit {
 		bool TargetForDropOperation { [Bind ("isTargetForDropOperation")] get; set; }
 
 		[Export ("drawBackgroundInRect:")]
-		void DrawBackgrounn (RectangleF dirtyRect);
+		void DrawBackground (RectangleF dirtyRect);
 
 		[Export ("drawSelectionInRect:")]
 		void DrawSelection (RectangleF dirtyRect);
@@ -11203,7 +11547,7 @@ namespace MonoMac.AppKit {
 
 	[Lion]
 	[BaseType (typeof (NSView))]
-	public interface NSTableCellView {
+	public partial interface NSTableCellView {
 		[Export ("backgroundStyle")]
 		NSBackgroundStyle BackgroundStyle {
 			get; set;
@@ -11228,12 +11572,17 @@ namespace MonoMac.AppKit {
 		NSTextField TextField {
 			get; set;
 		}
+
+		[Export ("draggingImageComponents", ArgumentSemantic.Retain)]
+		NSArray DraggingImageComponents {
+			get;
+		}
 	}
 
 	public delegate void NSTableViewRowHandler (NSTableRowView rowView, int row);
 	
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTableViewDelegate)})]
-	public interface NSTableView : NSDraggingSource {
+	public partial interface NSTableView : NSDraggingSource {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -11568,7 +11917,7 @@ namespace MonoMac.AppKit {
 	
 	[BaseType (typeof (NSObject))]
 	[Model]
-	public interface NSTableViewDelegate {
+	public partial interface NSTableViewDelegate {
 		[Export ("tableView:willDisplayCell:forTableColumn:row:"), EventArgs ("NSTableViewCell")]
 		void WillDisplayCell (NSTableView tableView, NSObject cell, NSTableColumn tableColumn, int row);
 	
@@ -11595,10 +11944,6 @@ namespace MonoMac.AppKit {
 	
 		[Export ("tableView:didDragTableColumn:"), EventArgs ("NSTableViewTable")]
 		void DidDragTableColumn (NSTableView tableView, NSTableColumn tableColumn);
-	
-		//FIXME: Binding NSRectPointer
-		//[Export ("tableView:toolTipForCell:rect:tableColumn:row:mouseLocation:")]
-		//string TableViewtoolTipForCellrecttableColumnrowmouseLocation (NSTableView tableView, NSCell cell, NSRectPointer rect, NSTableColumn tableColumn, int row, PointF mouseLocation);
 	
 		[Export ("tableView:heightOfRow:"), DelegateName ("NSTableViewRowHeight"), NoDefaultValue]
 		float GetRowHeight (NSTableView tableView, int row );
@@ -11879,7 +12224,7 @@ namespace MonoMac.AppKit {
 	}
 		
 	[BaseType (typeof (NSView), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTabViewDelegate)})]
-	public interface NSTabView {
+	public partial interface NSTabView {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -11934,13 +12279,13 @@ namespace MonoMac.AppKit {
 		[Export ("controlSize")]
 		NSControlSize ControlSize { get; set; }
 
-		[Export ("addTabViewItem:")]
+		[Export ("addTabViewItem:")][PostGet ("Items")]
 		void Add (NSTabViewItem tabViewItem);
 
-		[Export ("insertTabViewItem:atIndex:")]
+		[Export ("insertTabViewItem:atIndex:")][PostGet ("Items")]
 		void Insert (NSTabViewItem tabViewItem, int index);
 
-		[Export ("removeTabViewItem:")]
+		[Export ("removeTabViewItem:")][PostGet ("Items")]
 		void Remove (NSTabViewItem tabViewItem);
 
 		[Export ("delegate"), NullAllowed]
@@ -12015,7 +12360,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSView), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextDelegate)})]
-	public interface NSText {
+	public partial interface NSText {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 
@@ -12198,6 +12543,9 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSCell))]
 	public interface NSTextAttachmentCell {
+		[Export ("initImageCell:")]
+		IntPtr Constructor (NSImage  image);
+
 		[Export ("wantsToTrackMouse")]
 		bool WantsToTrackMouse ();
 
@@ -12205,7 +12553,7 @@ namespace MonoMac.AppKit {
 		void Highlight (bool highlight, RectangleF cellFrame, NSView controlView);
 
 		[Export ("trackMouse:inRect:ofView:untilMouseUp:")]
-		bool TrackMouseinRectofViewuntilMouseUp (NSEvent theEvent, RectangleF cellFrame, NSView controlView, bool untilMouseUp);
+		bool TrackMouse (NSEvent theEvent, RectangleF cellFrame, NSView controlView, bool untilMouseUp);
 
 		[Export ("cellSize")]
 		SizeF CellSize { get; }
@@ -12216,11 +12564,9 @@ namespace MonoMac.AppKit {
 		[Export ("drawWithFrame:inView:characterIndex:")]
 		void DrawWithFrame (RectangleF cellFrame, NSView controlView, uint charIndex);
 
-		[Abstract]
 		[Export ("drawWithFrame:inView:characterIndex:layoutManager:")]
 		void DrawWithFrame (RectangleF cellFrame, NSView controlView, uint charIndex, NSLayoutManager layoutManager);
 
-		[Abstract]
 		[Export ("wantsToTrackMouseForEvent:inRect:ofView:atCharacterIndex:")]
 		bool WantsToTrackMouse (NSEvent theEvent, RectangleF cellFrame, NSView controlView, uint charIndex);
 
@@ -12279,7 +12625,7 @@ namespace MonoMac.AppKit {
 		float GetWidth (NSTextBlockLayer layer, NSRectEdge edge);
 
 		[Export ("widthValueTypeForLayer:edge:")]
-		NSTextBlockValueType WidthValueTypeForLayeredge (NSTextBlockLayer layer, NSRectEdge edge);
+		NSTextBlockValueType WidthValueTypeForLayer (NSTextBlockLayer layer, NSRectEdge edge);
 
 		[Export ("setBorderColor:forEdge:")]
 		void SetBorderColor (NSColor color, NSRectEdge edge);
@@ -12309,7 +12655,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextFieldDelegate)})]
-	public interface NSTextField {
+	public partial interface NSTextField {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (RectangleF frameRect);
 		
@@ -12370,6 +12716,9 @@ namespace MonoMac.AppKit {
 
 		[Export ("importsGraphics")]
 		bool ImportsGraphics { get; set; }
+
+		[MountainLion, Export ("preferredMaxLayoutWidth")]
+		float PreferredMaxLayoutWidth { get; set; }
 	}
 
 	[BaseType (typeof (NSTextField))]
@@ -12457,7 +12806,7 @@ namespace MonoMac.AppKit {
 	}  
 
 	[BaseType (typeof (NSObject))]
-	public interface NSTextInputContext {
+	public partial interface NSTextInputContext {
 		[Static]
 		[Export ("currentInputContext")]
 		NSTextInputContext CurrentInputContext { get; }
@@ -12549,7 +12898,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public interface NSTextContainer {
+	public partial interface NSTextContainer {
 		[Export ("initWithContainerSize:")]
 		IntPtr Constructor (SizeF size);
 
@@ -12587,11 +12936,11 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSMutableAttributedString), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextStorageDelegate)})]
-	public interface NSTextStorage {
-		[Export ("addLayoutManager:")]
+	public partial interface NSTextStorage {
+		[Export ("addLayoutManager:")][PostGet ("LayoutManagers")]
 		void AddLayoutManager (NSLayoutManager obj);
 
-		[Export ("removeLayoutManager:")]
+		[Export ("removeLayoutManager:")][PostGet ("LayoutManagers")]
 		void RemoveLayoutManager (NSLayoutManager obj);
 
 		[Export ("layoutManagers")]
@@ -12661,7 +13010,7 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSText), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextViewDelegate)})]
-	public interface NSTextView : NSDraggingSource {
+	public partial interface NSTextView : NSDraggingSource {
 		[Export ("initWithFrame:textContainer:")]
 		IntPtr Constructor (RectangleF frameRect, NSTextContainer container);
 
@@ -12690,10 +13039,10 @@ namespace MonoMac.AppKit {
 		void SetConstrainedFrameSize (SizeF desiredSize);
 
 		[Export ("setAlignment:range:")]
-		void SetAlignmentrange (NSTextAlignment alignment, NSRange range);
+		void SetAlignmentRange (NSTextAlignment alignment, NSRange range);
 
 		[Export ("setBaseWritingDirection:range:")]
-		void SetBaseWritingDirectionrange (NSWritingDirection writingDirection, NSRange range);
+		void SetBaseWritingDirection (NSWritingDirection writingDirection, NSRange range);
 
 		[Export ("turnOffKerning:")]
 		void TurnOffKerning (NSObject sender);
@@ -12771,13 +13120,13 @@ namespace MonoMac.AppKit {
 		bool RulerViewShouldAddMarker (NSRulerView ruler, NSRulerMarker marker);
 
 		[Export ("rulerView:willMoveMarker:toLocation:")]
-		float RulerViewWillMoveMarkertoLocation (NSRulerView ruler, NSRulerMarker marker, float location);
+		float RulerViewWillMoveMarker (NSRulerView ruler, NSRulerMarker marker, float location);
 
 		[Export ("rulerView:shouldRemoveMarker:")]
 		bool RulerViewShouldRemoveMarker (NSRulerView ruler, NSRulerMarker marker);
 
 		[Export ("rulerView:willAddMarker:atLocation:")]
-		float RulerViewWillAddMarkeratLocation (NSRulerView ruler, NSRulerMarker marker, float location);
+		float RulerViewWillAddMarker (NSRulerView ruler, NSRulerMarker marker, float location);
 
 		[Export ("rulerView:handleMouseDown:")]
 		void RulerViewHandleMouseDown (NSRulerView ruler, NSEvent theEvent);
@@ -12789,7 +13138,7 @@ namespace MonoMac.AppKit {
 		bool ShouldDrawInsertionPoint { get; }
 
 		[Export ("drawInsertionPointInRect:color:turnedOn:")]
-		void DrawInsertionPointInRectcolorturnedOn (RectangleF rect, NSColor color, bool turnedOn);
+		void DrawInsertionPoint (RectangleF rect, NSColor color, bool turnedOn);
 
 		[Export ("drawViewBackgroundInRect:")]
 		void DrawViewBackgroundInRect (RectangleF rect);
@@ -12838,26 +13187,26 @@ namespace MonoMac.AppKit {
 		string [] CompletionsForPartialWord (NSRange charRange, out int index);
 
 		[Export ("insertCompletion:forPartialWordRange:movement:isFinal:")]
-		void InsertCompletionforPartialWord (string word, NSRange charRange, int movement, bool isFinal);
+		void InsertCompletion (string completion, NSRange partialWordCharRange, int movement, bool isFinal);
 
 		// Pasteboard
 		[Export ("writablePasteboardTypes")]
 		string [] WritablePasteboardTypes ();
 
 		[Export ("writeSelectionToPasteboard:type:")]
-		bool WriteSelectionToPasteboardtype (NSPasteboard pboard, string type);
+		bool WriteSelectionToPasteboard (NSPasteboard pboard, string type);
 
 		[Export ("writeSelectionToPasteboard:types:")]
-		bool WriteSelectionToPasteboardtypes (NSPasteboard pboard, string [] types);
+		bool WriteSelectionToPasteboard (NSPasteboard pboard, string [] types);
 
 		[Export ("readablePasteboardTypes")]
 		string [] ReadablePasteboardTypes ();
 
 		[Export ("preferredPasteboardTypeFromArray:restrictedToTypesFromArray:")]
-		string PreferredPasteboardTypeFromArrayrestrictedToTypesFromArray (string [] availableTypes, string [] allowedTypes);
+		string GetPreferredPasteboardType (string [] availableTypes, string [] allowedTypes);
 
 		[Export ("readSelectionFromPasteboard:type:")]
-		bool ReadSelectionFromPasteboardtype (NSPasteboard pboard, string type);
+		bool ReadSelectionFromPasteboard (NSPasteboard pboard, string type);
 
 		[Export ("readSelectionFromPasteboard:")]
 		bool ReadSelectionFromPasteboard (NSPasteboard pboard);
@@ -12867,7 +13216,7 @@ namespace MonoMac.AppKit {
 		void RegisterForServices ();
 
 		[Export ("validRequestorForSendType:returnType:")]
-		NSObject ValidRequestorForSendTypereturnType (string sendType, string returnType);
+		NSObject ValidRequestorForSendType (string sendType, string returnType);
 
 		[Export ("pasteAsPlainText:")]
 		void PasteAsPlainText (NSObject sender);
@@ -12887,16 +13236,16 @@ namespace MonoMac.AppKit {
 		string [] AcceptableDragTypes ();
 
 		[Export ("dragOperationForDraggingInfo:type:")]
-		NSDragOperation DragOperationForDraggingInfotype (NSDraggingInfo dragInfo, string type);
+		NSDragOperation DragOperationForDraggingInfo (NSDraggingInfo dragInfo, string type);
 
 		[Export ("cleanUpAfterDragOperation")]
 		void CleanUpAfterDragOperation ();
 
 		[Export ("setSelectedRanges:affinity:stillSelecting:")]
-		void SetSelectedRangesaffinitystillSelecting (NSArray /*NSRange []*/ ranges, NSSelectionAffinity affinity, bool stillSelectingFlag);
+		void SetSelectedRanges (NSArray /*NSRange []*/ ranges, NSSelectionAffinity affinity, bool stillSelectingFlag);
 
 		[Export ("setSelectedRange:affinity:stillSelecting:")]
-		void SetSelectedRangeaffinitystillSelecting (NSRange charRange, NSSelectionAffinity affinity, bool stillSelectingFlag);
+		void SetSelectedRange (NSRange charRange, NSSelectionAffinity affinity, bool stillSelectingFlag);
 
 		[Export ("selectionAffinity")]
 		NSSelectionAffinity SelectionAffinity ();
@@ -12914,10 +13263,10 @@ namespace MonoMac.AppKit {
 		void ToggleGrammarChecking (NSObject sender);
 
 		[Export ("setSpellingState:range:")]
-		void SetSpellingStaterange (int value, NSRange charRange);
+		void SetSpellingState (int value, NSRange charRange);
 
 		[Export ("shouldChangeTextInRanges:replacementStrings:")]
-		bool ShouldChangeTextInRangesreplacementStrings (NSArray /* NSRange [] */ affectedRanges, string [] replacementStrings);
+		bool ShouldChangeText (NSArray /* NSRange [] */ affectedRanges, string [] replacementStrings);
 
 		[Export ("rangesForUserTextChange")]
 		NSArray /* NSRange [] */ RangesForUserTextChange ();
@@ -12928,8 +13277,8 @@ namespace MonoMac.AppKit {
 		[Export ("rangesForUserParagraphAttributeChange")]
 		NSArray /* NSRange [] */ RangesForUserParagraphAttributeChange ();
 
-		[Export ("shouldChangeTextInRange:replacementString:")]
-		bool ShouldChangeTextInRangereplacementString (NSRange affectedCharRange, string replacementString);
+		//[Export ("shouldChangeTextInRange:replacementString:")]
+		//bool ShouldChangeText (NSRange affectedCharRange, string replacementString);
 
 		[Export ("rangeForUserTextChange")]
 		NSRange RangeForUserTextChange ();
@@ -13037,9 +13386,6 @@ namespace MonoMac.AppKit {
 		[Export ("allowedInputSourceLocales")]
 		string [] AllowedInputSourceLocales { get; set; }
 
-		[Export ("setSelectedRange:affinity:stillSelecting:")]
-		void SetSelectedRange (NSRange charRange, NSSelectionAffinity affinity, bool stillSelectingFlag);
-
 		// FIXME: binding
 		//[Export ("shouldChangeTextInRanges:replacementStrings:")]
 		//bool ShouldChangeTextInRanges (NSArray affectedRanges, NSArray replacementStrings);
@@ -13144,7 +13490,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSTextDelegate))]
 	[Model]
-	public interface NSTextViewDelegate {
+	public partial interface NSTextViewDelegate {
 		[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
 		bool LinkClicked (NSTextView textView, NSObject link, uint charIndex);
 
@@ -13244,50 +13590,40 @@ namespace MonoMac.AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model]
 	public interface NSTokenFieldDelegate {
-		[Abstract]
 		[Export ("tokenField:completionsForSubstring:indexOfToken:indexOfSelectedItem:")]
 		string [] GetCompletionStrings (NSTokenField tokenField, string substring, int tokenIndex, int selectedIndex);
 
-		[Abstract]
 		[Export ("tokenField:shouldAddObjects:atIndex:")]
 		NSTokenField [] ShouldAddObjects (NSTokenField tokenField, NSTokenField [] tokens, uint index);
 
-		[Abstract]
 		[Export ("tokenField:displayStringForRepresentedObject:")]
 		string GetDisplayString (NSTokenField tokenField, NSObject representedObject);
 
-		[Abstract]
 		[Export ("tokenField:editingStringForRepresentedObject:")]
 		string GetEditingString (NSTokenField tokenField, NSObject representedObject);
 
-		[Abstract]
 		[Export ("tokenField:representedObjectForEditingString:")]
 		NSObject GetRepresentedObject (NSTokenField tokenField, string editingString);
 
-		[Abstract]
 		[Export ("tokenField:writeRepresentedObjects:toPasteboard:")]
 		bool WriteRepresented (NSTokenField tokenField, NSArray objects, NSPasteboard pboard);
 
-		[Abstract]
 		[Export ("tokenField:readFromPasteboard:")]
 		NSObject [] Read (NSTokenField tokenField, NSPasteboard pboard);
 
-		[Abstract]
 		[Export ("tokenField:menuForRepresentedObject:")]
 		NSMenu GetMenu (NSTokenField tokenField, NSObject representedObject);
 
-		[Abstract]
 		[Export ("tokenField:hasMenuForRepresentedObject:")]
 		bool HasMenu (NSTokenField tokenField, NSObject representedObject);
 
-		[Abstract]
 		[Export ("tokenField:styleForRepresentedObject:")]
 		NSTokenStyle GetStyle (NSTokenField tokenField, NSObject representedObject);
 
 	}
 
 	[BaseType (typeof (NSObject), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSToolbarDelegate)})]
-	public interface NSToolbar {
+	public partial interface NSToolbar {
 		[Export ("initWithIdentifier:")]
 		IntPtr Constructor (string identifier);
 
@@ -13442,7 +13778,7 @@ namespace MonoMac.AppKit {
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")]get; set; }
 
-		[Export ("image")]
+		[Export ("image"), NullAllowed]
 		NSImage Image { get; set; }
 
 		[Export ("view")]
@@ -13485,7 +13821,7 @@ namespace MonoMac.AppKit {
 	[BaseType (typeof (NSObject))]
 	public interface NSTrackingArea {
 		[Export ("initWithRect:options:owner:userInfo:")]
-		IntPtr Constructor (RectangleF rect, NSTrackingAreaOptions options, NSObject owner, NSDictionary userInfo);
+		IntPtr Constructor (RectangleF rect, NSTrackingAreaOptions options, NSObject owner, [NullAllowed] NSDictionary userInfo);
 		
 		[Export ("rect")]
 		RectangleF Rect { get; }
@@ -13509,7 +13845,7 @@ namespace MonoMac.AppKit {
 		IntPtr Constructor (NSObject modelObject);
 
 		[Export ("representedObject")]
-		NSTreeNode RepresentedObject { get; }
+		NSObject RepresentedObject { get; }
 
 		[Export ("indexPath")]
 		NSIndexPath IndexPath { get; }
@@ -13555,7 +13891,7 @@ namespace MonoMac.AppKit {
 		NSSortDescriptor [] SortDescriptors { get; set; }
 
 		[Export ("content")]
-		NSTreeController Content { get; set; }
+		NSObject Content { get; set; }
 
 		[Export ("add:")]
 		void Add (NSObject sender);
@@ -13651,7 +13987,7 @@ namespace MonoMac.AppKit {
 	}
 	
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSWindowDelegate)})]
-	public interface NSWindow : NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification {
+	public partial interface NSWindow : NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification {
 		[Static, Export ("frameRectForContentRect:styleMask:")]
 		RectangleF FrameRectFor (RectangleF contectRect, NSWindowStyle styleMask);
 	
@@ -13873,13 +14209,13 @@ namespace MonoMac.AppKit {
 		void Center ();
 	
 		[Export ("makeKeyAndOrderFront:")]
-		void MakeKeyAndOrderFront (NSObject sender);
+		void MakeKeyAndOrderFront ([NullAllowed] NSObject sender);
 	
 		[Export ("orderFront:")]
-		void OrderFront (NSObject sender);
+		void OrderFront ([NullAllowed] NSObject sender);
 		
 		[Export ("orderBack:")]
-		void OrderBack (NSObject sender);
+		void OrderBack ([NullAllowed] NSObject sender);
 	
 		[Export ("orderOut:")]
 		void OrderOut ([NullAllowed] NSObject sender);
@@ -14059,7 +14395,7 @@ namespace MonoMac.AppKit {
 		string StringWithSavedFrame ();
 	
 		[Export ("setFrameFromString:")]
-		void SetFrameFroom (string str);
+		void SetFrameFrom (string str);
 	
 		[Export ("saveFrameUsingName:")]
 		void SaveFrameUsingName (string  name);
@@ -14151,10 +14487,10 @@ namespace MonoMac.AppKit {
 		[Export ("standardWindowButton:")]
 		NSButton StandardWindowButton (NSWindowButton b);
 	
-		[Export ("addChildWindow:ordered:")]
+		[Export ("addChildWindow:ordered:")][PostGet ("ChildWindows")]
 		void AddChildWindow (NSWindow  childWin, NSWindowOrderingMode place);
 	
-		[Export ("removeChildWindow:")]
+		[Export ("removeChildWindow:")][PostGet ("ChildWindows")]
 		void RemoveChildWindow (NSWindow  childWin);
 	
 		[Export ("childWindows")]
@@ -14278,12 +14614,13 @@ namespace MonoMac.AppKit {
                 float BackingScaleFactor { get; }
 
                 [Lion, Export ("toggleFullScreen:")]
-                void ToggleFullScreen (NSObject sender);
+                void ToggleFullScreen ([NullAllowed] NSObject sender);
 
                 //Detected properties
                 [Export ("animationBehavior")]
                 NSWindowAnimationBehavior AnimationBehavior { get; set; }
 
+#if !XAMARIN_MAC
 		//
 		// Fields
 		//
@@ -14367,6 +14704,7 @@ namespace MonoMac.AppKit {
 
 		[Lion, Field ("NSWindowDidExitVersionBrowserNotification")]
 		NSString DidExitVersionBrowserNotification { get; }
+#endif
 	}
 
 	public delegate void NSWindowCompletionHandler (NSWindow window, NSError error);
@@ -14374,7 +14712,7 @@ namespace MonoMac.AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Lion]
-	public interface NSWindowRestoration {
+	public partial interface NSWindowRestoration {
 		[Static]
 		[Export ("restoreWindowWithIdentifier:state:completionHandler:")]
 		void RestoreWindow (string identifier, NSCoder state, NSWindowCompletionHandler onCompletion);
@@ -14627,7 +14965,7 @@ namespace MonoMac.AppKit {
 	[BaseType (typeof (NSObject))]
 	public interface NSWorkspace {
 		[Static]
-		[Export ("sharedWorkspace")]
+		[Export ("sharedWorkspace"), ThreadSafe]
 		NSWorkspace SharedWorkspace { get; }
 		
 		[Export ("notificationCenter")]
@@ -14652,7 +14990,7 @@ namespace MonoMac.AppKit {
 		bool LaunchApplication (string appName);
 		
 		[Export ("launchApplicationAtURL:options:configuration:error:")]
-		NSRunningApplication LaunchApplication (NSUrl url, NSWorkspaceLaunchOptions options, NSDictionary configuration, NSError error );
+		NSRunningApplication LaunchApplication (NSUrl url, NSWorkspaceLaunchOptions options, NSDictionary configuration, out NSError error );
 		
 		[Export ("launchApplication:showIcon:autolaunch:")]
 		bool LaunchApplication (string appName, bool showIcon, bool autolaunch);
@@ -14771,7 +15109,7 @@ namespace MonoMac.AppKit {
 		[Export ("desktopImageOptionsForScreen:")]
 		NSDictionary DesktopImageOptions (NSScreen screen);		
 		
-		[Export ("runningApplications")]
+		[Export ("runningApplications"), ThreadSafe]
 		NSRunningApplication [] RunningApplications { get; }
 
 		[Lion]
@@ -14892,7 +15230,7 @@ namespace MonoMac.AppKit {
 	
 	
 	[BaseType (typeof (NSObject))]
-	public interface NSRunningApplication {
+	public partial interface NSRunningApplication {
 		[Export ("terminated")]
 		bool Terminated { [Bind ("isTerminated")] get;  }
 		
@@ -14934,10 +15272,10 @@ namespace MonoMac.AppKit {
 		int ExecutableArchitecture { get;  }
 		
 		[Export ("hide")]
-		bool Hide { get; }
+		bool Hide ();
 		
 		[Export ("unhide")]
-		bool Unhide { get; }
+		bool Unhide ();
 		
 		[Export ("activateWithOptions:")]
 		bool Activate (NSApplicationActivationOptions options);
@@ -14956,7 +15294,7 @@ namespace MonoMac.AppKit {
 		[Export ("runningApplicationWithProcessIdentifier:")]
 		NSRunningApplication GetRunningApplication (int pid);
 		
-		[Static]
+		[Static][ThreadSafe]
 		[Export ("currentApplication")]
 		NSRunningApplication CurrentApplication { get ; }
 	
@@ -15042,7 +15380,7 @@ namespace MonoMac.AppKit {
 	}
    
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSRuleEditorDelegate)})]
-	public interface NSRuleEditor {
+	public partial interface NSRuleEditor {
 		[Export ("reloadCriteria")]
 		void ReloadCriteria ();
 

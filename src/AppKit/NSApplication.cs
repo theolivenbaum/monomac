@@ -32,6 +32,9 @@ using MonoMac.ObjCRuntime;
 
 namespace MonoMac.AppKit {
 	public partial class NSApplication : NSResponder {
+		public static bool CheckForIllegalCrossThreadCalls = true;
+		private static Thread mainThread;
+
 		static NSApplication () {
 			System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof (NSObject).TypeHandle);
 			class_ptr = Class.GetHandle ("NSApplication");
@@ -40,8 +43,16 @@ namespace MonoMac.AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		extern static void NSApplicationMain (int argc, string [] argv);
 
+		static bool initialized;
+
 		public static void Init ()
 		{
+			if (initialized) {
+				throw new InvalidOperationException ("Init has already be be invoked; it can only be invoke once");
+			}
+
+			initialized = true;
+
 			var monomac = Assembly.GetExecutingAssembly ();
 			Runtime.RegisterAssembly (monomac);
 
@@ -58,6 +69,17 @@ namespace MonoMac.AppKit {
 				}
 			}
 
+			// Runtime hosts embedding MonoMac may use a different sync context 
+			// and call NSApplicationMain externally prior to this Init, so only
+			// initialize the context if it hasn't been set externally. Alternatively,
+			// AppKitSynchronizationContext could be made public.
+			if(SynchronizationContext.Current == null)
+				SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
+
+			// Establish the main thread at the time of Init to support hosts
+			// that don't call Main.
+			NSApplication.mainThread = Thread.CurrentThread;
+
 			// TODO:
 			//   Install hook to register dynamically loaded assemblies
 		}
@@ -73,9 +95,21 @@ namespace MonoMac.AppKit {
 
 		public static void Main (string [] args)
 		{
-			SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
-			
+			// Switch to an AppKitSynchronizationContext if Main is invoked
+			if(SynchronizationContext.Current == null || !typeof(AppKitSynchronizationContext).IsAssignableFrom(SynchronizationContext.Current.GetType()))
+				SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
+
+			// Init where this is set the first time is generally paired
+			// with a call to Main, but this guarantees the right thread.
+			NSApplication.mainThread = Thread.CurrentThread;
+
 			NSApplicationMain (args.Length, args);
+		}
+
+		public static void EnsureUIThread()
+		{
+			if (NSApplication.CheckForIllegalCrossThreadCalls && NSApplication.mainThread != Thread.CurrentThread)
+				throw new AppKitThreadAccessException();
 		}
 
 		// NSEventMask is a superset (64 bits) of the mask that can be used (32 bits)

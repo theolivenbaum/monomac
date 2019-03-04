@@ -35,23 +35,11 @@ namespace macdoc
 			}
 		}
 
-		public static string GetDocFeedForProduct (Product product)
-		{
-			switch (product) {
-			case Product.MonoTouch:
-				return AppleDocHandler.Ios6AtomFeed;
-			case Product.MonoMac:
-				return AppleDocHandler.MacMountainLionFeed;
-			default:
-				return null;
-			}
-		}
-
 		public static string GetMergeToolForProduct (Product product)
 		{
 			switch (product) {
 			case Product.MonoTouch:
-				return "/Developer/MonoTouch/usr/share/doc/MonoTouch/apple-doc-wizard";
+				return "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/share/doc/MonoTouch/apple-doc-wizard";
 			case Product.MonoMac:
 				return "/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/usr/share/doc/Xamarin.Mac/apple-doc-wizard";
 			default:

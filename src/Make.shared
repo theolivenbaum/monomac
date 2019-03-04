@@ -4,9 +4,10 @@
 SHARED_SOURCE = \
 	./AudioToolbox/AudioBufferList.cs		\
 	./AudioToolbox/AudioBuffers.cs			\
-	./AudioToolbox/AudioClassDescription.cs	\
+	./AudioToolbox/AudioClassDescription.cs		\
+	./AudioToolbox/AudioConverter.cs		\
 	./AudioToolbox/AudioFile.cs			\
-	./AudioToolbox/AudioFileGlobalInfo.cs   \
+	./AudioToolbox/AudioFileGlobalInfo.cs   	\
 	./AudioToolbox/AudioFileStream.cs		\
 	./AudioToolbox/AudioFormatAvailability.cs	\
 	./AudioToolbox/AudioQueue.cs			\
@@ -42,7 +43,7 @@ SHARED_SOURCE = \
 	./CoreAnimation/CADefs.cs			\
 	./CoreAnimation/CALayer.cs			\
 	./CoreAnimation/CATextLayer.cs			\
-	./CoreAnimation/CAMediaTimingFunction.cs			\
+	./CoreAnimation/CAMediaTimingFunction.cs	\
 	./CoreFoundation/CFArray.cs                     \
 	./CoreFoundation/CFBoolean.cs                   \
 	./CoreFoundation/CFDictionary.cs                \
@@ -53,6 +54,7 @@ SHARED_SOURCE = \
 	./CoreFoundation/CFWriteStream.cs		\
 	./CoreFoundation/CFType.cs			\
 	./CoreGraphics/CGContextPDF.cs			\
+	./CoreGraphics/CGDataConsumer.cs		\
 	./CoreGraphics/CGDataProvider-2.cs		\
 	./CoreGraphics/CGFunction.cs			\
 	./CoreGraphics/CGPDFArray.cs			\
@@ -95,6 +97,7 @@ SHARED_SOURCE = \
 	./Foundation/ModelNotImplementedException.cs	\
 	./Foundation/NSAutoreleasePool.cs		\
 	./Foundation/NSArray.cs				\
+	./Foundation/NSAttributedString.cs				\
 	./Foundation/NSBundle.cs			\
 	./Foundation/NSCalendar.cs			\
 	./Foundation/NSCoder.cs				\
@@ -102,6 +105,7 @@ SHARED_SOURCE = \
 	./Foundation/NSDate.cs				\
 	./Foundation/NSDictionary.cs			\
 	./Foundation/NSError.cs				\
+	./Foundation/NSErrorException.cs	\
 	./Foundation/NSFileManager.cs			\
 	./Foundation/NSHttpCookie.cs			\
 	./Foundation/NSHttpCookieStorage.cs		\
@@ -110,26 +114,33 @@ SHARED_SOURCE = \
 	./Foundation/NSInputStream.cs			\
 	./Foundation/NSKeyedArchiver.cs			\
 	./Foundation/NSKeyedUnarchiver.cs		\
+	./Foundation/NSLocale.cs		\
 	./Foundation/NSMutableAttributedString.cs	\
 	./Foundation/NSMutableData.cs			\
 	./Foundation/NSMutableDictionary.cs		\
+	./Foundation/NSMutableSet.cs		\
 	./Foundation/NSMutableUrlRequest.cs		\
 	./Foundation/NSNotificationCenter.cs		\
 	./Foundation/NSNumber.cs			\
 	./Foundation/NSNumber2.cs			\
-	./Foundation/NSObject2.cs			\
 	./Foundation/NSOutputStream.cs			\
+	./Foundation/NSOrderedSet.cs			\
+	./Foundation/NSPropertyListSerialization.cs	\
 	./Foundation/NSRunLoop.cs			\
+	./Foundation/NSSearchPath.cs		\
 	./Foundation/NSSet.cs				\
 	./Foundation/NSStream.cs			\
 	./Foundation/NSString2.cs			\
 	./Foundation/NSThread.cs			\
 	./Foundation/NSTimer.cs				\
+	./Foundation/NSUbiquitousKeyValueStore.cs				\
 	./Foundation/NSUrl.cs				\
 	./Foundation/NSUrlConnection.cs			\
+	./Foundation/NSUrlCredential.cs			\
 	./Foundation/NSUrlProtocol.cs		\
 	./Foundation/NSUrlProtocolClient.cs	\
 	./Foundation/NSUserDefaults.cs			\
+	./Foundation/NSUuid.cs			\
 	./Foundation/NSValue.cs				\
 	./Foundation/ToString.cs			\
 	./ImageIO/CGImageSource.cs			\
@@ -159,6 +170,7 @@ SHARED_CORE_SOURCE = \
 	./CoreFoundation/CFUrl.cs                       \
 	./CoreFoundation/CFRunLoop.cs                   \
 	./CoreFoundation/Dispatch.cs                    \
+	./CoreFoundation/DispatchQueueSynchronizationContext.cs  \
 	./CoreFoundation/CFData.cs			\
 	./CoreFoundation/CFDataBuffer.cs		\
 	./CoreFoundation/CFIndex.cs			\
@@ -201,17 +213,21 @@ SHARED_CORE_SOURCE = \
 	./CoreVideo/CVPixelBufferPoolSettings.cs	\
 	./CoreVideo/CVPixelFormatDescription.cs		\
 	./CoreVideo/CVPixelBufferAttributes.cs	\
+	./Foundation/AdviceAttribute.cs			\
 	./Foundation/ConnectAttribute.cs		\
 	./Foundation/Enum.cs 				\
 	./Foundation/DictionaryContainer.cs		\
+	./Foundation/FieldAttribute.cs			\
 	./Foundation/ExportAttribute.cs			\
 	./Foundation/ModelAttribute.cs			\
 	./Foundation/NSAction.cs			\
 	./Foundation/NSDecimal.cs			\
 	./Foundation/NSRange.cs				\
+	./Foundation/NSObject2.cs			\
 	./Foundation/NSString.cs			\
 	./Foundation/RegisterAttribute.cs		\
 	./Foundation/PreserveAttribute.cs		\
+	./Foundation/LinkerSafeAttribute.cs		\
         ./ObjCRuntime/AdoptsAttribute.cs               	\
         ./ObjCRuntime/ArgumentSemantic.cs               \
         ./ObjCRuntime/AlphaAttribute.cs                 \
@@ -220,6 +236,7 @@ SHARED_CORE_SOURCE = \
         ./ObjCRuntime/INativeObject.cs                  \
 	./ObjCRuntime/LionAttribute.cs			\
         ./ObjCRuntime/SinceAttribute.cs                 \
+        ./ObjCRuntime/ThreadSafeAttribute.cs                 \
         ./ObjCRuntime/TypeConverter.cs                  \
 	./MonoNativeFunctionWrapperAttribute.cs			\
 	./MonoPInvokeCallbackAttribute.cs

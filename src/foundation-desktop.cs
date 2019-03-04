@@ -37,6 +37,8 @@ using NSAppleEventManagerSuspensionID = System.IntPtr;
 // These two are both four char codes i.e. defined on a uint with constant like 'xxxx'
 using AEKeyword = System.UInt32;
 using OSType = System.UInt32;
+// typedef double NSTimeInterval;
+using NSTimeInterval = System.Double;
 
 namespace MonoMac.Foundation {
 	
@@ -86,6 +88,165 @@ namespace MonoMac.Foundation {
 
 		[Export ("transformStruct")]
 		CGAffineTransform TransformStruct { get; set; }
+	}
+
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	public interface NSConnection {
+		[Static, Export ("connectionWithReceivePort:sendPort:")]
+		NSConnection Create ([NullAllowed] NSPort receivePort, [NullAllowed] NSPort sendPort);
+
+		[Export ("runInNewThread")]
+		void RunInNewThread ();
+
+		// enableMultipleThreads, multipleThreadsEnabled - no-op in 10.5+ (always enabled)
+
+		[Export ("addRunLoop:")]
+		void AddRunLoop (NSRunLoop runLoop);
+
+		[Export ("removeRunLoop:")]
+		void RemoveRunLoop (NSRunLoop runLoop);
+
+		[Static, Export ("serviceConnectionWithName:rootObject:usingNameServer:")]
+		NSConnection CreateService (string name, NSObject root, NSPortNameServer server);
+
+		[Static, Export ("serviceConnectionWithName:rootObject:")]
+		NSConnection CreateService (string name, NSObject root);
+
+		[Export ("registerName:")]
+		bool RegisterName (string name);
+
+		[Export ("registerName:withNameServer:")]
+		bool RegisterName (string name, NSPortNameServer server);
+
+		[Export ("rootObject")]
+		NSObject RootObject { get; set; }
+
+		[Static, Export ("connectionWithRegisteredName:host:")]
+		NSConnection LookupService (string name, [NullAllowed] string hostName);
+
+		[Static, Export ("connectionWithRegisteredName:host:usingNameServer:")]
+		NSConnection LookupService (string name, [NullAllowed] string hostName, NSPortNameServer server);
+
+		[Internal, Export ("rootProxy")]
+		IntPtr _GetRootProxy ();
+
+		[Internal, Static, Export ("rootProxyForConnectionWithRegisteredName:host:")]
+		IntPtr _GetRootProxy (string name, [NullAllowed] string hostName);
+
+		[Internal, Static, Export ("rootProxyForConnectionWithRegisteredName:host:usingNameServer:")]
+		IntPtr _GetRootProxy (string name, [NullAllowed] string hostName, NSPortNameServer server);
+
+		[Export ("remoteObjects")]
+		NSObject [] RemoteObjects { get; }
+
+		[Export ("localObjects")]
+		NSObject [] LocalObjects { get; }
+
+		[Static, Export ("currentConversation")]
+		NSObject CurrentConversation { get; }
+
+		[Static, Export ("allConnections")]
+		NSConnection [] AllConnections { get; }
+
+		[Export ("requestTimeout")]
+		NSTimeInterval RequestTimeout { get; set; }
+
+		[Export ("replyTimeout")]
+		NSTimeInterval ReplyTimeout { get; set; }
+
+		[Export ("independentConversationQueueing")]
+		bool IndependentConversationQueueing { get; set; }
+
+		[Export ("addRequestMode:")]
+		void AddRequestMode (NSString runLoopMode);
+
+		[Export ("removeRequestMode:")]
+		void RemoveRequestMode (NSString runLoopMode);
+
+		[Export ("requestModes")]
+		NSString [] RequestModes { get; }
+
+		[Export ("invalidate")]
+		void Invalidate ();
+
+		[Export ("isValid")]
+		bool IsValid { get; }
+
+		[Export ("receivePort")]
+		NSPort ReceivePort { get; }
+
+		[Export ("sendPort")]
+		NSPort SendPort { get; }
+
+		[Export ("dispatchWithComponents:")]
+		void Dispatch (NSArray components);
+
+		[Export ("statistics")]
+		NSDictionary Statistics { get; }
+
+		[Export ("delegate"), NullAllowed]
+		NSObject WeakDelegate { get; set; }
+
+		[Wrap ("WeakDelegate")]
+		NSConnectionDelegate Delegate { get; set; }
+	}
+
+	[BaseType (typeof (NSObject))]
+	[Model]
+	public interface NSConnectionDelegate {
+		[Export ("authenticateComponents:withData:")]
+		bool AuthenticateComponents (NSArray components, NSData authenticationData);
+
+		[Export ("authenticationDataForComponents:")]
+		NSData GetAuthenticationData (NSArray components);
+
+		[Export ("connection:shouldMakeNewConnection:")]
+		bool ShouldMakeNewConnection (NSConnection parentConnection, NSConnection newConnection);
+
+		[Export ("connection:handleRequest:")]
+		bool HandleRequest (NSConnection connection, NSDistantObjectRequest request);
+
+		[Export ("createConversationForConnection:")]
+		NSObject CreateConversation (NSConnection connection);
+
+		[Export ("makeNewConnection:sender:")]
+		bool AllowNewConnection (NSConnection newConnection, NSConnection parentConnection);
+	}
+
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	public interface NSDistantObjectRequest {
+		[Export ("connection")]
+		NSConnection Connection { get; }
+
+		[Export ("conversation")]
+		NSObject Conversation { get; }
+
+		[Export ("invocation")]
+		NSInvocation Invocation { get; }
+
+		[Export ("replyWithException:")]
+		void Reply ([NullAllowed] NSException exception);
+	}
+
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	public interface NSPortNameServer {
+		[Static, Export ("systemDefaultPortNameServer")]
+		NSPortNameServer SystemDefault { get; }
+
+		[Export ("portForName:")]
+		NSPort GetPort (string portName);
+
+		[Export ("portForName:host:")]
+		NSPort GetPort (string portName, string hostName);
+
+		[Export ("registerPort:name:")]
+		bool RegisterPort (NSPort port, string portName);
+
+		[Export ("removePortForName:")]
+		bool RemovePort (string portName);
 	}
 	
 	// FAK Left off until I understand how to do structs
@@ -370,128 +531,6 @@ namespace MonoMac.Foundation {
 	}
 
 	[BaseType (typeof (NSObject))]
-	[DisableDefaultCtor] // return invalid handle
-	public interface NSFileHandle 
-	{
-		[Export ("availableData")]
-		NSData AvailableData ();
-		
-		[Export ("readDataToEndOfFile")]
-		NSData ReadDataToEndOfFile ();
-
-		[Export ("readDataOfLength:")]
-		NSData ReadDataOfLength (uint length);
-
-		[Export ("writeData:")]
-		void WriteData (NSData data);
-
-		[Export ("offsetInFile")]
-		ulong OffsetInFile ();
-
-		[Export ("seekToEndOfFile")]
-		ulong SeekToEndOfFile ();
-
-		[Export ("seekToFileOffset:")]
-		void SeekToFileOffset (ulong offset);
-
-		[Export ("truncateFileAtOffset:")]
-		void TruncateFileAtOffset (ulong offset);
-
-		[Export ("synchronizeFile")]
-		void SynchronizeFile ();
-
-		[Export ("closeFile")]
-		void CloseFile ();
-		
-		[Static]
-		[Export ("fileHandleWithStandardInput")]
-		NSFileHandle FromStandardInput ();
-		
-		[Static]
-		[Export ("fileHandleWithStandardOutput")]
-		NSFileHandle FromStandardOutput ();
-
-		[Static]
-		[Export ("fileHandleWithStandardError")]
-		NSFileHandle FromStandardError ();
-
-		[Static]
-		[Export ("fileHandleWithNullDevice")]
-		NSFileHandle FromNullDevice ();
-
-		[Static]
-		[Export ("fileHandleForReadingAtPath:")]
-		NSFileHandle OpenRead (string path);
-
-		[Static]
-		[Export ("fileHandleForWritingAtPath:")]
-		NSFileHandle OpenWrite (string path);
-
-		[Static]
-		[Export ("fileHandleForUpdatingAtPath:")]
-		NSFileHandle OpenUpdate (string path);
-
-		[Static]
-		[Export ("fileHandleForReadingFromURL:error:")]
-		NSFileHandle OpenReadUrl (NSUrl url, out NSError error);
-
-		[Static]
-		[Export ("fileHandleForWritingToURL:error:")]
-		NSFileHandle OpenWriteUrl (NSUrl url, out NSError error);
-
-		[Static]
-		[Export ("fileHandleForUpdatingURL:error:")]
-		NSFileHandle OpenUpdateUrl (NSUrl url, out NSError error);
-		
-		[Export ("readInBackgroundAndNotifyForModes:")]
-		void ReadInBackground (NSString [] notifyRunLoopModes);
-		
-		[Export ("readInBackgroundAndNotify")]
-		void ReadInBackground ();
-
-		[Export ("readToEndOfFileInBackgroundAndNotifyForModes:")]
-		void ReadToEndOfFileInBackground (NSString [] notifyRunLoopModes);
-
-		[Export ("readToEndOfFileInBackgroundAndNotify")]
-		void ReadToEndOfFileInBackground ();
-
-		[Export ("acceptConnectionInBackgroundAndNotifyForModes:")]
-		void AcceptConnectionInBackground (NSString [] notifyRunLoopModes);
-
-		[Export ("acceptConnectionInBackgroundAndNotify")]
-		void AcceptConnectionInBackground ();
-
-		[Export ("waitForDataInBackgroundAndNotifyForModes:")]
-		void WaitForDataInBackgroundAnd (NSString notifyRunLoopModes);
-
-		[Export ("waitForDataInBackgroundAndNotify")]
-		void WaitForDataInBackground ();
-		
-		[Export ("initWithFileDescriptor:closeOnDealloc:")]
-		IntPtr Constructor (int fd, bool closeOnDealloc);
-		
-		[Export ("initWithFileDescriptor:")]
-		IntPtr Constructor (int fd);
-
-		[Export ("fileDescriptor")]
-		int FileDescriptor { get; }
-	}
-	
-	[BaseType (typeof (NSObject))]
-	public interface NSPipe {
-		
-		[Export ("fileHandleForReading")]
-		NSFileHandle ReadHandle { get; }
-		
-		[Export ("fileHandleForWriting")]
-		NSFileHandle WriteHandle { get; }
-
-		[Static]
-		[Export ("pipe")]
-		NSPipe Create ();
-	}
-
-	[BaseType (typeof (NSObject))]
 	public interface NSValueTransformer {
 		[Export ("reverseTransformedValue:")]
 		NSObject ReverseTransformedValue (NSObject value);
@@ -504,28 +543,28 @@ namespace MonoMac.Foundation {
 	[BaseType (typeof (NSObject))]
 	public interface NSUserNotification 
 	{
-		[Export ("title")]
+		[Export ("title", ArgumentSemantic.Copy)]
 		string Title { get; set; }
 		
-		[Export ("subtitle")]
+		[Export ("subtitle", ArgumentSemantic.Copy)]
 		string Subtitle { get; set; }
 		
-		[Export ("informativeText")]
+		[Export ("informativeText", ArgumentSemantic.Copy)]
 		string InformativeText { get; set; }
 		
-		[Export ("actionButtonTitle")]
+		[Export ("actionButtonTitle", ArgumentSemantic.Copy)]
 		string ActionButtonTitle { get; set; }
 		
-		[Export ("userInfo")]
+		[Export ("userInfo", ArgumentSemantic.Copy)]
 		NSDictionary UserInfo { get; set; }
 		
-		[Export ("deliveryDate")]
+		[Export ("deliveryDate", ArgumentSemantic.Copy)]
 		NSDate DeliveryDate { get; set; }
 		
-		[Export ("deliveryTimeZone")]
+		[Export ("deliveryTimeZone", ArgumentSemantic.Copy)]
 		NSTimeZone DeliveryTimeZone { get; set; }
 		
-		[Export ("deliveryRepeatInterval")]
+		[Export ("deliveryRepeatInterval", ArgumentSemantic.Copy)]
 		NSDateComponents DeliveryRepeatInterval { get; set; }
 		
 		[Export ("actualDeliveryDate")]
@@ -546,7 +585,7 @@ namespace MonoMac.Foundation {
 		[Export ("activationType")]
 		NSUserNotificationActivationType ActivationType { get; }
 		
-		[Export ("otherButtonTitle")]
+		[Export ("otherButtonTitle", ArgumentSemantic.Copy)]
 		string OtherButtonTitle { get; set; }
 
 		[Field ("NSUserNotificationDefaultSoundName")]

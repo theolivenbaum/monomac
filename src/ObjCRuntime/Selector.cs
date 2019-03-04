@@ -1,5 +1,6 @@
 //
 // Copyright 2010, Novell, Inc.
+// Copyright 2013, Xamarin Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -30,28 +31,40 @@ namespace MonoMac.ObjCRuntime {
 		public static readonly IntPtr InitWithCoder = Selector.GetHandle ("initWithCoder:");
 		static IntPtr MethodSignatureForSelector = Selector.GetHandle ("methodSignatureForSelector:");
 		static IntPtr FrameLength = Selector.GetHandle ("frameLength");
-		internal static IntPtr Alloc = Selector.GetHandle ("alloc");
-		internal static IntPtr Release = Selector.GetHandle ("release");
+		internal static IntPtr RetainCount = Selector.GetHandle ("retainCount");
+		internal const string Alloc = "alloc";
+		internal const string Release = "release";
+		internal const string Retain = "retain";
+		internal const string Autorelease = "autorelease";
+		internal const string DoesNotRecognizeSelector = "doesNotRecognizeSelector:";
+		internal const string PerformSelectorOnMainThreadWithObjectWaitUntilDone = "performSelectorOnMainThread:withObject:waitUntilDone:";
+		internal const string PerformSelectorWithObjectAfterDelay = "performSelector:withObject:afterDelay:";
+
+		internal static IntPtr AllocHandle = Selector.GetHandle (Alloc);
+		internal static IntPtr ReleaseHandle = Selector.GetHandle (Release);
+		internal static IntPtr RetainHandle = Selector.GetHandle (Retain);
+		internal static IntPtr AutoreleaseHandle = Selector.GetHandle (Autorelease);
+		internal static IntPtr DoesNotRecognizeSelectorHandle = Selector.GetHandle (DoesNotRecognizeSelector);
+		internal static IntPtr PerformSelectorOnMainThreadWithObjectWaitUntilDoneHandle = GetHandle (PerformSelectorOnMainThreadWithObjectWaitUntilDone);
+		internal static IntPtr PerformSelectorWithObjectAfterDelayHandle = GetHandle (PerformSelectorWithObjectAfterDelay);
 
 		internal IntPtr handle;
 
-		public Selector (IntPtr sel) {
-			if (!sel_isMapped (sel))
+		public Selector (IntPtr sel) :
+			this (sel, true)
+		{
+		}
+
+		internal Selector (IntPtr sel, bool check)
+		{
+			if (check && !sel_isMapped (sel))
 				throw new ArgumentException ("sel is not a selector handle.");
 
 			this.handle = sel;
 		}
 
 		public Selector (string name, bool alloc) {
-			if (alloc) {
-				IntPtr selstr_ptr = Marshal.StringToHGlobalAuto (name);
-				handle = sel_registerName (selstr_ptr);
-
-				if (selstr_ptr != sel_getName (handle))
-					Marshal.FreeHGlobal (selstr_ptr);
-			} else {
-				handle = sel_registerName (name);
-			}
+			handle = GetHandle (name);
 		}
 
 		public Selector (string name) : this (name, false) {}
@@ -79,12 +92,7 @@ namespace MonoMac.ObjCRuntime {
 		}
 
 		public static bool operator!= (Selector left, Selector right) {
-			if (((object)left) == null)
-				return (((object)right) != null);
-			if (((object)right) == null)
-				return true;
-
-			return !sel_isEqual (left.handle, right.handle);
+			return !(left == right);
 		}
 
 		public static bool operator== (Selector left, Selector right) {
@@ -93,41 +101,39 @@ namespace MonoMac.ObjCRuntime {
 			if (((object)right) == null)
 				return false;
 
-			return sel_isEqual (left.handle, right.handle);
+			return left.handle == right.handle;
 		}
 
 		public override bool Equals (object right) {
-			if (right == null)
-				return false;
-
-			if (right is Selector)
-				return Equals ((Selector) right);
-
-			return false;
+			return Equals (right as Selector);
 		}
 
 		public bool Equals (Selector right) {
 			if (right == null)
 				return false;
 
-			return sel_isEqual (handle, right.handle);
+			return handle == right.handle;
 		}
 
 		public override int GetHashCode () {
 			return (int) handle;
 		}
-		
+
+		// return null, instead of throwing, if an invalid pointer is used (e.g. IntPtr.Zero)
+		// so this looks better in the debugger watch when no selector is assigned (ref: #10876)
+		public static Selector FromHandle (IntPtr sel)
+		{
+			if (!sel_isMapped (sel))
+				return null;
+			// create the selector without duplicating the sel_isMapped check
+			return new Selector (sel, false);
+		}
+
 		[DllImport ("/usr/lib/libobjc.dylib")]
 		extern static IntPtr sel_getName (IntPtr sel);
-		[DllImport ("/usr/lib/libobjc.dylib")]
-		extern static IntPtr sel_registerName (IntPtr name);
-		[DllImport ("/usr/lib/libobjc.dylib")]
-		internal extern static IntPtr sel_registerName (string name);
 		[DllImport ("/usr/lib/libobjc.dylib", EntryPoint="sel_registerName")]
 		public extern static IntPtr GetHandle (string name);
 		[DllImport ("/usr/lib/libobjc.dylib")]
 		extern static bool sel_isMapped (IntPtr sel);
-		[DllImport ("/usr/lib/libobjc.dylib")]
-		extern static bool sel_isEqual (IntPtr lhs, IntPtr rhs);
 	}
 }

@@ -90,8 +90,7 @@ namespace macdoc
 					navigationCells.SetSelected (true, 1);
 			};
 			HideMultipleMatches ();
-			if (!string.IsNullOrEmpty (initialLoadFromUrl))
-				LoadUrl (initialLoadFromUrl);
+			LoadUrl (string.IsNullOrEmpty (initialLoadFromUrl) ? "root:" : initialLoadFromUrl);
 		}
 
 		void HandleAddBookmarkBtnActivated (object sender, EventArgs e)
@@ -348,13 +347,13 @@ namespace macdoc
 		
 		void HideMultipleMatches ()
 		{
-			splitView.SetPositionofDivider (splitView.MaxPositionOfDivider (0), 0);
+			splitView.SetPositionOfDivider (splitView.MaxPositionOfDivider (0), 0);
 		}
 		
 		void ShowMultipleMatches ()
 		{
 			float middle = (splitView.MaxPositionOfDivider (0) - splitView.MinPositionOfDivider (0))/2;
-			splitView.SetPositionofDivider (middle, 0);
+			splitView.SetPositionOfDivider (middle, 0);
 		}
 		
 		// Action: when the user clicks on the index table view
@@ -390,7 +389,8 @@ namespace macdoc
 			tabSelector.SelectAt (2);
 			Search (contents);
 			// Unselect the search term in case user is typing slowly
-			sender.CurrentEditor.SelectedRange = new NSRange (contents.Length, 0);
+			if (sender.CurrentEditor != null)
+				sender.CurrentEditor.SelectedRange = new NSRange (contents.Length, 0);
 		}
 		
 		// Typing in the index panel
@@ -455,11 +455,11 @@ namespace macdoc
 			
 			// Process embedded images coming from doc source
 			// Because WebView doesn't let me answer a NSUrlRequest myself I have to resort to this piece of crap of a solution
-			var imgs = dom.GetElementsByTagName ("img").Where (node => node.Attributes["src"].Value.StartsWith ("source-id"));
+			var imgs = dom.GetElementsByTagName ("img").Where (node => node.Attributes["src"].NodeValue.StartsWith ("source-id"));
 			byte[] buffer = new byte[4096];
 			
 			foreach (var img in imgs) {
-				var src = img.Attributes["src"].Value;
+				var src = img.Attributes["src"].NodeValue;
 				var imgStream = AppDelegate.Root.GetImage (src);
 				if (imgStream == null)
 					continue;
@@ -503,8 +503,8 @@ namespace macdoc
 			outlineView.ExpandItem (item);
 			
 			// Focus the last child, then this child to ensure we show as much as possible
-			if (n.Nodes.Count > 0)
-				ScrollToVisible ((Node) n.Nodes [n.Nodes.Count-1]);
+			if (n.ChildNodes.Count > 0)
+				ScrollToVisible ((Node) n.ChildNodes [n.ChildNodes.Count-1]);
 			var row = ScrollToVisible (n);
 			ignoreSelect = true;
 			if (row > 0)
@@ -514,6 +514,9 @@ namespace macdoc
 		
 		int ScrollToVisible (Node n)
 		{
+			if (!nodeToWrapper.ContainsKey (n))
+				return 0;
+
 			var item = nodeToWrapper [n];
 			var row = outlineView.RowForItem (item);
 			outlineView.ScrollRowToVisible (row);
@@ -538,7 +541,7 @@ namespace macdoc
 					return;
 				
 				var node = WrapNode.FromObject (parent.outlineView.ItemAtRow ((int) indexes.FirstIndex));
-				parent.LoadUrl (node.PublicUrl, false, node.tree.HelpSource);
+				parent.LoadUrl (node.PublicUrl, false, node.Tree.HelpSource);
 			}
 		}
 
