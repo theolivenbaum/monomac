@@ -63,10 +63,8 @@ namespace MonoMac.CoreGraphics {
 		public CGSize Size;
 
 		public CGPoint Location {
-			get
-			{
-				return Origin;
-			}
+            get => Origin;
+            set => Origin = value;
 		}
 		
 		public nfloat Left { get { return X; } }
