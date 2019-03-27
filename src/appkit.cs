@@ -11952,7 +11952,7 @@ namespace MonoMac.AppKit {
 		[Lion, Export ("convertSizeToLayer:")]
 		CGSize ConvertSizeToLayer (CGSize aSize);
 		
-		[Mavericks, Export ("canDrawSubviewsIntoLayer:")]
+		[Mavericks, Export ("canDrawSubviewsIntoLayer")]
 		bool CanDrawSubviewsIntoLayer { get; set; }
 
 		[Mac (10,10)]
