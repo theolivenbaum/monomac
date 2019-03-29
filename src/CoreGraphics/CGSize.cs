@@ -104,6 +104,8 @@ namespace MonoMac.CoreGraphics {
 
         public override bool Equals(object obj) => (obj is CGSize p) && p == this;
 
+        public bool IsEmpty => (double)Width == 0.0 || (double)Width == 0.0;
+
     }
 }
 #endif

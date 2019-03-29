@@ -129,6 +129,8 @@ namespace MonoMac.CoreGraphics {
 		public nfloat Y { get { return Origin.Y; } set { Origin.Y=value; } }
 		public nfloat Width { get { return Size.Width; } set { Size.Width = value; } }
 		public nfloat Height { get { return Size.Height; } set { Size.Height = value; } }
-	}
+
+        public bool IsEmpty => Size.IsEmpty;
+    }
 }
 #endif
