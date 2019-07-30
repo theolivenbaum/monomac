@@ -3441,143 +3441,199 @@ namespace MonoMac.AppKit {
 	
 	[BaseType (typeof (NSView))]
 	public partial interface NSControl {
-		[Export ("initWithFrame:")]
-		IntPtr Constructor (CGRect frameRect);
+        [DesignatedInitializer]
+        [Export("initWithFrame:")]
+        IntPtr Constructor(CGRect frameRect);
 
-		[Export ("sizeToFit")]
-		void SizeToFit ();
+        [Export("sizeToFit")]
+        void SizeToFit();
 
-		[Export ("calcSize")]
-		void CalcSize ();
+        [Deprecated(PlatformName.MacOSX, 10, 10, message: "Override 'Layout' instead.")]
+        [Export("calcSize")]
+        void CalcSize();
 
-		[Export ("selectedCell")]
-		NSCell SelectedCell { get; }
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("selectedCell")]
+        NSCell SelectedCell { get; }
 
-		[Export ("selectedTag")]
-		nint SelectedTag { get; }
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("selectedTag")]
+        nint SelectedTag { get; }
 
-		[Export ("sendActionOn:")]
-		nint SendActionOn (NSEventType mask);
+        [Export("sendActionOn:")]
+        nint SendActionOn(NSEventType mask);
 
-		[Export ("setNeedsDisplay")]
-		void SetNeedsDisplay ();
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("setNeedsDisplay")]
+        void SetNeedsDisplay();
 
-		[Export ("updateCell:")]
-		void UpdateCell (NSCell aCell);
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("updateCell:")]
+        void UpdateCell(NSCell aCell);
 
-		[Export ("updateCellInside:")]
-		void UpdateCellInside (NSCell aCell);
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("updateCellInside:")]
+        void UpdateCellInside(NSCell aCell);
 
-		[Export ("drawCellInside:")]
-		void DrawCellInside (NSCell aCell);
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("drawCellInside:")]
+        void DrawCellInside(NSCell aCell);
 
-		[Export ("drawCell:")]
-		void DrawCell (NSCell aCell);
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("drawCell:")]
+        void DrawCell(NSCell aCell);
 
-		[Export ("selectCell:")]
-		void SelectCell (NSCell aCell);
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("selectCell:")]
+        void SelectCell(NSCell aCell);
 
-		[Export ("sendAction:to:")]
-		bool SendAction (Selector theAction, NSObject theTarget);
+        [Export("sendAction:to:")]
+        bool SendAction(Selector theAction, NSObject theTarget);
 
-		[Export ("takeIntValueFrom:")]
-		void TakeIntValueFrom (NSObject sender);
+        [Export("takeIntValueFrom:")]
+        void TakeIntValueFrom(NSObject sender);
 
-		[Export ("takeFloatValueFrom:")]
-		void TakeFloatValueFrom (NSObject sender);
+        [Export("takeFloatValueFrom:")]
+        void TakeFloatValueFrom(NSObject sender);
 
-		[Export ("takeDoubleValueFrom:")]
-		void TakeDoubleValueFrom (NSObject sender);
+        [Export("takeDoubleValueFrom:")]
+        void TakeDoubleValueFrom(NSObject sender);
 
-		[Export ("takeStringValueFrom:")]
-		void TakeStringValueFrom (NSObject sender);
+        [Export("takeStringValueFrom:")]
+        void TakeStringValueFrom(NSObject sender);
 
-		[Export ("takeObjectValueFrom:")]
-		void TakeObjectValueFrom (NSObject sender);
+        [Export("takeObjectValueFrom:")]
+        void TakeObjectValueFrom(NSObject sender);
 
-		[Export ("currentEditor")]
-		NSText CurrentEditor { get; }
+        [Export("currentEditor")]
+        NSText CurrentEditor { get; }
 
-		[Export ("abortEditing")]
-		bool AbortEditing ();
+        [Export("abortEditing")]
+        bool AbortEditing();
 
-		[Export ("validateEditing")]
-		void ValidateEditing ();
+        [Export("validateEditing")]
+        void ValidateEditing();
 
-		[Export ("mouseDown:")]
-		void MouseDown (NSEvent theEvent);
+        [Export("mouseDown:")]
+        void MouseDown(NSEvent theEvent);
 
-		[Export ("takeIntegerValueFrom:")]
-		void TakeIntegerValueFrom (NSObject sender);
+        [Export("takeIntegerValueFrom:")]
+        void TakeIntegerValueFrom(NSObject sender);
 
-		[Export ("invalidateIntrinsicContentSizeForCell:"), Lion]
-		void InvalidateIntrinsicContentSizeForCell (NSCell cell);
+        [Export("invalidateIntrinsicContentSizeForCell:")]
+        void InvalidateIntrinsicContentSizeForCell(NSCell cell);
 
-		//Detected properties
-		[Static]
-		[Export ("cellClass")]
-		Class CellClass { get; set; }
+        //Detected properties
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Static]
+        [Export("cellClass")]
+        Class CellClass { get; set; }
 
-		[Export ("cell")]
-		NSCell Cell { get; set; }
+        [Deprecated(PlatformName.MacOSX, 10, 10)]
+        [Export("cell")]
+        NSCell Cell { get; set; }
 
-		[Export ("target"), NullAllowed]
-		NSObject Target { get; set; }
+        [Export("target", ArgumentSemantic.Weak), NullAllowed]
+        NSObject Target { get; set; }
 
-		[Export ("action"), NullAllowed]
-		Selector Action { get; set; }
+        [Export("action"), NullAllowed]
+        Selector Action { get; set; }
 
-		[Export ("tag")]
-		nint Tag { get; set; }
+        [Export("tag")]
+        nint Tag { get; set; }
 
-		[Export ("ignoresMultiClick")]
-		bool IgnoresMultiClick { get; set; }
+        [Export("ignoresMultiClick")]
+        bool IgnoresMultiClick { get; set; }
 
-		[Export ("continuous")]
-		bool Continuous { [Bind ("isContinuous")]get; set; }
+        [Export("continuous")]
+        bool Continuous { [Bind("isContinuous")]get; set; }
 
-		[Export ("enabled")]
-		bool Enabled { [Bind ("isEnabled")]get; set; }
+        [Export("enabled")]
+        bool Enabled { [Bind("isEnabled")]get; set; }
 
-		[Export ("alignment")]
-		NSTextAlignment Alignment { get; set; }
+        [Export("alignment")]
+        NSTextAlignment Alignment { get; set; }
 
-		[Export ("font")]
-		NSFont Font { get; set; }
+        [Export("font")]
+        NSFont Font { get; set; }
 
-		[Export ("formatter"), NullAllowed]
-		NSObject Formatter { get; set; }
+        [Export("formatter", ArgumentSemantic.Retain), NullAllowed]
+#if XAMCORE_4_0
+		NSFormatter Formatter { get; set; }
+#else
+        NSObject Formatter { get; set; }
+#endif
 
-		[Export ("objectValue")]
-		NSObject ObjectValue { get; set; }
+        [Export("objectValue", ArgumentSemantic.Copy)]
+        NSObject ObjectValue { get; set; }
 
-		[Export ("stringValue")]
-		string StringValue { get; set; }
+        [Export("stringValue")]
+        string StringValue { get; set; }
 
-		[Export ("attributedStringValue")]
-		NSAttributedString AttributedStringValue { get; set; }
+        [Export("attributedStringValue", ArgumentSemantic.Copy)]
+        NSAttributedString AttributedStringValue { get; set; }
 
-		[Export ("intValue")]
-		int IntValue { get; set; }
+        [Export("intValue")]
+        int IntValue { get; set; } /* int, not NSInteger */
 
-		[Export ("floatValue")]
-		float FloatValue { get; set; } // 32-bit
+        [Export("floatValue")]
+        float FloatValue { get; set; } /* float, not CGFloat */
 
-		[Export ("doubleValue")]
-		double DoubleValue { get; set; }
+        [Export("doubleValue")]
+        double DoubleValue { get; set; }
 
-		[Export ("baseWritingDirection")]
-		NSWritingDirection BaseWritingDirection { get; set; }
+        [Export("baseWritingDirection")]
+        NSWritingDirection BaseWritingDirection { get; set; }
 
+#if XAMCORE_2_0
 		[Export ("integerValue")]
-		nint IntegerValue { get; set; }
+		nint NIntValue { get; set; }
+#else
+        [Export("integerValue")]
+        nint IntegerValue { get; set; }
+#endif
+        [Export("performClick:")]
+        void PerformClick(NSObject sender);
 
-		[Export ("performClick:")]
-		void PerformClick (NSObject sender);
+        [Export("refusesFirstResponder")]
+        bool RefusesFirstResponder { get; set; }
 
-		[Export ("refusesFirstResponder")]
-		bool RefusesFirstResponder { get; set; }
-	}
+        [Mac(10, 10)]
+        [Export("highlighted")]
+        bool Highlighted { [Bind("isHighlighted")] get; [Bind("setHighlighted:")] set; }
+
+        [Mac(10, 10)]
+        [Export("controlSize")]
+        NSControlSize ControlSize { get; set; }
+
+        [Mac(10, 10)]
+        [Export("sizeThatFits:")]
+        CGSize SizeThatFits(CGSize size);
+
+        [Mac(10, 10)]
+        [Export("lineBreakMode")]
+        NSLineBreakMode LineBreakMode { get; set; }
+
+        [Mac(10, 10)]
+        [Export("usesSingleLineMode")]
+        bool UsesSingleLineMode { get; set; }
+
+        [Mac(10, 10)]
+        [Export("drawWithExpansionFrame:inView:")]
+        void DrawWithExpansionFrame(CGRect cellFrame, NSView view);
+
+        [Mac(10, 10)]
+        [Export("editWithFrame:editor:delegate:event:")]
+        void EditWithFrame(CGRect aRect, [NullAllowed] NSText textObj, [NullAllowed] NSObject anObject, NSEvent theEvent);
+
+        [Mac(10, 10)]
+        [Export("selectWithFrame:editor:delegate:start:length:")]
+        void SelectWithFrame(CGRect aRect, [NullAllowed] NSText textObj, [NullAllowed] NSObject anObject, nint selStart, nint selLength);
+
+        [Mac(10, 10)]
+        [Export("endEditing:")]
+        void EndEditing([NullAllowed] NSText textObj);
+    }
 
 	[BaseType (typeof (NSObject))]
 	public interface NSController {
@@ -13524,43 +13580,72 @@ namespace MonoMac.AppKit {
 	//64 bit reviewed
 	[BaseType (typeof (NSObject))]
 	public partial interface NSTextContainer {
-		[Export ("initWithContainerSize:")]
-		IntPtr Constructor (CGSize size);
+        [Export("initWithContainerSize:"), Internal]
+        [Sealed]
+        IntPtr InitWithContainerSize(CGSize size);
 
-		[Export ("replaceLayoutManager:")]
-		void ReplaceLayoutManager (NSLayoutManager newLayoutManager);
+        [Mac(10, 11)]
+        [Export("initWithSize:"), Internal]
+        [Sealed]
+        IntPtr InitWithSize(CGSize size);
 
-		// FIXME: Binding
-		//[Export ("lineFragmentRectForProposedRect:sweepDirection:movementDirection:remainingRect:")]
-		//CGRect LineFragmentRect (CGRect proposedRect, NSLineSweepDirection sweepDirection, NSLineMovementDirection movementDirection, CGRectPointer remainingRect);
+        [Export("replaceLayoutManager:")]
+        void ReplaceLayoutManager(NSLayoutManager newLayoutManager);
 
-		[Export ("isSimpleRectangularTextContainer")]
-		bool IsSimpleRectangularTextContainer { get; }
+        // FIXME: Binding
+        //[Export ("lineFragmentRectForProposedRect:sweepDirection:movementDirection:remainingRect:")]
+        //CGRect LineFragmentRect (CGRect proposedRect, NSLineSweepDirection sweepDirection, NSLineMovementDirection movementDirection, NSRectPointer remainingRect);
 
-		[Export ("containsPoint:")]
-		bool ContainsPoint (CGPoint point);
+        [Export("isSimpleRectangularTextContainer")]
+        bool IsSimpleRectangularTextContainer { get; }
 
-		//Detected properties
-		[Export ("layoutManager")]
-		NSLayoutManager LayoutManager { get; set; }
+        [Deprecated(PlatformName.MacOSX, 10, 11)]
+        [Export("containsPoint:")]
+        bool ContainsPoint(CGPoint point);
 
-		[Export ("textView")]
-		NSTextView TextView { get; set; }
+        //Detected properties
+        [Export("layoutManager")]
+        NSLayoutManager LayoutManager { get; set; }
 
-		[Export ("widthTracksTextView")]
-		bool WidthTracksTextView { get; set; }
+        [Export("textView", ArgumentSemantic.Weak)]
+        NSTextView TextView { get; set; }
 
-		[Export ("heightTracksTextView")]
-		bool HeightTracksTextView { get; set; }
+        [Export("widthTracksTextView")]
+        bool WidthTracksTextView { get; set; }
 
-		[Export ("containerSize")]
-		CGSize ContainerSize { get; set; }
+        [Export("heightTracksTextView")]
+        bool HeightTracksTextView { get; set; }
 
-		[Export ("lineFragmentPadding")]
-		nfloat LineFragmentPadding { get; set; }
-	}
-	//64 bit reviewed
-	[BaseType (typeof (NSMutableAttributedString), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextStorageDelegate)})]
+        [Deprecated(PlatformName.MacOSX, 10, 11, message: "Use Size instead.")]
+        [Export("containerSize")]
+        CGSize ContainerSize { get; set; }
+
+        [Export("lineFragmentPadding")]
+        nfloat LineFragmentPadding { get; set; }
+
+        [Mac(10, 11)]
+        [Export("size", ArgumentSemantic.Assign)]
+        CGSize Size { get; set; }
+
+        [Mac(10, 11)]
+        [Export("exclusionPaths", ArgumentSemantic.Copy)]
+        // [Verify (StronglyTypedNSArray)]
+        NSBezierPath[] ExclusionPaths { get; set; }
+
+        [Mac(10, 11)]
+        [Export("lineBreakMode", ArgumentSemantic.Assign)]
+        NSLineBreakMode LineBreakMode { get; set; }
+
+        [Mac(10, 11)]
+        [Export("maximumNumberOfLines", ArgumentSemantic.Assign)]
+        nuint MaximumNumberOfLines { get; set; }
+
+        [Mac(10, 11)]
+        [Export("lineFragmentRectForProposedRect:atIndex:writingDirection:remainingRect:")]
+        CGRect GetLineFragmentRect(CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, ref CGRect remainingRect);
+    }
+    //64 bit reviewed
+    [BaseType (typeof (NSMutableAttributedString), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextStorageDelegate)})]
 	public partial interface NSTextStorage {
 		[Export ("addLayoutManager:")][PostGet ("LayoutManagers")]
 		void AddLayoutManager (NSLayoutManager obj);

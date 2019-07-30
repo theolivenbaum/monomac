@@ -4,6 +4,7 @@ namespace MonoMac.ObjCRuntime {
 		Assign = 0,
 		Copy = 1,
 		Retain = 2,
-        Strong = 3 // not implemented
+        Strong = 3, // not implemented
+        Weak = 4 // not implemented
 	}
 }

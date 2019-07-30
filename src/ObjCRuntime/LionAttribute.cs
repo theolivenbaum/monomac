@@ -174,4 +174,7 @@ namespace MonoMac.ObjCRuntime
     public class NoWatchAttribute : UnavailableAttribute { }
     public class NoTVAttribute : UnavailableAttribute { }
     public class NoiOSAttribute : UnavailableAttribute {  }
+
+    // not used
+    public class DesignatedInitializer : UnavailableAttribute { }
 }
