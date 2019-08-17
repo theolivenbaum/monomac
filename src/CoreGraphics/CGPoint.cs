@@ -107,6 +107,8 @@ namespace MonoMac.CoreGraphics {
 		public nfloat Y;
 
         public override bool Equals(object obj) => (obj is CGPoint p) && p == this;
+
+        public bool IsEmpty => (double)X == 0.0 && (double)Y == 0.0;
     }
 }
 #endif
