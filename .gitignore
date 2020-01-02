@@ -5,3 +5,4 @@ artifacts/
 *.exe
 *.dll
 src/generated_sources
+.vs
