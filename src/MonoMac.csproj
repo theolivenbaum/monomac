@@ -3,7 +3,6 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;SDCONVERT</BaseDefines>
     <Version>0.0.1</Version>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <EnableDefaultItems>False</EnableDefaultItems>
     <PlatformTarget>AnyCpu</PlatformTarget>
   </PropertyGroup>
