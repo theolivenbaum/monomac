@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 using MonoMac.ObjCRuntime;
 
 namespace MonoMac.Foundation {
-	[StructLayout(LayoutKind.Sequential)]
+	//[StructLayout(LayoutKind.Sequential)]
 	public partial class NSObject : INativeObject, IDisposable {
 		public static readonly Assembly MonoMacAssembly = typeof (NSObject).Assembly;
 

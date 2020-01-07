@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net45</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
     <PlatformTarget>AnyCpu</PlatformTarget>
+    <NoWarn>3021,0219,0414,114,108</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="$(Platform) == 'x64'">
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64</BaseDefines>

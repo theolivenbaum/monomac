@@ -725,9 +725,6 @@ namespace MonoMac.AudioToolbox {
 
 		public static AudioSessionErrors AddListener (AudioSessionProperty property, PropertyListener listener)
 		{
-			if (property == null)
-				throw new ArgumentNullException ("property");
-
 			if (listener == null)
 				throw new ArgumentNullException ("listener");
 
@@ -735,7 +732,7 @@ namespace MonoMac.AudioToolbox {
 				listeners = new Dictionary<AudioSessionProperty, List<PropertyListener>> ();
 
 			List<PropertyListener> a;
-			if (!listeners.TryGetValue (property, out a));
+			if (!listeners.TryGetValue (property, out a))
 				listeners [property] = a = new List<PropertyListener> ();
 
 			a.Add (listener);
@@ -753,7 +750,7 @@ namespace MonoMac.AudioToolbox {
 				throw new ArgumentNullException ("listener");
 
 			List<PropertyListener> a;
-			if (!listeners.TryGetValue (property, out a));
+			if (!listeners.TryGetValue (property, out a))
 				return;
 			a.Remove (listener);
 			if (a.Count == 0)

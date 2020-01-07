@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net45</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
     <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
@@ -35,7 +35,8 @@
     <Apis Include="composer.cs" />
     <Apis Include="scriptingbridge.cs" />
     
-    <CurrentOutputs Include="$(GeneratedOutputDir)**\*" />
+    <CurrentOutputs Include="$(GeneratedOutputDir)**\*" Visible="False" />
+    <CurrentOutputs Include="$(GeneratedOutputDir)generated_sources" Visible="False" />
     
   </ItemGroup>
   
@@ -46,7 +47,7 @@
     <Compile Include="btouch.cs" />
   </ItemGroup>
   
-  <Target Name="GenerateSources">
+  <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis)" Outputs="@(CurrentOutputs)">
     <ItemGroup>
       <BaseDefineItems Include="$(BaseDefines)" />
     </ItemGroup>
@@ -63,6 +64,11 @@
       
     </PropertyGroup>
     <Exec Command="$(TargetPath) $(GeneratorParameters)" />
-    
   </Target>
+  
+  <Target Name="CleanGeneratedSource" BeforeTargets="AfterClean">
+    <Message Importance="high" Text="Cleaning generated folder" />
+    <RemoveDir Directories="$(GeneratedOutputDir)" />
+  </Target>
+
 </Project>

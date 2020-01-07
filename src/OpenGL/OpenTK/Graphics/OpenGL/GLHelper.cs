@@ -97,10 +97,13 @@ namespace MonoMac.OpenGL
         /// <summary>
         /// Returns a synchronization token unique for the GL class.
         /// </summary>
+		///
+		/* Why?
         protected object SyncRoot
         {
             get { return sync_root; }
         }
+		*/
 
         #endregion
 

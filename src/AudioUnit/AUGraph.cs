@@ -87,7 +87,7 @@ namespace MonoMac.AudioUnit
 		{
 			int err = NewAUGraph (ref handle);
 			if (err != 0)
-				throw new InvalidOperationException(String.Format("Cannot create new AUGraph. Error code:", err));
+				throw new InvalidOperationException(String.Format("Cannot create new AUGraph. Error code: {0}", err));
 		}
 
 		public bool IsInitialized {

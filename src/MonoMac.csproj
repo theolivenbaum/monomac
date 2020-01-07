@@ -14,7 +14,8 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DefineConstants>$(BaseDefines)</DefineConstants>
-    <NoWarn>3021,0219,0414,114,108</NoWarn>
+    <NoWarn>3021,0219,0414,114,108,612,618,4014</NoWarn>
+    <GeneratorBuildProperties>BaseDefines=$(BaseDefines);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
   </PropertyGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'False'">
     <Reference Include="System.Net.Http" />
@@ -22,6 +23,10 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'True'">
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="generator.csproj" ReferenceOutputAssembly="False" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="@(CoreSource)" />
@@ -31,18 +36,7 @@
     <Compile Include="@(OpenGlSource)" />
     <Compile Include="@(CFNetworkSource)" />
   </ItemGroup>
-  <Target Name="CleanGeneratedSource" BeforeTargets="AfterClean">
-    <Message Importance="high" Text="Cleaning generated folder" />
-    <RemoveDir Directories="$(ArtifactsDir)generated\$(Platform)" />
-  </Target>
-  <Target Name="GenerateSource" BeforeTargets="BeforeBuild">
-    <PropertyGroup>
-      <GeneratorBuildProperties>BaseDefines=$(BaseDefines.Replace(";", "%3b"))</GeneratorBuildProperties>
-      <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
-      <GenIgnoreProperties>TargetFramework;PlatformTarget</GenIgnoreProperties>
-    </PropertyGroup>
-    <MSBuild Projects="core.csproj" Targets="Rebuild" Properties="$(GeneratorBuildProperties)" TargetAndPropertyListSeparators="%3b" RemoveProperties="$(GenIgnoreProperties)" />
-    <MSBuild Projects="generator.csproj" Targets="Rebuild;GenerateSources" Properties="$(GeneratorBuildProperties)" TargetAndPropertyListSeparators="%3b" RemoveProperties="$(GenIgnoreProperties)" />
+  <Target Name="IncludeGeneratedSource" BeforeTargets="BeforeBuild">
     <ItemGroup>
 	    <Compile Include="$(ArtifactsDir)generated\$(Platform)\**\*.cs" Visible="False" />
     </ItemGroup>

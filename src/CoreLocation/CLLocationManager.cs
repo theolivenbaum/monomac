@@ -37,7 +37,7 @@ using MonoMac.CoreLocation;
 namespace MonoMac.CoreLocation {
 	public partial class CLLocationManager : NSObject {
 #if MONOMAC
-		const bool use_static_variants = true;
+		public static bool LocationServicesEnabled => CLLocationManager._LocationServicesEnabledStatic;
 #else
 		internal static bool use_static_variants = false;
 
@@ -46,8 +46,7 @@ namespace MonoMac.CoreLocation {
 
 			use_static_variants = v.Major >= 4;
 		}
-#endif
-	
+
 		public static bool LocationServicesEnabled {
 			get {
 				if (use_static_variants) {
@@ -59,6 +58,8 @@ namespace MonoMac.CoreLocation {
 				}
 			}
 		}
+
+#endif
 
 #if !MONOMAC
 		public static bool HeadingAvailable {
