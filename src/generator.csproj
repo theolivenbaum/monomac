@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,15 +7,9 @@
     <EnableDefaultItems>False</EnableDefaultItems>
     <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
-    <PlatformTarget>AnyCpu</PlatformTarget>
+    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
   </PropertyGroup>
-  <PropertyGroup Condition="$(Platform) == 'x64'">
-    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64</BaseDefines>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Platform) == 'x86'">
-    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC</BaseDefines>
-  </PropertyGroup>
-  
+ 
   <PropertyGroup>
     <DefineConstants>$(BaseDefines);GENERATOR;MONOMAC_BOOTSTRAP</DefineConstants>
   </PropertyGroup>
@@ -55,14 +49,16 @@
     <PropertyGroup>
       <GeneratorParameters>$(GeneratorParameters) --compiler=csc -a --core -v</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir)"</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)"</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) @(Apis-&gt;'%(Identity)', ' ')</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems-&gt;'-d=%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir) "</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)\generate_temp"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(Apis->'%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems->'-d=%(Identity)', ' ')</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--baselib=$(TargetDir)core.dll"</GeneratorParameters>
       <GeneratorParameters>$(GeneratorParameters) "--ns=$(BaseNamespace)"</GeneratorParameters>
       
     </PropertyGroup>
+    <Message Text="Parameters: $(GeneratorParameters)" Importance="high" />
+    <MakeDir Directories="$(IntermediateOutputPath)\generate_temp" />
     <Exec Command="$(TargetPath) $(GeneratorParameters)" />
   </Target>
   

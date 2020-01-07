@@ -4,14 +4,8 @@
     <TargetFrameworks>net45</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
-    <PlatformTarget>AnyCpu</PlatformTarget>
     <NoWarn>3021,0219,0414,114,108</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Platform) == 'x64'">
-    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64</BaseDefines>
-  </PropertyGroup>
-  <PropertyGroup Condition="$(Platform) == 'x86'">
-    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC</BaseDefines>
+    <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>$(BaseDefines);GENERATOR;MONOMAC_BOOTSTRAP;COREBUILD</DefineConstants>
