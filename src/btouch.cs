@@ -187,8 +187,9 @@ class BindingTouch {
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
 
 			var compilerPath = Environment.GetEnvironmentVariable("VSINSTALLDIR");
-			if (string.IsNullOrEmpty(compilerPath))
-				compilerPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "Microsoft Visual Studio", "2019", "Professional");
+			var programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+			if (string.IsNullOrEmpty(compilerPath) && !string.IsNullOrEmpty(programFiles))
+				compilerPath = Path.Combine(programFiles, "Microsoft Visual Studio", "2019", "Professional");
 
 			if (!string.IsNullOrEmpty(compilerPath) && Directory.Exists(compilerPath))
 			{
