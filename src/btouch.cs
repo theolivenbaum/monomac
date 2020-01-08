@@ -186,20 +186,6 @@ class BindingTouch {
 			var api_file = sources [0];
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
 
-			var compilerPath = Environment.GetEnvironmentVariable("VSINSTALLDIR");
-			var programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-			if (string.IsNullOrEmpty(compilerPath) && !string.IsNullOrEmpty(programFiles))
-				compilerPath = Path.Combine(programFiles, "Microsoft Visual Studio", "2019", "Professional");
-
-			if (!string.IsNullOrEmpty(compilerPath) && Directory.Exists(compilerPath))
-			{
-				compiler = Path.Combine(compilerPath, @"MSBuild\Current\Bin\Roslyn\csc.exe");
-
-				// fallback to csc
-				if (!File.Exists(compiler))
-					compiler = "csc";
-			}
-
 			// -nowarn:436 is to avoid conflicts in definitions between core.dll and the sources
 			var cargs = String.Format("{10} -debug -unsafe -target:library {0} -nowarn:436 -out:{1} -r:{2} {3} {4} {5} -r:{6} {7} {8} {9}",
 						   string.Join(" ", sources.ToArray()),

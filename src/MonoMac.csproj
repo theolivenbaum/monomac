@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
@@ -9,7 +9,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DefineConstants>$(BaseDefines)</DefineConstants>
     <NoWarn>3021,0219,0414,114,108,612,618,4014</NoWarn>
-    <GeneratorBuildProperties>BaseDefines=$(BaseDefines);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
   </PropertyGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'False'">
     <Reference Include="System.Net.Http" />
@@ -17,10 +16,6 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'True'">
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="generator.csproj" ReferenceOutputAssembly="False" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="@(CoreSource)" />
@@ -30,9 +25,28 @@
     <Compile Include="@(OpenGlSource)" />
     <Compile Include="@(CFNetworkSource)" />
   </ItemGroup>
+  
   <Target Name="IncludeGeneratedSource" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <GeneratorBuildProperties>BaseDefines=$(BaseDefines.Replace(";", "%3b"))</GeneratorBuildProperties>
+      <GeneratorBuildProperties>$(GeneratorBuildProperties);Configuration=$(Configuration)</GeneratorBuildProperties>
+      <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
+      <GenIgnoreProperties>TargetFramework;PlatformTarget</GenIgnoreProperties>
+      <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
+    </PropertyGroup>
+    
     <ItemGroup>
-	    <Compile Include="$(ArtifactsDir)generated\$(Platform)\**\*.cs" Visible="False" />
+      <GeneratorProjects Include="core.csproj" />
+      <GeneratorProjects Include="generator.csproj" />
+    </ItemGroup>
+    
+    <!-- build generator and core apis (if needed) -->
+    <MSBuild Projects="@(GeneratorProjects)" Targets="Build" Properties="$(GeneratorBuildProperties)" TargetAndPropertyListSeparators="%3b" RemoveProperties="$(GenIgnoreProperties)" />
+
+    <!-- include generated code in output -->
+    <ItemGroup>
+      <Compile Include="$(GeneratedOutputDir)**\*.cs" Visible="False" />
     </ItemGroup>
   </Target>
-</Project>
+
+  </Project>

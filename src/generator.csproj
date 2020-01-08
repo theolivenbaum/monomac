@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
     <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
@@ -28,10 +28,6 @@
     <Apis Include="webkit.cs" />
     <Apis Include="composer.cs" />
     <Apis Include="scriptingbridge.cs" />
-    
-    <CurrentOutputs Include="$(GeneratedOutputDir)**\*" Visible="False" />
-    <CurrentOutputs Include="$(GeneratedOutputDir)generated_sources" Visible="False" />
-    
   </ItemGroup>
   
   <ItemGroup>
@@ -41,23 +37,33 @@
     <Compile Include="btouch.cs" />
   </ItemGroup>
   
-  <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis)" Outputs="@(CurrentOutputs)">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis)" Outputs="$(GeneratedOutputDir)generated_sources">
     <ItemGroup>
       <BaseDefineItems Include="$(BaseDefines)" />
     </ItemGroup>
-    
+
     <PropertyGroup>
-      <GeneratorParameters>$(GeneratorParameters) --compiler=csc -a --core -v</GeneratorParameters> 
+      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND Exists('$(_RoslynTasksDirectory)csc.exe')">$(_RoslynTasksDirectory)csc.exe</GeneratorCompiler>
+      <GeneratorCompiler Condition="$(GeneratorCompiler) == ''">csc</GeneratorCompiler>
+      
+      <GeneratorParameters>$(GeneratorParameters) -a --core -v</GeneratorParameters>
+      <GeneratorParameters>$(GeneratorParameters) "--compiler=$(GeneratorCompiler)"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir) "</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)\generate_temp"</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) @(Apis->'%(Identity)', ' ')</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems->'-d=%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(Apis-&gt;'%(Identity)', ' ')</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems-&gt;'-d=%(Identity)', ' ')</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--baselib=$(TargetDir)core.dll"</GeneratorParameters>
       <GeneratorParameters>$(GeneratorParameters) "--ns=$(BaseNamespace)"</GeneratorParameters>
       
     </PropertyGroup>
-    <Message Text="Parameters: $(GeneratorParameters)" Importance="high" />
     <MakeDir Directories="$(IntermediateOutputPath)\generate_temp" />
     <Exec Command="$(TargetPath) $(GeneratorParameters)" />
   </Target>
