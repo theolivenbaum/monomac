@@ -56,7 +56,7 @@
       <GeneratorParameters>$(GeneratorParameters) -a --core -v</GeneratorParameters>
       <GeneratorParameters>$(GeneratorParameters) "--compiler=$(GeneratorCompiler)"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir) "</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir)."</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)\generate_temp"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) @(Apis-&gt;'%(Identity)', ' ')</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems-&gt;'-d=%(Identity)', ' ')</GeneratorParameters> 

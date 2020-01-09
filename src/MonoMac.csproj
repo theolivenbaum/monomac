@@ -1,9 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+  
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
     <Version>0.0.1</Version>
     <EnableDefaultItems>False</EnableDefaultItems>
+    <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -26,13 +30,25 @@
     <Compile Include="@(CFNetworkSource)" />
   </ItemGroup>
   
-  <Target Name="IncludeGeneratedSource" BeforeTargets="BeforeBuild">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+
+  <PropertyGroup>
+    <CoreCompileDependsOn>IncludeGeneratedSource;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="IncludeGeneratedSource" DependsOnTargets="GenerateApiSource" BeforeTargets="BeforeBuild">
+    <!-- include generated code in output -->
+    <ItemGroup>
+      <Compile Include="$(GeneratedOutputDir)**\*.cs" />
+    </ItemGroup>
+   </Target>
+  
+  <Target Name="GenerateApiSource" Inputs="$(MSBuildProjectFile)" Outputs="$(GeneratedOutputDir)generated_sources ">
     <PropertyGroup>
       <GeneratorBuildProperties>BaseDefines=$(BaseDefines.Replace(";", "%3b"))</GeneratorBuildProperties>
       <GeneratorBuildProperties>$(GeneratorBuildProperties);Configuration=$(Configuration)</GeneratorBuildProperties>
       <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
       <GenIgnoreProperties>TargetFramework;PlatformTarget</GenIgnoreProperties>
-      <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
     </PropertyGroup>
     
     <ItemGroup>
@@ -43,10 +59,6 @@
     <!-- build generator and core apis (if needed) -->
     <MSBuild Projects="@(GeneratorProjects)" Targets="Build" Properties="$(GeneratorBuildProperties)" TargetAndPropertyListSeparators="%3b" RemoveProperties="$(GenIgnoreProperties)" />
 
-    <!-- include generated code in output -->
-    <ItemGroup>
-      <Compile Include="$(GeneratedOutputDir)**\*.cs" Visible="False" />
-    </ItemGroup>
   </Target>
-
+  
   </Project>
