@@ -25,22 +25,6 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
-
 namespace Foundation {
 	public partial class NSInputStream : NSStream {
 		const string selReadMaxLength = "read:maxLength:";

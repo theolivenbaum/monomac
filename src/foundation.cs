@@ -46,22 +46,6 @@ using UIKit;
 using System;
 using System.ComponentModel;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
-
 namespace Foundation
 {
 	public delegate nint NSComparator (NSObject obj1, NSObject obj2);
@@ -799,10 +783,10 @@ namespace Foundation
 		nuint Length { get; [NotImplemented] set; }
 
 		[Export ("writeToFile:options:error:")]
-		bool _Save (string file, nuint options, IntPtr addr);
+		bool _Save (string file, nint options, IntPtr addr);
 		
 		[Export ("writeToURL:options:error:")]
-		bool _Save (NSUrl url, nuint options, IntPtr addr);
+		bool _Save (NSUrl url, nint options, IntPtr addr);
 
 		[Export ("rangeOfData:options:range:")]
 		[Since (4,0)]

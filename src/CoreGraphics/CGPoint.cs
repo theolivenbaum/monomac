@@ -27,16 +27,6 @@ using System.Runtime.InteropServices;
 
 #if !SDCOMPAT
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#endif
-
 namespace CoreGraphics {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CGPoint {
@@ -98,6 +88,18 @@ namespace CoreGraphics {
 		}
 
 		public CGPoint(nfloat x, nfloat y)
+		{
+			X = x;
+			Y = y;
+		}
+
+		public CGPoint(double x, double y)
+		{
+			X = (nfloat)x;
+			Y = (nfloat)y;
+		}
+
+		public CGPoint(float x, float y)
 		{
 			X = x;
 			Y = y;

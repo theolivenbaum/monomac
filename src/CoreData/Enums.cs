@@ -21,24 +21,9 @@
 // Copyright 2011, 2012 Xamarin Inc
 using System;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace CoreData {
 
-        public enum NSEntityMappingType : nuint {
+        public enum NSEntityMappingType : ulong {
                 Undefined = 0x00,
                 Custom = 0x01,
                 Add = 0x02,
@@ -47,7 +32,7 @@ namespace CoreData {
 		Transform = 0x06
         }
 
-	public enum NSAttributeType : nuint {
+	public enum NSAttributeType : ulong {
 		Undefined = 0,
 		Integer16 = 100,
 		Integer32 = 200,
@@ -63,28 +48,28 @@ namespace CoreData {
 	}
 
 	[Flags]
-	public enum NSFetchRequestResultType : nuint {
+	public enum NSFetchRequestResultType : ulong {
 		ManagedObject = 0x00,
 		ManagedObjectID = 0x01,
 		DictionaryResultType = 0x02,
 		NSCountResultType = 0x04
 	}
 
-	public enum NSKeyValueSetMutationKind : nuint {
+	public enum NSKeyValueSetMutationKind : ulong {
 		Union = 1,
 		Minus = 2,
 		Intersect = 3,
 		NSKeyValueSet = 4
 	}
 
-	public enum NSDeleteRule : nuint {
+	public enum NSDeleteRule : ulong {
 		NoAction,
 		Nullify,
 		Cascade,
 		Deny
 	}
 
-	public enum NSPersistentStoreRequestType : nuint {
+	public enum NSPersistentStoreRequestType : ulong {
 		Fetch = 1,
 		Save,
 #if MONOMAC
@@ -92,11 +77,11 @@ namespace CoreData {
 #endif
 	}
 
-	public enum NSManagedObjectContextConcurrencyType : nuint {
+	public enum NSManagedObjectContextConcurrencyType : ulong {
 		Confinement, PrivateQueue, MainQueue
 	}
 
-	public enum NSMergePolicyType : nuint {
+	public enum NSMergePolicyType : ulong {
 		Error, PropertyStoreTrump, PropertyObjectTrump, Overwrite, RollbackMerge
 	}
 

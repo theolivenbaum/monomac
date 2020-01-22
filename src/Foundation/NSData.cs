@@ -33,22 +33,6 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
-
 namespace Foundation {
 	public partial class NSData : IEnumerable, IEnumerable<byte> {
 		
@@ -230,47 +214,58 @@ namespace Foundation {
 		{
 			return NSString.FromData (this, encoding);
 		}
-		
-		public override string ToString ()
+
+		public override string ToString()
 		{
-			return ToString (NSStringEncoding.UTF8);
+			// not every NSData can be converted into a (valid) UTF8 string and:
+			// * Your ToString override should not throw an exception
+			//   -> http://msdn.microsoft.com/en-us/library/system.object.tostring(v=vs.110).aspx
+			// * We want to show something valuable on XS watches while debugging
+			try
+			{
+				using (var s = new NSString(this, NSStringEncoding.UTF8))
+					return s.ToString();
+			}
+			catch
+			{
+				return Description; // ObjC knows how to render NSData into a string
+			}
 		}
 
-		public bool Save (string file, bool auxiliaryFile, out NSError error)
+		public bool Save(string file, bool auxiliaryFile, out NSError error)
 		{
-			unsafe {
-				IntPtr val;
-				IntPtr val_addr = (IntPtr) ((IntPtr *) &val);
-
-				bool ret = _Save (file, (nuint)(auxiliaryFile ? 1 : 0), val_addr);
-				error = Runtime.GetNSObject<NSError> (val);
-				
-				return ret;
-			}
+			return Save(file, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions)0, out error);
 		}
 
 		public bool Save (string file, NSDataWritingOptions options, out NSError error)
 		{
-			unsafe {
+			unsafe
+			{
 				IntPtr val;
-				IntPtr val_addr = (IntPtr) ((IntPtr *) &val);
+				IntPtr val_addr = (IntPtr)((IntPtr*)&val);
 
-				bool ret = _Save (file, (nuint) options, val_addr);
-				error = Runtime.GetNSObject<NSError> (val);
-				
+				bool ret = _Save(file, (nint)(long)options, val_addr);
+				error = (NSError)Runtime.GetNSObject(val);
+
 				return ret;
 			}
 		}
 
-		public bool Save (NSUrl url, bool auxiliaryFile, out NSError error)
+		public bool Save(NSUrl url, bool auxiliaryFile, out NSError error)
 		{
-			unsafe {
-				IntPtr val;
-				IntPtr val_addr = (IntPtr) ((IntPtr *) &val);
+			return Save(url, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions)0, out error);
+		}
 
-				bool ret = _Save (url, (nuint)(auxiliaryFile ? 1 : 0), val_addr);
-				error = Runtime.GetNSObject<NSError> (val);
-				
+		public bool Save(NSUrl url, NSDataWritingOptions options, out NSError error)
+		{
+			unsafe
+			{
+				IntPtr val;
+				IntPtr val_addr = (IntPtr)((IntPtr*)&val);
+
+				bool ret = _Save(url, (nint)(long)options, val_addr);
+				error = (NSError)Runtime.GetNSObject(val);
+
 				return ret;
 			}
 		}

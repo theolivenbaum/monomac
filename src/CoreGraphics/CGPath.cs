@@ -31,21 +31,6 @@ using System.Runtime.InteropServices;
 using ObjCRuntime;
 using Foundation;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace CoreGraphics {
 	public enum CGPathElementType {
 		MoveToPoint,
@@ -364,9 +349,14 @@ namespace CoreGraphics {
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPathAddEllipseInRect(IntPtr path, IntPtr zero, CGRect rect);
+		public void AddEllipseInRect(CGRect rect)
+		{
+			CGPathAddEllipseInRect(handle, IntPtr.Zero, rect);
+		}
+		[Obsolete("Use AddEllipseInRect instead")]
 		public void AddElipseInRect (CGRect rect)
 		{
-			CGPathAddEllipseInRect (handle, IntPtr.Zero, rect);
+			AddEllipseInRect(rect);
 		}
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]

@@ -31,58 +31,29 @@ using Foundation;
 using ObjCRuntime;
 using System.Runtime.InteropServices;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace AppKit {
 	public partial class NSBezierPath {
 
-		public void GetLineDash (out nfloat[] pattern, out nfloat phase)
+		public unsafe void GetLineDash (out nfloat[] pattern, out nfloat phase)
 		{
+			nint length;
+
 			//Call the internal method with null to get the length of the pattern array
-			nint _length;
-			_GetLineDash ((IntPtr)null, out _length, out phase);
-			int length = (int)_length;
-			
-			//Allocate space for the C-array
-			nfloat[] managedArray = new nfloat[length];
-			int size = Marshal.SizeOf(managedArray[0]) * length;
-			IntPtr pNativeArray = Marshal.AllocHGlobal(size);
-			
-			//Call the method again to get the array
-			_GetLineDash (pNativeArray, out _length, out phase);
-			length = (int)_length;
+			_GetLineDash(IntPtr.Zero, out length, out phase);
 
-			Marshal.Copy(pNativeArray, managedArray, 0, length);
-			Marshal.FreeHGlobal(pNativeArray);
+			pattern = new nfloat[length];
+			fixed (nfloat* ptr = &pattern[0])
+				_GetLineDash((IntPtr)ptr, out length, out phase);
 
-			pattern = managedArray;
 		}
 
-		public void SetLineDash (nfloat[] pattern, nfloat phase)
+		public unsafe void SetLineDash (nfloat[] pattern, nfloat phase)
 		{
 			if (pattern == null)
-				throw new ArgumentNullException ("pattern");
+				throw new ArgumentNullException("pattern");
 
-			int size = Marshal.SizeOf(pattern[0]) * pattern.Length;
-			IntPtr pNativeArray = Marshal.AllocHGlobal(size);
-			Marshal.Copy(pattern, 0, pNativeArray, pattern.Length);
-
-			_SetLineDash (pNativeArray, pattern.Length, phase);
-			
-			Marshal.FreeHGlobal(pNativeArray);
+			fixed (nfloat* ptr = &pattern[0])
+				_SetLineDash((IntPtr)ptr, pattern.Length, phase);
 		}
 
 		public NSBezierPathElement ElementAt (nint index, out CGPoint[] points)

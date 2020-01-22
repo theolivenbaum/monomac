@@ -27,16 +27,6 @@ using System.Runtime.InteropServices;
 
 #if !SDCOMPAT
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#endif
-
 namespace CoreGraphics {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CGRect {
@@ -52,6 +42,22 @@ namespace CoreGraphics {
 		}
 
 		public CGRect(nfloat x, nfloat y, nfloat width, nfloat height)
+		{
+			Origin.X = x;
+			Origin.Y = y;
+			Size.Width = width;
+			Size.Height = height;
+		}
+
+		public CGRect(double x, double y, double width, double height)
+		{
+			Origin.X = (nfloat)x;
+			Origin.Y = (nfloat)y;
+			Size.Width = (nfloat)width;
+			Size.Height = (nfloat)height;
+		}
+
+		public CGRect(float x, float y, float width, float height)
 		{
 			Origin.X = x;
 			Origin.Y = y;

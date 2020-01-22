@@ -139,6 +139,21 @@ namespace Foundation {
 			return source.BoolValue;
 		}
 
+		public static explicit operator nint(NSNumber source)
+		{
+			return source.Int64Value;
+		}
+
+		public static explicit operator nuint(NSNumber source)
+		{
+			return source.UInt64Value;
+		}
+
+		public static explicit operator nfloat(NSNumber source)
+		{
+			return (nfloat)source.DoubleValue;
+		}
+
 		public override string ToString ()
 		{
 			return StringValue;

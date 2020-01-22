@@ -241,6 +241,7 @@
     <SharedCoreSource Include="MobileCoreServices/UTType.cs" />
     <SharedCoreSource Include="MonoNativeFunctionWrapperAttribute.cs" />
     <SharedCoreSource Include="MonoPInvokeCallbackAttribute.cs" />
+    <SharedCoreSource Include="Primitives.cs" />
     <CoreSource Include="Constants.cs" />
     <CoreSource Include="AppKit/Enums.cs" />
     <CoreSource Include="AppKit/Defs.cs" />

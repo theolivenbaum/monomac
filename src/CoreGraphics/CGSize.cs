@@ -29,16 +29,6 @@ using System.Runtime.InteropServices;
 // we didn't mess up the 32 bit build
 #if !SDCOMPAT
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#endif
-
 namespace CoreGraphics {
     [StructLayout(LayoutKind.Sequential)]
     public struct CGSize {
@@ -50,7 +40,19 @@ namespace CoreGraphics {
 			Width = width;
 			Height = height;
 		}
-		
+
+		public CGSize(float width, float height)
+		{
+			Width = width;
+			Height = height;
+		}
+
+		public CGSize(double width, double height)
+		{
+			Width = (nfloat)width;
+			Height = (nfloat)height;
+		}
+
 		public override int GetHashCode()
 		{
 			return Width.GetHashCode() ^ Height.GetHashCode();

@@ -4,21 +4,6 @@ using Foundation;
 using ObjCRuntime;
 using System.Runtime.InteropServices;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace AppKit {
 	public partial class NSColor {
 
@@ -29,7 +14,7 @@ namespace AppKit {
 
 			int size = Marshal.SizeOf(components[0]) * components.Length;
 			IntPtr pNativeFloatArray = Marshal.AllocHGlobal(size);
-			Marshal.Copy(components, 0, pNativeFloatArray, components.Length);
+			nfloat.CopyArray(components, 0, pNativeFloatArray, components.Length);
 
 			NSColor color = _FromColorSpace (space, pNativeFloatArray, components.Length);
 
@@ -46,7 +31,7 @@ namespace AppKit {
 			IntPtr pNativeFloatArray = Marshal.AllocHGlobal(size);
 
 			_GetComponents (pNativeFloatArray);
-			Marshal.Copy(pNativeFloatArray, managedFloatArray, 0, count);
+			nfloat.CopyArray(pNativeFloatArray, managedFloatArray, 0, count);
 			Marshal.FreeHGlobal(pNativeFloatArray);
 
 			components = managedFloatArray;

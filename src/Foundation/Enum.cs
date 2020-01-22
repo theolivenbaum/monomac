@@ -26,23 +26,8 @@
 using System;
 using ObjCRuntime;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace Foundation  {
-	public enum NSUrlCredentialPersistence : nuint {
+	public enum NSUrlCredentialPersistence : ulong {
 		None,
 		ForSession,
 		Permanent
@@ -55,13 +40,13 @@ namespace Foundation  {
 		PPC64  = 0x01000012
 	}
 
-	public enum NSComparisonResult : nint {
+	public enum NSComparisonResult : long {
 		Ascending = -1,
 		Same,
 		Descending
 	}
 
-	public enum NSUrlRequestCachePolicy : nuint {
+	public enum NSUrlRequestCachePolicy : ulong {
 		UseProtocolCachePolicy = 0,
 		ReloadIgnoringLocalCacheData = 1,
 		ReloadIgnoringLocalAndRemoteCacheData = 4, // Unimplemented
@@ -73,11 +58,11 @@ namespace Foundation  {
 		ReloadRevalidatingCacheData = 5, // Unimplemented
 	}
 
-	public enum NSUrlCacheStoragePolicy : nuint {
+	public enum NSUrlCacheStoragePolicy : ulong {
 		Allowed, AllowedInMemoryOnly, NotAllowed
 	}
 	
-	public enum NSStreamStatus : nuint {
+	public enum NSStreamStatus : ulong {
 		NotOpen = 0,
 		Opening = 1,
 		Open = 2,
@@ -88,20 +73,20 @@ namespace Foundation  {
 		Error = 7
 	}
 
-	public enum NSPropertyListFormat : nuint {
+	public enum NSPropertyListFormat : ulong {
 		OpenStep = 1,
 		Xml = 100,
 		Binary = 200
 	}
 
-	public enum NSPropertyListMutabilityOptions : nuint {
+	public enum NSPropertyListMutabilityOptions : ulong {
 		Immutable = 0,
 		MutableContainers = 1,
 		MutableContainersAndLeaves = 2
 	}
 
 	// Should mirror NSPropertyListMutabilityOptions
-	public enum NSPropertyListWriteOptions : nuint {
+	public enum NSPropertyListWriteOptions : ulong {
 		Immutable = 0,
 		MutableContainers = 1,
 		MutableContainersAndLeaves = 2
@@ -109,20 +94,20 @@ namespace Foundation  {
 
 	// Should mirror NSPropertyListMutabilityOptions, but currently
 	// not implemented (always use Immutable/0)
-	public enum NSPropertyListReadOptions : nuint {
+	public enum NSPropertyListReadOptions : ulong {
 		Immutable = 0,
 		MutableContainers = 1,
 		MutableContainersAndLeaves = 2
 	}
 
 	[Flags]
-	public enum NSMachPortRights : nuint {
+	public enum NSMachPortRights : ulong {
 		None = 0,
 		SendRight = (1 << 0),
 		ReceiveRight = (1 << 1)
 	}
 
-	public enum NSNetServicesStatus : nint {
+	public enum NSNetServicesStatus : long {
 		UnknownError = -72000,
 		CollisionError = -72001,
 		NotFoundError	= -72002,
@@ -133,11 +118,11 @@ namespace Foundation  {
 		TimeoutError = -72007
 	}
 	
-	public enum NSNetServiceOptions : nuint {
+	public enum NSNetServiceOptions : ulong {
 		NoAutoRename = 1 << 0
 	}
 
-	public enum NSDateFormatterStyle : nuint {
+	public enum NSDateFormatterStyle : ulong {
 		None,
 		Short,
 		Medium,
@@ -145,16 +130,16 @@ namespace Foundation  {
 		Full
 	}
 
-	public enum NSDateFormatterBehavior : nuint {
+	public enum NSDateFormatterBehavior : ulong {
 		Default = 0, Mode_10_4 = 1040
 	}
 
-	public enum NSHttpCookieAcceptPolicy : nuint {
+	public enum NSHttpCookieAcceptPolicy : ulong {
 		Always, Never, OnlyFromMainDocumentDomain
 	}
 
 	[Flags]
-	public enum NSCalendarUnit : nuint {
+	public enum NSCalendarUnit : ulong {
 		Era = 2, 
 		Year = 4,
 		Month = 8,
@@ -181,7 +166,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSDataReadingOptions: nuint {
+	public enum NSDataReadingOptions: ulong {
 		   Mapped =   1 << 0,
 		   Uncached = 1 << 1,
 
@@ -192,7 +177,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSDataWritingOptions : nuint {
+	public enum NSDataWritingOptions : ulong {
 		Atomic = 1,
 
 		WithoutOverwriting  = 2,
@@ -215,28 +200,28 @@ namespace Foundation  {
 	public delegate void NSSetEnumerator (NSObject obj, ref bool stop);
 
 	[Since (4,0)]
-	public enum NSOperationQueuePriority : nint {
+	public enum NSOperationQueuePriority : long {
 		VeryLow = -8, Low = -4, Normal = 0, High = 4, VeryHigh = 8
 	}
 
 	[Flags]
-	public enum NSNotificationCoalescing : nuint {
+	public enum NSNotificationCoalescing : ulong {
 		NoCoalescing = 0,
 		CoalescingOnName = 1,
 		CoalescingOnSender = 2
 	}
 
-	public enum NSPostingStyle : nuint {
+	public enum NSPostingStyle : ulong {
 		PostWhenIdle = 1, PostASAP = 2, Now = 3
 	}
 
 	[Flags]
-	public enum NSDataSearchOptions : nuint {
+	public enum NSDataSearchOptions : ulong {
 		SearchBackwards = 1,
 		SearchAnchored = 2
 	}
 
-	public enum NSExpressionType : nuint {
+	public enum NSExpressionType : ulong {
 		ConstantValue = 0, 
 		EvaluatedObject, 
 		Variable, 
@@ -297,26 +282,26 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSKeyValueObservingOptions : nuint {
+	public enum NSKeyValueObservingOptions : ulong {
 		New = 1, Old = 2, OldNew = 3, Initial = 4, Prior = 8, 
 	}
 
-	public enum NSKeyValueChange : nuint {
+	public enum NSKeyValueChange : ulong {
 		Setting = 1, Insertion, Removal, Replacement
 	}
 
-	public enum NSKeyValueSetMutationKind : nuint {
+	public enum NSKeyValueSetMutationKind : ulong {
 		UnionSet = 1, MinusSet, IntersectSet, SetSet
 	}
 
 	[Flags]
-	public enum NSEnumerationOptions : nuint {
+	public enum NSEnumerationOptions : ulong {
 		SortConcurrent = 1,
 		Reverse = 2
 	}
 	
 #if MONOMAC
-	public enum NSNotificationSuspensionBehavior : nuint {
+	public enum NSNotificationSuspensionBehavior : ulong {
 		Drop = 1,
 		Coalesce = 2,
 		Hold = 3,
@@ -324,13 +309,13 @@ namespace Foundation  {
 	}
     
 	[Flags]
-	public enum NSNotificationFlags : nuint {
+	public enum NSNotificationFlags : ulong {
 		DeliverImmediately = (1 << 0),
 		PostToAllSessions = (1 << 1),
 	}
 #endif
 
-	public enum NSStreamEvent : nuint {
+	public enum NSStreamEvent : ulong {
 		None = 0,
 		OpenCompleted = 1 << 0,
 		HasBytesAvailable = 1 << 1,
@@ -339,13 +324,13 @@ namespace Foundation  {
 		EndEncountered = 1 << 4
 	}
 
-	public enum NSComparisonPredicateModifier : nuint {
+	public enum NSComparisonPredicateModifier : ulong {
 		Direct,
 		All,
 		Any
 	}
 
-	public enum NSPredicateOperatorType : nuint {
+	public enum NSPredicateOperatorType : ulong {
 		LessThan,
 		LessThanOrEqualTo,
 		GreaterThan,
@@ -363,14 +348,14 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSComparisonPredicateOptions : nuint {
+	public enum NSComparisonPredicateOptions : ulong {
 		None                 = 0x00,
 		CaseInsensitive      = 1<<0,
 		DiacriticInsensitive = 1<<1,
 		Normalized           = 1<<2
 	}	
 	
-	public enum NSCompoundPredicateType : nuint {
+	public enum NSCompoundPredicateType : ulong {
 		Not,
 		And,
 		Or
@@ -378,7 +363,7 @@ namespace Foundation  {
 
 	[Since (4,0)]
 	[Flags]
-	public enum NSVolumeEnumerationOptions : nuint {
+	public enum NSVolumeEnumerationOptions : ulong {
 		None                     = 0,
 		// skip                  = 1 << 0,
 		SkipHiddenVolumes        = 1 << 1,
@@ -387,7 +372,7 @@ namespace Foundation  {
 
 	[Since (4,0)]
 	[Flags]
-	public enum NSDirectoryEnumerationOptions : nuint {
+	public enum NSDirectoryEnumerationOptions : ulong {
 		SkipsNone                    = 0,
 		SkipsSubdirectoryDescendants = 1 << 0,
 		SkipsPackageDescendants      = 1 << 1,
@@ -396,13 +381,13 @@ namespace Foundation  {
 
 	[Since (4,0)]
 	[Flags]
-	public enum NSFileManagerItemReplacementOptions : nuint {
+	public enum NSFileManagerItemReplacementOptions : ulong {
 		None                      = 0,
 		UsingNewMetadataOnly      = 1 << 0,
 		WithoutDeletingBackupItem = 1 << 1,
 	}
 
-	public enum NSSearchPathDirectory : nuint {
+	public enum NSSearchPathDirectory : ulong {
 		ApplicationDirectory = 1,
 		DemoApplicationDirectory,
 		DeveloperApplicationDirectory,
@@ -433,7 +418,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSSearchPathDomain : nuint {
+	public enum NSSearchPathDomain : ulong {
 		None    = 0,
 		User    = 1 << 0,
 		Local   = 1 << 1,
@@ -442,15 +427,15 @@ namespace Foundation  {
 		All     = 0x0ffff,
 	}
 
-	public enum NSRoundingMode : nuint {
+	public enum NSRoundingMode : ulong {
 		Plain, Down, Up, Bankers
 	}
 
-	public enum NSCalculationError : nuint {
+	public enum NSCalculationError : ulong {
 		None, PrecisionLoss, Underflow, Overflow, DivideByZero
 	}
 	
-	public enum NSStringDrawingOptions : nuint {
+	public enum NSStringDrawingOptions : ulong {
 		UsesLineFragmentOrigin = (1 << 0),
 		UsesFontLeading = (1 << 1),
 		DisableScreenFontSubstitution = (1 << 2),
@@ -459,7 +444,7 @@ namespace Foundation  {
 		TruncatesLastVisibleLine = (1 << 5)
 	}		
 
-	public enum NSNumberFormatterStyle : nuint {
+	public enum NSNumberFormatterStyle : ulong {
 		None = 0,
 		Decimal = 1,
 		Currency = 2,
@@ -468,36 +453,36 @@ namespace Foundation  {
 		SpellOut = 5
 	}
 
-	public enum NSNumberFormatterBehavior : nuint {
+	public enum NSNumberFormatterBehavior : ulong {
 		Default = 0,
 		Version_10_0 = 1000,
 		Version_10_4 = 1040
 	}
 
-	public enum NSNumberFormatterPadPosition : nuint {
+	public enum NSNumberFormatterPadPosition : ulong {
 		BeforePrefix, AfterPrefix, BeforeSuffix, AfterSuffix
 	}
 
-	public enum NSNumberFormatterRoundingMode : nuint {
+	public enum NSNumberFormatterRoundingMode : ulong {
 		Ceiling, Floor, Down, Up, HalfEven, HalfDown, HalfUp
 	}
 
 	[Flags]
-	public enum NSFileVersionReplacingOptions : nuint {
+	public enum NSFileVersionReplacingOptions : ulong {
 		ByMoving = 1 << 0
 	}
 
-	public enum NSFileVersionAddingOptions : nuint {
+	public enum NSFileVersionAddingOptions : ulong {
 		ByMoving = 1 << 0
 	}
 
 	[Flags]
-	public enum NSFileCoordinatorReadingOptions : nuint {
+	public enum NSFileCoordinatorReadingOptions : ulong {
 		WithoutChanges = 1
 	}
 
 	[Flags]
-	public enum NSFileCoordinatorWritingOptions : nuint {
+	public enum NSFileCoordinatorWritingOptions : ulong {
 		ForDeleting = 1,
 		ForMoving = 2,
 		ForMerging = 4,
@@ -505,7 +490,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSLinguisticTaggerOptions : nuint {
+	public enum NSLinguisticTaggerOptions : ulong {
 		OmitWords = 1,
 		OmitPunctuation = 2,
 		OmitWhitespace = 4,
@@ -518,18 +503,18 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSJsonReadingOptions : nuint {
+	public enum NSJsonReadingOptions : ulong {
 		MutableContainers = 1,
 		MutableLeaves = 2,
 		AllowFragments = 4
 	}
 
 	[Flags]
-	public enum NSJsonWritingOptions : nuint {
+	public enum NSJsonWritingOptions : ulong {
 		PrettyPrinted = 1
 	}
 
-	public enum NSLocaleLanguageDirection : nuint {
+	public enum NSLocaleLanguageDirection : ulong {
 		Unknown, LeftToRight, RightToLeft, TopToBottom, BottomToTop,
 	}
 
@@ -564,19 +549,19 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSFileWrapperReadingOptions : nuint {
+	public enum NSFileWrapperReadingOptions : ulong {
 		Immediate = 1 << 0,
 		WithoutMapping = 1 << 1
 	}
 
 	[Flags]
-	public enum NSFileWrapperWritingOptions : nuint {
+	public enum NSFileWrapperWritingOptions : ulong {
 		Atomic = 1 << 0,
 		WithNameUpdating = 1 << 1
 	}
 
 	[Flags]
-	public enum NSAttributedStringEnumeration : nuint {
+	public enum NSAttributedStringEnumeration : ulong {
 		None = 0,
 		Reverse = 1 << 1,
 		LongestEffectiveRangeNotRequired = 1 << 20
@@ -589,12 +574,12 @@ namespace Foundation  {
 	}
 #endif
 
-	public enum NSWritingDirection : nint {
+	public enum NSWritingDirection : long {
 		Natural = -1, LeftToRight = 0, RightToLeft = -1
 	}
 
 	[Flags]
-	public enum NSByteCountFormatterUnits : nuint {
+	public enum NSByteCountFormatterUnits : ulong {
 		UseDefault      = 0,
 		UseBytes        = 1 << 0,
 		UseKB           = 1 << 1,
@@ -608,12 +593,12 @@ namespace Foundation  {
 		UseAll          = 0x0FFFF
 	}
 
-	public enum NSByteCountFormatterCountStyle : nint {
+	public enum NSByteCountFormatterCountStyle : long {
 		File, Memory, Decimal, Binary
 	}
 
 	[Flags]
-	public enum NSUrlBookmarkCreationOptions : nuint {
+	public enum NSUrlBookmarkCreationOptions : ulong {
 		PreferFileIDResolution = 1 << 8,
 		MinimalBookmark = 1 << 9,
 		SuitableForBookmarkFile = 1 << 10,
@@ -622,7 +607,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSUrlBookmarkResolutionOptions : nuint {
+	public enum NSUrlBookmarkResolutionOptions : ulong {
 		WithoutUI = 1 << 8,
 		WithoutMounting = 1 << 9,
 		WithSecurityScope = 1 << 10,
@@ -634,12 +619,12 @@ namespace Foundation  {
 	}
 #endif
 	
-	public enum NSDateComponentsWrappingBehavior : nuint {
+	public enum NSDateComponentsWrappingBehavior : ulong {
 		None = 0,
 		WrapCalendarComponents = 1 << 0,
 	}
 
-	public enum NSUrlRequestNetworkServiceType : nuint {
+	public enum NSUrlRequestNetworkServiceType : ulong {
 		Default,
 		VoIP,
 		Video,
@@ -648,7 +633,7 @@ namespace Foundation  {
 	}
 
 	[Flags]
-	public enum NSSortOptions : nuint {
+	public enum NSSortOptions : ulong {
 		Concurrent = 1 << 0,
 		Stable = 1 << 4
 	}

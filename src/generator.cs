@@ -2055,6 +2055,8 @@ public class Generator {
 						print (GenerateNSNumber ("", "DoubleValue"));
 					else if (propertyType == typeof (float))
 						print (GenerateNSNumber ("", "FloatValue"));
+					else if (propertyType == typeof(nfloat))
+						print(GenerateNSNumber("(System.nfloat)", "DoubleValue"));
 					else if (fullname == "System.Drawing.PointF")
 						print (GenerateNSValue ("PointFValue"));
 					else if (fullname == "System.Drawing.SizeF")
@@ -2077,8 +2079,10 @@ public class Generator {
 							print (GenerateNSNumber (cast, "Int16Value"));
 						else if (underlying == typeof (byte))
 							print (GenerateNSNumber (cast, "ByteValue"));
-						else if (underlying == typeof (bool))
-							print (GenerateNSNumber (cast, "BoolValue"));
+						else if (underlying == typeof(bool))
+							print(GenerateNSNumber(cast, "BoolValue"));
+						else if (underlying == typeof (nint))
+							print (GenerateNSNumber (cast, "Int64Value"));
 						else
 							throw new BindingException (1011, true, "Do not know how to extract type {0}/{1} from an NSDictionary", propertyType, underlying);
 					}
@@ -3720,6 +3724,10 @@ public class Generator {
 						print ("return Dlfcn.GetInt32 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == typeof (double)){
 						print ("return Dlfcn.GetDouble (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+					} else if (field_pi.PropertyType == typeof (nint)){
+						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+					} else if (field_pi.PropertyType == typeof (nfloat)){
+						print ("return Dlfcn.GetDouble (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == typeof (float)){
 						print ("return Dlfcn.GetFloat (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == typeof (IntPtr)){
@@ -3744,10 +3752,14 @@ public class Generator {
 						indent++;
 						if (field_pi.PropertyType == typeof (int)) {
 							print ("Dlfcn.SetInt32 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+						} else if (field_pi.PropertyType == typeof (nint)) {
+							print ("Dlfcn.SetInt64 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (double)) {
 							print ("Dlfcn.SetDouble (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (float)) {
 							print ("Dlfcn.SetFloat (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+						} else if (field_pi.PropertyType == typeof (nfloat)) {
+							print ("Dlfcn.SetDouble (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (IntPtr)) {
 							print ("Dlfcn.SetIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (SizeF)) {

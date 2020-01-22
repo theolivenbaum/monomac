@@ -30,21 +30,6 @@ using System.Runtime.InteropServices;
 using CoreGraphics;
 using ObjCRuntime;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace AppKit {
 	public partial class NSCell {
 
@@ -57,7 +42,7 @@ namespace AppKit {
 				frame, startCap != null ? startCap.Handle : IntPtr.Zero,
 				centerFill != null ? centerFill.Handle : IntPtr.Zero,
 				endCap != null ? endCap.Handle : IntPtr.Zero,
-				vertical, (nuint)op, alphaFraction, flipped);
+				vertical, (nuint)(ulong)op, alphaFraction, flipped);
 		}
 
 		[DllImport (Constants.AppKitLibrary)]
@@ -75,7 +60,7 @@ namespace AppKit {
 				bottomLeftCorner != null ? bottomLeftCorner.Handle : IntPtr.Zero,
 				bottomEdgeFill != null ? bottomEdgeFill.Handle : IntPtr.Zero,
 				bottomRightCorner != null ? bottomRightCorner.Handle : IntPtr.Zero,
-				(nuint)op, alphaFraction, flipped);
+				(nuint)(ulong)op, alphaFraction, flipped);
  		}
 	}
 }

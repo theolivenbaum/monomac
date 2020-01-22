@@ -400,35 +400,19 @@ class TrivialParser {
 		case "NSString":
 		case "NSString *":
 			return "string";
-#if MAC64
 		case "NSInteger":
-			return "long";
+			return "nint";
 		case "NSUInteger":
-			return "ulong";
+			return "nuint";
 		case "nfloat":
 		case "GLfloat":
-			return "double";
+			return "nfloat";
 		case "NSSize":
 			return "CGSize";
 		case "NSRect":
 			return "CGRect";
 		case "NSPoint":
 			return "CGPoint";
-#else
-		case "NSInteger":
-			return "int";
-		case "NSUInteger":
-			return "uint";
-		case "nfloat":
-		case "GLfloat":
-			return "float";
-		case "NSSize": case "CGSize":
-			return "SizeF";
-		case "NSRect": case "CGRect":
-			return "RectangleF";
-		case "NSPoint": case "CGPoint":
-			return "PointF";
-#endif
 		case "NSGlyph":
 			return "uint";
 		case "instancetype":

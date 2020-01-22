@@ -30,21 +30,6 @@ using System;
 
 using ObjCRuntime;
 
-#if MAC64
-using nint = System.Int64;
-using nuint = System.UInt64;
-using nfloat = System.Double;
-#else
-using nint = System.Int32;
-using nuint = System.UInt32;
-using nfloat = System.Single;
-#if SDCOMPAT
-using CGPoint = System.Drawing.PointF;
-using CGSize = System.Drawing.SizeF;
-using CGRect = System.Drawing.RectangleF;
-#endif
-#endif
-
 namespace Foundation {
 	public sealed class NSUrlProtocolClient : NSObject
 	{
@@ -74,7 +59,7 @@ namespace Foundation {
 
 		public void ReceivedResponse (NSUrlProtocol protocol, NSUrlResponse response, NSUrlCacheStoragePolicy policy)
 		{
-			Messaging.void_objc_msgSend_intptr_intptr_nuint (this.Handle, Selector.GetHandle (selUrlProtocolDidReceiveResponseCacheStoragePolicy_), protocol.Handle, response.Handle, (nuint)policy);
+			Messaging.void_objc_msgSend_intptr_intptr_nuint (this.Handle, Selector.GetHandle (selUrlProtocolDidReceiveResponseCacheStoragePolicy_), protocol.Handle, response.Handle, (nuint)(ulong)policy);
 		}
 
 		public void DataLoaded (NSUrlProtocol protocol, NSData data)
