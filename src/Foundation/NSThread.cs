@@ -23,7 +23,7 @@
 
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSThread {
 

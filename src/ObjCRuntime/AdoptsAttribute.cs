@@ -30,7 +30,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
 	public class AdoptsAttribute : Attribute {

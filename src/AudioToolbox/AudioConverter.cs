@@ -28,10 +28,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioToolbox
+namespace AudioToolbox
 {
 	public enum AudioConverterError
 	{
@@ -618,72 +618,72 @@ namespace MonoMac.AudioToolbox
 				throw new ArgumentException (res.ToString ());
 		}
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
         static extern AudioConverterError AudioConverterNew (ref AudioStreamBasicDescription inSourceFormat, ref AudioStreamBasicDescription inDestinationFormat, ref IntPtr outAudioConverter);		
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]	
+		[DllImport (Constants.AudioToolboxLibrary)]	
 		static extern AudioConverterError AudioConverterNewSpecific (ref AudioStreamBasicDescription inSourceFormat, ref AudioStreamBasicDescription inDestinationFormat,
 			int inNumberClassDescriptions, ref AudioClassDescription[] inClassDescriptions, ref IntPtr outAudioConverter);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterDispose (IntPtr inAudioConverter);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]	
+		[DllImport (Constants.AudioToolboxLibrary)]	
 		static extern AudioConverterError AudioConverterReset (IntPtr inAudioConverter);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterConvertComplexBuffer (IntPtr inAudioConverter, int inNumberPCMFrames,
 			IntPtr inInputData, IntPtr outOutputData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, out uint outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, out int outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, out double outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, byte[] outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, out AudioConverterPrimeInfo outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			ref int ioPropertyDataSize, IntPtr outPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterGetPropertyInfo (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			out int outSize, out bool outWritable);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			int inPropertyDataSize, ref uint inPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			int inPropertyDataSize, ref int inPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			int inPropertyDataSize, ref double inPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
 			int inPropertyDataSize, byte[] inPropertyData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterConvertBuffer (IntPtr inAudioConverter, int inInputDataSize, byte[] inInputData,
 			ref int ioOutputDataSize, byte[] outOutputData);
 
-		[DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterFillComplexBuffer (IntPtr inAudioConverter,
 			AudioConverterComplexInputDataShared inInputDataProc, IntPtr inInputDataProcUserData,
 			ref int ioOutputDataPacketSize, IntPtr outOutputData,

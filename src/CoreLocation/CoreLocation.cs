@@ -31,8 +31,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
+using ObjCRuntime;
 
-namespace MonoMac.CoreLocation {
+namespace CoreLocation {
 
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CLLocationCoordinate2D {

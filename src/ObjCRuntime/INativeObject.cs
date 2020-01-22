@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public interface INativeObject {
 		IntPtr Handle { get; }
 	}

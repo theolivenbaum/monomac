@@ -28,8 +28,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
+using CoreGraphics;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -46,7 +46,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 	public unsafe partial class CAMediaTimingFunction {
 
 #if !MONOMAC

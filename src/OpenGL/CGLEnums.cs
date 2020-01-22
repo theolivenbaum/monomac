@@ -22,7 +22,7 @@
 //
 using System;
 
-namespace MonoMac.OpenGL {
+namespace OpenGL {
 
 	public enum CGLErrorCode : int
 	{

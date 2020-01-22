@@ -25,9 +25,9 @@ using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSNumber : NSValue {
 		public static implicit operator NSNumber (float value)
 		{

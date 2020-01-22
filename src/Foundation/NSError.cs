@@ -26,9 +26,9 @@
 //
 using System;
 using System.Diagnostics;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	
 	public class NSErrorEventArgs : EventArgs {
 		public NSErrorEventArgs (NSError error)

@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreServices.CFHTTPAuthentication
+// CoreServices.CFHTTPAuthentication
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -28,11 +28,11 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreServices {
+namespace CoreServices {
 
 	public class CFHTTPAuthentication : CFType, INativeObject, IDisposable {
 		internal IntPtr handle;

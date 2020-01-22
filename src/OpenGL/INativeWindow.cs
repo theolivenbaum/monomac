@@ -31,7 +31,7 @@ using System.Text;
 using System.Drawing;
 using System.ComponentModel;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     /// <summary>
     /// Defines the interface for a native window. 

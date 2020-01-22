@@ -22,7 +22,8 @@
 //
 using System;
 
-namespace MonoMac {
+namespace ObjCRuntime
+{
 
 	[AttributeUsage (AttributeTargets.Method)]
 	public sealed class MonoPInvokeCallbackAttribute : Attribute {

@@ -9,7 +9,7 @@
 
 using System;
 
-namespace MonoMac.OpenAL
+namespace OpenAL
 {
     /// <summary>
     /// Defines available context attributes.

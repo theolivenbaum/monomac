@@ -32,13 +32,13 @@
 
 using System;
 using System.Diagnostics;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreImage;
-using MonoMac.CoreAnimation;
-using MonoMac.CoreData;
-using MonoMac.OpenGL;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreImage;
+using CoreAnimation;
+using CoreData;
+using OpenGL;
 
 #if MAC64
 using nint = System.Int64;
@@ -55,7 +55,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	[AttributeUsage( AttributeTargets.All, AllowMultiple=true )]
 	sealed class VerifyAttribute : System.Attribute
 	{
@@ -1060,7 +1060,7 @@ namespace MonoMac.AppKit {
 		IntPtr Constructor (CGImage cgImage);
 
 		[Export ("initWithCIImage:")]
-		IntPtr Constructor (MonoMac.CoreImage.CIImage ciImage);
+		IntPtr Constructor (CoreImage.CIImage ciImage);
 
 		[Static]
 		[Export ("imageRepsWithData:")]
@@ -3094,10 +3094,10 @@ namespace MonoMac.AppKit {
 		IntPtr ColorSyncProfile { get; }
 
 		[Export ("initWithCGColorSpace:")]
-		IntPtr Constructor (MonoMac.CoreGraphics.CGColorSpace cgColorSpace);
+		IntPtr Constructor (CoreGraphics.CGColorSpace cgColorSpace);
 
 		[Export ("CGColorSpace")]
-		MonoMac.CoreGraphics.CGColorSpace ColorSpace { get; }
+		CoreGraphics.CGColorSpace ColorSpace { get; }
 
 		[Export ("numberOfColorComponents")]
 		int ColorComponents { get; }
@@ -5474,7 +5474,7 @@ namespace MonoMac.AppKit {
 		NSColorRenderingIntent ColorRenderingIntent { get; set; }
 
 		[Export ("CIContext")]
-		MonoMac.CoreImage.CIContext CIContext { get; } 
+		CoreImage.CIContext CIContext { get; } 
 	}
 
 	[BaseType (typeof (NSGraphicsContext))]

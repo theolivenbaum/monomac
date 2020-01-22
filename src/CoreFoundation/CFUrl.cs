@@ -30,10 +30,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 	public enum CFUrlPathStyle {
 		POSIX = 0,
 		HFS = 1,

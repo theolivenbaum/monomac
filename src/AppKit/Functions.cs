@@ -23,13 +23,13 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreImage;
-using MonoMac.CoreAnimation;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreImage;
+using CoreAnimation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	// Class to access C functions
 	// TODO: A whole slew of missing functions

@@ -22,10 +22,10 @@
 //
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
+using Foundation;
+using AppKit;
 
-namespace MonoMac.QTKit {
+namespace QTKit {
 
 	public enum QTCodecQuality {
 		Lossless = 0x00000400,

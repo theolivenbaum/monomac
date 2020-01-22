@@ -47,7 +47,7 @@
     <PropertyGroup>
       <GeneratorBuildProperties>BaseDefines=$(BaseDefines.Replace(";", "%3b"))</GeneratorBuildProperties>
       <GeneratorBuildProperties>$(GeneratorBuildProperties);Configuration=$(Configuration)</GeneratorBuildProperties>
-      <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
+      <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=ObjCRuntime</GeneratorBuildProperties>
       <GenIgnoreProperties>TargetFramework;PlatformTarget</GenIgnoreProperties>
     </PropertyGroup>
     

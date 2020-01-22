@@ -11,22 +11,21 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-using MonoMac;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
 using OSStatus = System.Int32;
 
 #if !COREBUILD
-using MonoMac.AudioToolbox;
-using MonoMac.CoreVideo;
+using AudioToolbox;
+using CoreVideo;
 #if !MONOMAC
 using MonoTouch.UIKit;
 #endif
 #endif
 
-namespace MonoMac.CoreMedia {
+namespace CoreMedia {
 
 	public enum CMSampleBufferError {
 		None							= 0,

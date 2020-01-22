@@ -30,13 +30,14 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
 using OSStatus = System.Int32;
 using AudioFileID = System.IntPtr;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	// AudioFormatListItem
 	[StructLayout(LayoutKind.Sequential, Pack=4)] // Force same memory layout as in native code for easier marshalling

@@ -26,11 +26,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreVideo;
+using Foundation;
+using ObjCRuntime;
+using CoreVideo;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 	public partial class AVAssetReaderVideoCompositionOutput {
 		[Advice ("Use overload with PixelBufferAttributes")]
 		public AVAssetReaderVideoCompositionOutput (AVAssetTrack [] videoTracks, AVVideoSettings videoSettings)

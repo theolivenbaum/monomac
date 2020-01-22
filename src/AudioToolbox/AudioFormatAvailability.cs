@@ -28,10 +28,11 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public static class AudioFormatAvailability
 	{

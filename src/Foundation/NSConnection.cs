@@ -28,9 +28,9 @@
 
 using System;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation
+namespace Foundation
 {
 
 	public partial class NSConnection

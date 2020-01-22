@@ -30,14 +30,14 @@
 using System;
 using System.Net;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
 using AuthenticationException = System.Security.Authentication.AuthenticationException;
 using InvalidCredentialException = System.Security.Authentication.InvalidCredentialException;
 
-namespace MonoMac.CoreServices {
+namespace CoreServices {
 
 	public class CFHTTPMessage : CFType, INativeObject, IDisposable {
 		internal IntPtr handle;

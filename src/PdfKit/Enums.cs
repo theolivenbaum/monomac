@@ -28,7 +28,7 @@
 //
 using System;
 
-namespace MonoMac.PdfKit {
+namespace PdfKit {
 
 	public enum PdfActionNamedName {
 		None         = 0,

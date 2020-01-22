@@ -9,7 +9,7 @@
 
 using System;
 
-namespace MonoMac.OpenAL
+namespace OpenAL
 {
 
     ///<summary>A list of valid Enable/Disable/IsEnabled parameters</summary>

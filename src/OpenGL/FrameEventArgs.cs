@@ -26,7 +26,7 @@
 #endregion
 using System;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
 	/// <summary>
 	/// Defines the arguments for frame events.

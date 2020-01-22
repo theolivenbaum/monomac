@@ -21,11 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	public partial class NSWindow {
 		static IntPtr selInitWithWindowRef = Selector.GetHandle ("initWithWindowRef:");
@@ -37,9 +37,9 @@ namespace MonoMac.AppKit {
 		private NSWindow (IntPtr windowRef, NSObjectFlag x) : base (NSObjectFlag.Empty)
 		{
 			if (IsDirectBinding) {
-				Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selInitWithWindowRef);
+				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selInitWithWindowRef);
 			} else {
-				Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, selInitWithWindowRef);
+				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, selInitWithWindowRef);
 			}
 		}
 

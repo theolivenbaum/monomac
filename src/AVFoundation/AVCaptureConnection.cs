@@ -28,10 +28,10 @@
 //
 
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 	public partial class AVCaptureConnection {
 
 		public bool SupportsVideoMinFrameDuration {

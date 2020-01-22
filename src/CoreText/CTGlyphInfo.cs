@@ -27,15 +27,15 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using CoreGraphics;
 
 using CGGlyph     = System.UInt16;
 using CGFontIndex = System.UInt16;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 #region Glyph Info Values
 	[Since (3,2)]

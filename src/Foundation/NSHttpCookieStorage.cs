@@ -1,7 +1,7 @@
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSHttpCookieStorage {
 		public static NSString CookiesChangedNotification;
 		public static NSString AcceptPolicyChangedNotification;

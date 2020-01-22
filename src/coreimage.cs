@@ -36,16 +36,16 @@
 // CIVector
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreImage;
-using MonoMac.CoreVideo;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreImage;
+using CoreVideo;
 #if !MONOMAC
-using MonoTouch.OpenGLES;
-using MonoTouch.UIKit;
+using OpenGLES;
+using UIKit;
 #else
-using MonoMac.AppKit;
+using AppKit;
 #endif
 
 #if MAC64
@@ -63,7 +63,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 
 	[BaseType (typeof (NSObject))]
 	[Since (5,0)]

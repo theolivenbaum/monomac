@@ -33,10 +33,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.AudioToolbox;
+using CoreFoundation;
+using AudioToolbox;
+using ObjCRuntime;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
     public enum ExtAudioFileError
     {
@@ -325,39 +326,39 @@ namespace MonoMac.AudioUnit
         }
 
         #region Interop
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileOpenURL")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileOpenURL")]
         static extern ExtAudioFileError ExtAudioFileOpenUrl(IntPtr inUrl, IntPtr outExtAudioFile); // caution
 
-        [DllImport (MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport (Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileWrapAudioFileID (IntPtr inFileID, bool inForWriting, IntPtr outExtAudioFile);    
 
         [Obsolete]
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileRead")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileRead")]
         static extern int ExtAudioFileRead(IntPtr  inExtAudioFile, ref int ioNumberFrames, AudioBufferList ioData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileRead (IntPtr inExtAudioFile, ref uint ioNumberFrames, IntPtr ioData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileWrite (IntPtr inExtAudioFile, uint inNumberFrames, IntPtr ioData);                 
 
         [Obsolete]
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileWriteAsync")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileWriteAsync")]
         static extern int ExtAudioFileWriteAsync(IntPtr inExtAudioFile, int inNumberFrames, AudioBufferList ioData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileWriteAsync(IntPtr inExtAudioFile, uint inNumberFrames, IntPtr ioData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileDispose")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileDispose")]
         static extern int ExtAudioFileDispose(IntPtr inExtAudioFile);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileSeek")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileSeek")]
         static extern int ExtAudioFileSeek(IntPtr inExtAudioFile, long inFrameOffset);
         
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileTell")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileTell")]
         static extern int ExtAudioFileTell(IntPtr inExtAudioFile, ref long outFrameOffset);
         
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileCreateWithURL")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileCreateWithURL")]
         static extern int ExtAudioFileCreateWithUrl(IntPtr inURL,
             [MarshalAs(UnmanagedType.U4)] AudioFileType inFileType,
             ref AudioStreamBasicDescription inStreamDesc,
@@ -365,33 +366,33 @@ namespace MonoMac.AudioUnit
             UInt32 flags,
             IntPtr outExtAudioFile);            
         
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileGetProperty")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileGetProperty")]
         static extern int ExtAudioFileGetProperty(
             IntPtr inExtAudioFile, 
             PropertyIDType inPropertyID,
             ref uint ioPropertyDataSize,
             IntPtr outPropertyData);
         
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileGetProperty")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileGetProperty")]
         static extern int ExtAudioFileGetProperty(
             IntPtr inExtAudioFile,
             PropertyIDType inPropertyID,
             ref uint ioPropertyDataSize,
             ref AudioStreamBasicDescription outPropertyData);
         
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileGetProperty (IntPtr inExtAudioFile, PropertyIDType inPropertyID, ref uint ioPropertyDataSize, out IntPtr outPropertyData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileGetProperty (IntPtr inExtAudioFile, PropertyIDType inPropertyID, ref uint ioPropertyDataSize, out long outPropertyData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileGetProperty (IntPtr inExtAudioFile, PropertyIDType inPropertyID, ref uint ioPropertyDataSize, out uint outPropertyData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary)]
+        [DllImport(Constants.AudioToolboxLibrary)]
         static extern ExtAudioFileError ExtAudioFileSetProperty (IntPtr inExtAudioFile, PropertyIDType inPropertyID, int ioPropertyDataSize, IntPtr outPropertyData);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileSetProperty")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "ExtAudioFileSetProperty")]
         static extern int ExtAudioFileSetProperty(
             IntPtr inExtAudioFile,
             PropertyIDType inPropertyID,

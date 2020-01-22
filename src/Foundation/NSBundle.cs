@@ -3,9 +3,9 @@ using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSBundle : NSObject {
 		public string LocalizedString (string key, string comment) {
 			return LocalizedString (key, "", "");

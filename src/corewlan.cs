@@ -22,11 +22,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using Foundation;
+using CoreFoundation;
 using System;
 
-namespace MonoMac.CoreWlan {
+namespace CoreWlan {
 
 	[BaseType (typeof (NSObject))]
 	interface CW8021XProfile {

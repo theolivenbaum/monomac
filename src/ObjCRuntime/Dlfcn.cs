@@ -30,10 +30,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using Foundation;
+using CoreFoundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	
 	public static class Dlfcn {
 

@@ -28,10 +28,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioToolbox
+namespace AudioToolbox
 {
 	[Obsolete ("Use AudioBuffers")]
 	[StructLayout(LayoutKind.Sequential)]

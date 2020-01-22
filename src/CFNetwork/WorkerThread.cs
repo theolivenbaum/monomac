@@ -1,5 +1,5 @@
 //
-// MonoMac.CFNetwork.WorkerThread
+// CFNetwork.WorkerThread
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -32,10 +32,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using Foundation;
+using CoreFoundation;
 
-namespace MonoMac.CFNetwork {
+namespace CFNetwork {
 
 	public class WorkerThread {
 		CFRunLoop loop;

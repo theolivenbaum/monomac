@@ -24,8 +24,8 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using Foundation;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -42,7 +42,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	public enum NSImageName {
 		QuickLookTemplate,

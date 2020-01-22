@@ -28,10 +28,10 @@
 using System;
 using System.Net;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 	public enum CFProxyType {
 		None,
 		AutoConfigurationUrl,

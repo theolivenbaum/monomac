@@ -27,13 +27,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using ObjCRuntime;
+using Foundation;
+using CoreGraphics;
 #if MONOMAC
-using MonoMac.AppKit;
+using AppKit;
 #else
-using MonoMac.UIKit;
+using UIKit;
 #endif
 using System;
 using System.ComponentModel;
@@ -53,7 +53,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.QuickLook {
+namespace QuickLook {
 #if !MONOMAC
 	[Since (4,0)]
 	[BaseType (typeof (UIViewController), Delegates = new string [] { "WeakDelegate" }, Events=new Type [] { typeof (QLPreviewControllerDelegate)})]

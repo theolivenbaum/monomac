@@ -31,10 +31,10 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreGraphics;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -51,7 +51,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	[Since (3,2)]
 	public enum CTFontOrientation : uint {

@@ -24,7 +24,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.IO;
 
-namespace MonoMac {
+namespace ObjCRuntime
+{
 	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 	public class RequiredFrameworkAttribute : Attribute
 	{

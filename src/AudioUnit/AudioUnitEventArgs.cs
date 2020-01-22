@@ -30,16 +30,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MonoMac.AudioToolbox;
+using AudioToolbox;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
     [Obsolete]
     public class AudioUnitEventArgs : EventArgs
     {
         #region Variables
         public readonly AudioUnitRenderActionFlags ActionFlags;
-        public readonly MonoMac.AudioToolbox.AudioTimeStamp TimeStamp;
+        public readonly AudioToolbox.AudioTimeStamp TimeStamp;
         public readonly int BusNumber;
         public readonly int NumberFrames;
         public readonly AudioBufferList Data;
@@ -47,7 +47,7 @@ namespace MonoMac.AudioUnit
 
         #region Constructor
         public AudioUnitEventArgs(AudioUnitRenderActionFlags actionFlags,
-				  MonoMac.AudioToolbox.AudioTimeStamp timestamp,
+				  AudioToolbox.AudioTimeStamp timestamp,
 				  int busNumber,
 				  int frames,
 				  AudioBufferList data)

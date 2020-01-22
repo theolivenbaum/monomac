@@ -26,11 +26,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace MonoMac.Darwin {
+namespace Darwin {
 
 	[StructLayout (LayoutKind.Sequential)]
 	public struct TimeSpec {

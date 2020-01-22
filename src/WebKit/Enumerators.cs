@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.WebKit {
+namespace WebKit {
 
 	public interface IIndexedContainer<T> {
 		int Count { get; }

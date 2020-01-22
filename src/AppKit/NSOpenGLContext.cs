@@ -1,8 +1,7 @@
-using MonoMac.Foundation;
-using MonoMac;
+using Foundation;
 using System;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	
 	public partial class NSOpenGLContext {
 

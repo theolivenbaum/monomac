@@ -32,9 +32,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	 public class Class : INativeObject {
 		public static bool ThrowOnInitFailure = true;
 

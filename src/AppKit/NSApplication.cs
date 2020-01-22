@@ -26,11 +26,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using MonoMac;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSApplication : NSResponder {
 		public static bool CheckForIllegalCrossThreadCalls = true;
 		private static Thread mainThread;

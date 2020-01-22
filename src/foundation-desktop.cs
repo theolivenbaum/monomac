@@ -26,10 +26,10 @@
 // Foundation APIs
 // 
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
-using MonoMac.AppKit;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreGraphics;
+using AppKit;
 
 // In Apple headers, this is a typedef to a pointer to a private struct
 using NSAppleEventManagerSuspensionID = System.IntPtr;
@@ -54,7 +54,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	
 	[BaseType (typeof (NSObject))]
 	public interface NSAffineTransform {

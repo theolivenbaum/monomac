@@ -26,11 +26,11 @@
 // scriptingbridge.cs: Bindings for the ScriptingBridge.Framework API
 //
 using System;
-using MonoMac.AppKit;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using AppKit;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.ScriptingBridge {
+namespace ScriptingBridge {
 	
 	
 	[BaseType (typeof (NSObject))]

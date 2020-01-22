@@ -30,10 +30,11 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public unsafe static class AudioFileGlobalInfo
 	{

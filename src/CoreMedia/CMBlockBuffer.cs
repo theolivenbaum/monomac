@@ -10,12 +10,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreMedia {
+namespace CoreMedia {
 
 	public enum CMBlockBufferError {
 		None						= 0,

@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreFoundation.CFWriteStream
+// CoreFoundation.CFWriteStream
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -28,11 +28,11 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	public class CFWriteStream : CFStream {
 		internal CFWriteStream (IntPtr handle)

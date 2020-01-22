@@ -273,7 +273,6 @@
     <CoreSource Include="OpenGL/CGLPixelFormat.cs" />
     <CoreSource Include="ScriptingBridge/Enums.cs" />
     <CoreSource Include="WebKit/Enums.cs" />
-    <BaseSource Include="Compat.cs" />
     <BaseSource Include="Foundation/NSObjectMac.cs" />
     <BaseSource Include="Foundation/NSConnection.cs" />
     <BaseSource Include="AppKit/EventArgs.cs" />

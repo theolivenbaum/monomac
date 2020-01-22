@@ -30,10 +30,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MonoMac.AudioToolbox;
-using MonoMac.Foundation;
+using AudioToolbox;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
     public static class AudioUnitUtils
     {
@@ -45,7 +46,7 @@ namespace MonoMac.AudioUnit
             // setting AudioStreamBasicDescription
             int AudioUnitSampleTypeSize = 		
 #if !MONOMAC
-            (MonoMac.ObjCRuntime.Runtime.Arch == MonoTouch.ObjCRuntime.Arch.SIMULATOR) ? sizeof(float) : sizeof(int);
+            (ObjCRuntime.Runtime.Arch == MonoTouch.ObjCRuntime.Arch.SIMULATOR) ? sizeof(float) : sizeof(int);
 #else
 		sizeof (float);
 #endif
@@ -77,7 +78,7 @@ namespace MonoMac.AudioUnit
 			throw new ArgumentException();            
         }
 
-	    [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "AudioSessionSetProperty")]
+	    [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "AudioSessionSetProperty")]
 	    static extern int AudioSessionSetProperty(
 		    UInt32 inID,
 		    UInt32 inDataSize,

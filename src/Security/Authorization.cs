@@ -24,12 +24,12 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.Security {
+namespace Security {
 	public enum AuthorizationStatus {
 		Success                 = 0,
 		InvalidSet              = -60001,

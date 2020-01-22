@@ -13,7 +13,7 @@
 //
 // This generator produces various */*.g.cs files based on the
 // interface-based type description on this file, see the 
-// embedded `MonoTouch.UIKit' namespace here for an example
+// embedded `UIKit' namespace here for an example
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -49,30 +49,22 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.ComponentModel;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using CoreGraphics;
+using CoreVideo;
+using CoreMidi;
+using CoreMedia;
+
+using DictionaryContainerType = Foundation.DictionaryContainer;
 
 #if MONOMAC
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreVideo;
-using MonoMac.OpenGL;
-using MonoMac.CoreMidi;
-using MonoMac.CoreMedia;
+using OpenGL;
 
-using DictionaryContainerType = MonoMac.Foundation.DictionaryContainer;
 
 #else
-using MonoTouch.ObjCRuntime;
-using MonoTouch.Foundation;
-using MonoTouch.CoreFoundation;
-using MonoTouch.CoreGraphics;
-using MonoTouch.CoreMedia;
-using MonoTouch.CoreVideo;
-using MonoTouch.CoreMidi;
-using MonoTouch.MediaToolbox;
-
-using DictionaryContainerType = MonoTouch.Foundation.DictionaryContainer;
+using MediaToolbox;
 
 #endif
 
@@ -1023,13 +1015,13 @@ public class Generator {
 	string init_binding_type;
 
 	// Where the assembly messaging is located (core)
-	public string CoreMessagingNS = "MonoTouch.ObjCRuntime";
+	public string CoreMessagingNS = "ObjCRuntime";
 
 	// Whether to use ZeroCopy for strings, defaults to false
 	public bool ZeroCopyStrings;
 	
 	// This can be plugged by the user when using btouch/bmac for their own bindings
-	public string MessagingNS = "MonoTouch.ObjCRuntime";
+	public string MessagingNS = "ObjCRuntime";
 	
 	public bool BindThirdPartyLibrary = false;
 	public bool InlineSelectors;
@@ -1039,35 +1031,33 @@ public class Generator {
 	public List<string> GeneratedFiles = new List<string> ();
 	public Type CoreNSObject = typeof (NSObject);
 #if MONOMAC
-	public Type MessagingType = typeof (MonoMac.ObjCRuntime.Messaging);
-	public Type SampleBufferType = typeof (MonoMac.CoreMedia.CMSampleBuffer);
-	string [] standard_namespaces = new string [] { "MonoMac.Foundation", "MonoMac.ObjCRuntime", "MonoMac.CoreGraphics" };
-	const string MainPrefix = "MonoMac";
+	public Type MessagingType = typeof (ObjCRuntime.Messaging);
+	public Type SampleBufferType = typeof (CoreMedia.CMSampleBuffer);
+	string [] standard_namespaces = new string [] { "Foundation", "ObjCRuntime", "CoreGraphics" };
 	const string CoreImageMap = "Quartz";
 	string [] UINamespaces = new string [] {
-		"MonoMac.AppKit"
+		"AppKit"
 	};
-	string thread_check_call = "global::MonoMac.AppKit.NSApplication.EnsureUIThread ();";
+	string thread_check_call = "global::AppKit.NSApplication.EnsureUIThread ();";
 
 #else
-	public Type MessagingType = typeof (MonoTouch.ObjCRuntime.Messaging);
-	public Type SampleBufferType = typeof (MonoTouch.CoreMedia.CMSampleBuffer);
-	string [] standard_namespaces = new string [] { "MonoTouch.Foundation", "MonoTouch.ObjCRuntime", "MonoTouch.CoreGraphics" };
-	const string MainPrefix = "MonoTouch";
+	public Type MessagingType = typeof (ObjCRuntime.Messaging);
+	public Type SampleBufferType = typeof (CoreMedia.CMSampleBuffer);
+	string [] standard_namespaces = new string [] { "Foundation", "ObjCRuntime", "CoreGraphics" };
 	const string CoreImageMap = "CoreImage";
 	string [] UINamespaces = new string [] {
-		"MonoTouch.UIKit",
-		"MonoTouch.Twitter",
-		"MonoTouch.GameKit",
-		"MonoTouch.NewsstandKit",
-		"MonoTouch.iAd",
-		"MonoTouch.QuickLook",
-		"MonoTouch.EventKitUI",
-		"MonoTouch.AddressBookUI",
-		"MonoTouch.MapKit",
-		"MonoTouch.MessageUI",
+		"UIKit",
+		"Twitter",
+		"GameKit",
+		"NewsstandKit",
+		"iAd",
+		"QuickLook",
+		"EventKitUI",
+		"AddressBookUI",
+		"MapKit",
+		"MessageUI",
 	};
-	string thread_check_call = "global::MonoTouch.UIKit.UIApplication.EnsureUIThread ();";
+	string thread_check_call = "global::UIKit.UIApplication.EnsureUIThread ();";
 #endif
 
 	//
@@ -1690,17 +1680,13 @@ public class Generator {
 #endif
 		marshal_types.Add (new MarshalType (typeof (CVPixelBuffer), "IntPtr", "{0}.Handle", "new CVPixelBuffer ("));
 		marshal_types.Add (new MarshalType (typeof (CGLayer), "IntPtr", "{0}.Handle", "new CGLayer ("));
+		marshal_types.Add(new MarshalType(typeof(CoreMedia.CMSampleBuffer), "IntPtr", "{0}.Handle", "new CoreMedia.CMSampleBuffer ("));
+		marshal_types.Add(new MarshalType(typeof(CoreVideo.CVImageBuffer), "IntPtr", "{0}.Handle", "new CoreVideo.CMImageBuffer ("));
+		marshal_types.Add(new MarshalType(typeof(CoreVideo.CVPixelBufferPool), "IntPtr", "{0}.Handle", "new CoreVideo.CVPixelBufferPool ("));
+		marshal_types.Add(new MarshalType(typeof(CoreMedia.CMFormatDescription), "IntPtr", "{0}.Handle", "new CoreMedia.CMFormatDescription ("));
 #if MONOMAC
-		marshal_types.Add (new MarshalType (typeof (MonoMac.CoreMedia.CMSampleBuffer), "IntPtr", "{0}.Handle", "new MonoMac.CoreMedia.CMSampleBuffer ("));
-		marshal_types.Add (new MarshalType (typeof (MonoMac.CoreVideo.CVImageBuffer), "IntPtr", "{0}.Handle", "new MonoMac.CoreVideo.CMImageBuffer ("));
-		marshal_types.Add (new MarshalType (typeof (MonoMac.CoreVideo.CVPixelBufferPool), "IntPtr", "{0}.Handle", "new MonoMac.CoreVideo.CVPixelBufferPool ("));
-		marshal_types.Add (new MarshalType (typeof (MonoMac.CoreMedia.CMFormatDescription), "IntPtr", "{0}.Handle", "new MonoMac.CoreMedia.CMFormatDescription ("));
 #else
-		marshal_types.Add (new MarshalType (typeof (MTAudioProcessingTap), "IntPtr", "{0}.Handle", "new MonoTouch.MediaToolbox.MTAudioProcessingTap ("));
-		marshal_types.Add (new MarshalType (typeof (MonoTouch.CoreMedia.CMSampleBuffer), "IntPtr", "{0}.Handle", "new MonoTouch.CoreMedia.CMSampleBuffer ("));
-		marshal_types.Add (new MarshalType (typeof (MonoTouch.CoreVideo.CVImageBuffer), "IntPtr", "{0}.Handle", "new MonoTouch.CoreVideo.CMImageBuffer ("));
-		marshal_types.Add (new MarshalType (typeof (MonoTouch.CoreVideo.CVPixelBufferPool), "IntPtr", "{0}.Handle", "new MonoTouch.CoreVideo.CVPixelBufferPool ("));			
-		marshal_types.Add (new MarshalType (typeof (MonoTouch.CoreMedia.CMFormatDescription), "IntPtr", "{0}.Handle", "new MonoTouch.CoreMedia.CMFormatDescription ("));
+		marshal_types.Add (new MarshalType (typeof (MTAudioProcessingTap), "IntPtr", "{0}.Handle", "new MediaToolbox.MTAudioProcessingTap ("));
 #endif
 
 		marshal_types.Add (new MarshalType (typeof (BlockLiteral), "BlockLiteral", "{0}", "THIS_IS_BROKEN"));
@@ -1909,11 +1895,7 @@ public class Generator {
 		sw = new StreamWriter (library_file);
 		
 		Header (sw);
-#if MONOMAC
-		print ("namespace MonoMac {"); indent++;
-#else
-		print ("namespace MonoTouch {"); indent++;
-#endif
+		print ("namespace ObjCRuntime {"); indent++;
 		print ("");
 		//print ("[CompilerGenerated]");
 		print ("static class Trampolines {"); indent++;
@@ -1965,11 +1947,7 @@ public class Generator {
 		sw = new StreamWriter (library_file);
 		
 		Header (sw);
-#if MONOMAC
-		print ("namespace MonoMac {"); indent++;
-#else
-		print ("namespace MonoTouch {"); indent++;
-#endif
+		print ("namespace ObjCRuntime {"); indent++;
 		//print ("[CompilerGenerated]");
 		print ("static class Libraries {"); indent++;
 		foreach (string library_name in libraries) {
@@ -2038,9 +2016,9 @@ public class Generator {
 						prop.Name);
 					indent += 2;
 					if (BindThirdPartyLibrary)
-						print ("IntPtr value; if ({0} == IntPtr.Zero)\n\t{0} = {1}.ObjCRuntime.Dlfcn.GetIntPtr (Libraries.__Internal.Handle, \"{2}\");", kn, MainPrefix, export.Selector);
+						print ($"IntPtr value; if ({kn} == IntPtr.Zero)\n\t{kn} = ObjCRuntime.Dlfcn.GetIntPtr (Libraries.__Internal.Handle, \"{export.Selector}\");");
 					else
-						print ("IntPtr value; if ({0} == IntPtr.Zero)\n\t{0} = {1}.ObjCRuntime.Dlfcn.GetIntPtr (Libraries.{2}.Handle, \"{3}\");", kn, MainPrefix, lib, export.Selector);
+						print ($"IntPtr value; if ({kn} == IntPtr.Zero)\n\t{kn} = ObjCRuntime.Dlfcn.GetIntPtr (Libraries.{lib}.Handle, \"{export.Selector}\");");
 				}
 				if (null_allowed || probe_presence){
 					if (probe_presence)
@@ -2351,34 +2329,23 @@ public class Generator {
 		"System.Diagnostics",
 		"System.ComponentModel",
 		"System.Threading.Tasks",
-#if MONOMAC
-		"MonoMac",
-		"MonoMac.CoreFoundation",
-		"MonoMac.Foundation",
-		"MonoMac.ObjCRuntime",
-		"MonoMac.CoreGraphics",
-		"MonoMac.CoreAnimation",
-		"MonoMac.CoreLocation", 
-		"MonoMac.QTKit",
-		"MonoMac.CoreVideo",
-		"MonoMac.CoreMedia",
-		"MonoMac.OpenGL",
-#else
-		"MonoTouch",
-		"MonoTouch.CoreFoundation",
-		"MonoTouch.CoreMedia",
-		"MonoTouch.CoreMotion",
-		"MonoTouch.Foundation", 
-		"MonoTouch.ObjCRuntime", 
-		"MonoTouch.CoreAnimation", 
-		"MonoTouch.CoreLocation", 
-		"MonoTouch.MapKit", 
-		"MonoTouch.UIKit",
-		"MonoTouch.CoreGraphics",
-		"MonoTouch.NewsstandKit",
-		"MonoTouch.GLKit",
-		"MonoTouch.CoreVideo",
-		"OpenTK"
+		"CoreFoundation",
+		"Foundation",
+		"ObjCRuntime",
+		"CoreGraphics",
+		"CoreAnimation",
+		"CoreLocation",
+		"QTKit",
+		"CoreVideo",
+		"CoreMedia",
+		"OpenGL",
+#if !MONOMAC
+		"CoreMedia",
+		"CoreMotion",
+		"MapKit", 
+		"UIKit",
+		"NewsstandKit",
+		"GLKit"
 #endif
 	};
 		
@@ -3470,7 +3437,7 @@ public class Generator {
 		type_needs_thread_checks = UINamespaces.Contains (type.Namespace) && !HasAttribute (type, typeof (ThreadSafeAttribute));
 		string TypeName = GetGeneratedTypeName (type);
 
-		string dir = Path.Combine (basedir, type.Namespace.Replace (MainPrefix + ".", ""));
+		string dir = Path.Combine (basedir, type.Namespace);
 		string file = TypeName + ".g.cs";
 
 		if (!Directory.Exists (dir))
@@ -3597,7 +3564,7 @@ public class Generator {
 							sw.WriteLine ("\t\t{");
 							if (debug)
 								sw.WriteLine ("\t\t\tConsole.WriteLine (\"{0}.ctor ()\");", TypeName);
-							sw.WriteLine ("\t\t\tHandle = " + MainPrefix + ".ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, {0});", initSelector);
+							sw.WriteLine ("\t\t\tHandle = " + "ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, {0});", initSelector);
 							sw.WriteLine ("\t\t\t");
 							sw.WriteLine ("\t\t}");
 						}
@@ -3613,9 +3580,9 @@ public class Generator {
 							if (debug)
 								sw.WriteLine ("\t\t\tConsole.WriteLine (\"{0}.ctor ()\");", TypeName);
 							sw.WriteLine ("\t\t\tif (IsDirectBinding) {");
-							sw.WriteLine ("\t\t\t\tHandle = " + MainPrefix + ".ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, {0});", initSelector);
+							sw.WriteLine ("\t\t\t\tHandle = " + "ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, {0});", initSelector);
 							sw.WriteLine ("\t\t\t} else {");
-							sw.WriteLine ("\t\t\t\tHandle = " + MainPrefix + ".ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, {0});", initSelector);
+							sw.WriteLine ("\t\t\t\tHandle = " + "ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, {0});", initSelector);
 							sw.WriteLine ("\t\t\t}");
 							sw.WriteLine ("\t\t}");
 							sw.WriteLine ();
@@ -3630,9 +3597,9 @@ public class Generator {
 						if (debug)
 							sw.WriteLine ("\t\t\tConsole.WriteLine (\"{0}.ctor (NSCoder)\");", TypeName);
 						sw.WriteLine ("\t\t\tif (IsDirectBinding) {");
-						sw.WriteLine ("\t\t\t\tHandle = " + MainPrefix + ".ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, {0}, coder.Handle);", initWithCoderSelector);
+						sw.WriteLine ("\t\t\t\tHandle = " + "ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, {0}, coder.Handle);", initWithCoderSelector);
 						sw.WriteLine ("\t\t\t} else {");
-						sw.WriteLine ("\t\t\t\tHandle = " + MainPrefix + ".ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, {0}, coder.Handle);", initWithCoderSelector);
+						sw.WriteLine ("\t\t\t\tHandle = " + "ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, {0}, coder.Handle);", initWithCoderSelector);
 						sw.WriteLine ("\t\t\t}");
 						sw.WriteLine ("\t\t}");
 						sw.WriteLine ();
@@ -3716,9 +3683,6 @@ public class Generator {
 						} 
 					} else {
 						library_name = type.Namespace;
-						// note: not every binding namespace will start with MainPrefix (e.g. MonoTouch.)
-						if (library_name.StartsWith (MainPrefix))
-							library_name = library_name.Substring (MainPrefix.Length + 1);
 					}
 
 					if (!libraries.Contains (library_name)) {
@@ -4114,12 +4078,12 @@ public class Generator {
 				print ("}\n");
 				print ("public static {0}{1} Appearance {{", parent_implements_appearance ? "new " : "", appearance_type_name);
 				indent++;
-				print ("get {{ return new {0} (MonoTouch.ObjCRuntime.Messaging.IntPtr_objc_msgSend (class_ptr, UIAppearance.SelectorAppearance)); }}", appearance_type_name);
+				print ("get {{ return new {0} (ObjCRuntime.Messaging.IntPtr_objc_msgSend (class_ptr, UIAppearance.SelectorAppearance)); }}", appearance_type_name);
 				indent--;
 				print ("}\n");
 				print ("public static {0}{1} GetAppearance<T> () {{", parent_implements_appearance ? "new " : "", appearance_type_name);
 				indent++;
-				print ("return new {0} (MonoTouch.ObjCRuntime.Messaging.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), UIAppearance.SelectorAppearance));", appearance_type_name);
+				print ("return new {0} (ObjCRuntime.Messaging.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), UIAppearance.SelectorAppearance));", appearance_type_name);
 				indent--;
 				print ("}\n");
 				print ("public static {0}{1} AppearanceWhenContainedIn (params Type [] containers)", parent_implements_appearance ? "new " : "", appearance_type_name);
@@ -4176,7 +4140,7 @@ public class Generator {
 				var delmethod = deltype.GetMethod ("Invoke");
 				var del = new StringBuilder ();
 
-				// Propagate MonoTouch.MonoNativeFunctionWrapperAttribute
+				// Propagate MonoNativeFunctionWrapperAttribute
 				var attrs = deltype.GetCustomAttributes (false);
 				foreach (var a in attrs){
 					if (a.GetType ().FullName.IndexOf ("MonoNativeFunctionWrapperAttribute") != -1){

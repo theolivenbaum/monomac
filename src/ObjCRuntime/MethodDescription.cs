@@ -23,7 +23,7 @@
 using System;
 using System.Reflection;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public struct MethodDescription {
 		public MethodBase method;
 		public ArgumentSemantic semantic;

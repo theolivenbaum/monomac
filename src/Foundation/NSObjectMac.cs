@@ -26,9 +26,9 @@
 // requires this.   This will be replaced later with a dynamic system
 //
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSObject {
 		// Used to force the loading of AppKit and Foundation
 		static IntPtr fl = Dlfcn.dlopen (Constants.FoundationLibrary, 1);

@@ -9,10 +9,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreMedia {
+namespace CoreMedia {
 	
 	public enum CMMediaType : uint
 	{

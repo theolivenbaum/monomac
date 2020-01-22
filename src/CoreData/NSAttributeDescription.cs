@@ -31,10 +31,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreData {
+namespace CoreData {
 		public partial class NSAttributeDescription {
 			[Obsolete ("Use the DefaultValue property")]
 			public virtual void SetDefaultValue (NSObject value)

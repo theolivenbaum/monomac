@@ -23,7 +23,7 @@
 //
 using System.Runtime.InteropServices;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSValue : NSObject {
 #if !COREBUILD
 		public string ObjCType {

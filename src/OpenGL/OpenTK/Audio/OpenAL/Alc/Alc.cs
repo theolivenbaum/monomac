@@ -66,9 +66,9 @@ typedef void ALCvoid;
  * IntPtr
 */
 
-using MonoMac.OpenGL;
+using OpenGL;
 	
-namespace MonoMac.OpenAL
+namespace OpenAL
 {
 
     /// <summary>Alc = Audio Library Context</summary>

@@ -23,7 +23,7 @@
 //
 using System;
 
-namespace MonoMac.ScriptingBridge
+namespace ScriptingBridge
 {
 	[Flags]
 	public enum AESendMode

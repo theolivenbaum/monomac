@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreServices.CFHost
+// CoreServices.CFHost
 //
 // Authors:
 //      Martin Baulig (martin.baulig@xamarin.com)
@@ -30,11 +30,11 @@
 using System;
 using System.Net;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreServices {
+namespace CoreServices {
 
 	class CFHost : INativeObject, IDisposable {
 		internal IntPtr handle;

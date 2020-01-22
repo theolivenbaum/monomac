@@ -24,7 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -42,7 +42,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSDictionary : IDictionary, IDictionary<NSObject, NSObject> {
 		public NSDictionary (NSObject first, NSObject second, params NSObject [] args) : this (PickOdd (second, args), PickEven (first, args))
@@ -436,9 +436,9 @@ namespace MonoMac.Foundation {
 		public IntPtr LowlevelObjectForKey (IntPtr key)
 		{
 #if MONOMAC
-			return MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selObjectForKey_Handle, key);
+			return ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selObjectForKey_Handle, key);
 #else
-			return MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle (selObjectForKey_), key);
+			return ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle (selObjectForKey_), key);
 #endif
 		}
 	}

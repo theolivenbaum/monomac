@@ -25,7 +25,7 @@
 //
 using System;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public class SinceAttribute : Attribute {
 		public SinceAttribute (byte major, byte minor)
 		{

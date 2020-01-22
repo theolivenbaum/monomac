@@ -26,10 +26,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	public partial class NSControl {
 		

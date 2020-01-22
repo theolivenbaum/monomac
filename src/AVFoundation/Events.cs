@@ -29,10 +29,10 @@
 //
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	public class AVErrorEventArgs : EventArgs {
 		public AVErrorEventArgs (NSError error)

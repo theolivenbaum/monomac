@@ -21,11 +21,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 using System;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 #if !MONOMAC
 	public partial class AVAudioSession {

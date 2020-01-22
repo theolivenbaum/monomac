@@ -31,12 +31,12 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
 using CFIndex = System.Int32;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 	
 	class CFArray : INativeObject, IDisposable {
 

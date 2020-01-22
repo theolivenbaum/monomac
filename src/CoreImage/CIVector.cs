@@ -43,7 +43,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 	public partial class CIVector {
 		nfloat this [int index] {
 			get {

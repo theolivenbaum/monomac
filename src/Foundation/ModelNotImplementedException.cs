@@ -22,7 +22,7 @@
 //
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public class ModelNotImplementedException : Exception {
 		public ModelNotImplementedException () {}
 	}

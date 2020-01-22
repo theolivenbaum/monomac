@@ -26,9 +26,9 @@ using System.Reflection.Emit;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	internal class NativeConstructorBuilder : NativeImplementationBuilder {
 		private static MethodInfo trygetnsobject = typeof (Runtime).GetMethod ("TryGetNSObject", BindingFlags.Public | BindingFlags.Static);
 		private static MethodInfo newobject = typeof (System.Runtime.Serialization.FormatterServices).GetMethod ("GetUninitializedObject", BindingFlags.Public | BindingFlags.Static);
@@ -36,7 +36,7 @@ namespace MonoMac.ObjCRuntime {
 		private static MethodInfo retain = typeof (NSObject).GetMethod ("Retain", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 		private static FieldInfo handlefld = typeof (NSObject).GetField ("handle", BindingFlags.NonPublic | BindingFlags.Instance);
 		private static FieldInfo valuefld = typeof (RuntimeTypeHandle).GetField ("value", BindingFlags.NonPublic | BindingFlags.Instance);
-		static IntPtr selInit = MonoMac.ObjCRuntime.Selector.GetHandle ("init");
+		static IntPtr selInit = ObjCRuntime.Selector.GetHandle ("init");
 
 		private ConstructorInfo cinfo;
 				

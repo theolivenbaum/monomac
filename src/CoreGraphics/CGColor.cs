@@ -27,9 +27,9 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 
 	public class CGColor : INativeObject, IDisposable {
 		internal IntPtr handle;

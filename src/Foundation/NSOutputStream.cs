@@ -1,9 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSOutputStream : NSStream {
 		const string selWriteMaxLength = "write:maxLength:";
 

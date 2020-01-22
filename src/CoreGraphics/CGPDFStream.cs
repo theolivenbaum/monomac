@@ -27,11 +27,11 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
+using Foundation;
+using ObjCRuntime;
+using CoreFoundation;
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 	public class CGPDFStream : INativeObject {
 		internal IntPtr handle;
 

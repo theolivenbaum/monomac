@@ -28,10 +28,10 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.OpenGL {
+namespace OpenGL {
 	public class CGLPixelFormat : INativeObject, IDisposable {
 		internal IntPtr handle;
 

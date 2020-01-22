@@ -24,11 +24,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 using System.Collections.Generic;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	// Keeps references to the taerget objects alive until the method is invoked
 	internal static class OneShotTracker {

@@ -28,14 +28,14 @@
 //
 using System;
 using System.Diagnostics;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 #if !MONOMAC
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 #endif
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 	public partial class CIFilter {
 		internal CIFilter (string name)
 			: base (CreateFilter (name))

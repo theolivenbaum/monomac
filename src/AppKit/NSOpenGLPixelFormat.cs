@@ -24,13 +24,13 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreImage;
-using MonoMac.CoreAnimation;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreImage;
+using CoreAnimation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSOpenGLPixelFormat {
 		static IntPtr selInitWithAttributes = Selector.GetHandle ("initWithAttributes:");
 
@@ -45,9 +45,9 @@ namespace MonoMac.AppKit {
 
 				fixed (NSOpenGLPixelFormatAttribute* pArray = copy){
 					if (IsDirectBinding) {
-						Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selInitWithAttributes, new IntPtr((void*)pArray ));
+						Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selInitWithAttributes, new IntPtr((void*)pArray ));
 					} else {
-						Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, selInitWithAttributes, new IntPtr((void*)pArray));
+						Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, selInitWithAttributes, new IntPtr((void*)pArray));
 					}
 				}
 				
@@ -126,9 +126,9 @@ namespace MonoMac.AppKit {
 
 				fixed (NSOpenGLPixelFormatAttribute* pArray = copy){
 					if (IsDirectBinding) {
-						Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selInitWithAttributes, new IntPtr((void*)pArray ));
+						Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, selInitWithAttributes, new IntPtr((void*)pArray ));
 					} else {
-						Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, selInitWithAttributes, new IntPtr((void*)pArray));
+						Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (this.SuperHandle, selInitWithAttributes, new IntPtr((void*)pArray));
 					}
 				}
 				

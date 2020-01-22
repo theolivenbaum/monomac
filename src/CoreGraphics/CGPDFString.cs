@@ -29,9 +29,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 	
 	// internal helper class only - we avoid exposing it to users
 	static class CGPDFString {

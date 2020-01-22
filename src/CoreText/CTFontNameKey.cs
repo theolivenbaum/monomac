@@ -27,10 +27,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	[Since (3,2)]
 	public enum CTFontNameKey {

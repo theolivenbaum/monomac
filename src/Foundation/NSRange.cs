@@ -38,7 +38,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public struct NSRange {
 		public nint Location;
 		public nint Length;

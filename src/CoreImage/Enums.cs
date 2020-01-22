@@ -23,7 +23,7 @@
 
 using System;
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 
 	public enum CIImageOrientation {
 		TopLeft = 1,

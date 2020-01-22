@@ -1,5 +1,5 @@
 //
-// MonoMac.CFNetwork.Content
+// CFNetwork.Content
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -32,9 +32,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.CFNetwork {
+namespace CFNetwork {
 
 	class Content : StreamContent {
 		WebResponseStream responseStream;

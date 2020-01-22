@@ -27,12 +27,12 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using CoreGraphics;
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 
 	public class CIImageInitializationOptions : DictionaryContainer
 	{

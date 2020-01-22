@@ -27,10 +27,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreVideo {
+namespace CoreVideo {
 	public struct CVTime {
 		public long TimeValue;
 		public long TimeScale;

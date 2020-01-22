@@ -31,9 +31,9 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Property)]
 	public class ExportAttribute : Attribute {

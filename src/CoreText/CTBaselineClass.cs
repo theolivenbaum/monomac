@@ -26,10 +26,10 @@
 //
 using System;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	public enum CTBaselineClass {
 		Roman,

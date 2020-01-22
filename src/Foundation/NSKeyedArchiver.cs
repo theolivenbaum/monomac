@@ -22,11 +22,11 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSKeyedArchiver {
 
@@ -38,7 +38,7 @@ namespace MonoMac.Foundation {
 				throw new ArgumentNullException ("kls");
 
 			var nsname = new NSString (name);
-			MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (class_ptr, selSetClassNameForClass_Handle, nsname.Handle, kls.Handle);
+			ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (class_ptr, selSetClassNameForClass_Handle, nsname.Handle, kls.Handle);
 			nsname.Dispose ();
 		}
 
@@ -46,7 +46,7 @@ namespace MonoMac.Foundation {
 		{
 			if (kls == null)
 				throw new ArgumentNullException ("kls");
-			return NSString.FromHandle (MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (class_ptr, selClassNameForClass_Handle, kls.Handle));
+			return NSString.FromHandle (ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (class_ptr, selClassNameForClass_Handle, kls.Handle));
 		}
 
 	}

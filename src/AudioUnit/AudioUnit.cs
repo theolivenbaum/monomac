@@ -32,9 +32,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MonoMac.AudioToolbox;
+using AudioToolbox;
+using ObjCRuntime;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
 	public enum AudioUnitStatus {
 		NoError = 0,
@@ -140,7 +141,7 @@ namespace MonoMac.AudioUnit
 		public IntPtr ProcRefCon; 
 	}
 	
-	public class AudioUnit : IDisposable, MonoMac.ObjCRuntime.INativeObject
+	public class AudioUnit : IDisposable, ObjCRuntime.INativeObject
 	{
 		static readonly RenderCallbackShared CreateRenderCallback = RenderCallbackImpl;
 
@@ -209,7 +210,7 @@ namespace MonoMac.AudioUnit
 		
 		[Obsolete]
 		// callback funtion should be static method and be attatched a MonoPInvokeCallback attribute.        
-		[MonoMac.MonoPInvokeCallback(typeof(AURenderCallback))]
+		[MonoPInvokeCallback(typeof(AURenderCallback))]
 		static int renderCallback(IntPtr inRefCon, ref AudioUnitRenderActionFlags _ioActionFlags,
 					  ref AudioTimeStamp _inTimeStamp,
 					  int _inBusNumber,
@@ -234,7 +235,7 @@ namespace MonoMac.AudioUnit
 			return 0; // noerror
 		}
 
-		public void SetAudioFormat(MonoMac.AudioToolbox.AudioStreamBasicDescription audioFormat, AudioUnitScopeType scope, uint audioUnitElement = 0)
+		public void SetAudioFormat(AudioToolbox.AudioStreamBasicDescription audioFormat, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
 			int err = AudioUnitSetProperty(handle,
 						       AudioUnitPropertyIDType.StreamFormat,
@@ -248,7 +249,7 @@ namespace MonoMac.AudioUnit
 
 		public AudioStreamBasicDescription GetAudioFormat(AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
-			MonoMac.AudioToolbox.AudioStreamBasicDescription audioFormat = new AudioStreamBasicDescription();
+			AudioToolbox.AudioStreamBasicDescription audioFormat = new AudioStreamBasicDescription();
 			uint size = (uint)Marshal.SizeOf(audioFormat);
 			
 			int err = AudioUnitGetProperty(handle,
@@ -374,7 +375,7 @@ namespace MonoMac.AudioUnit
 			GC.SuppressFinalize (this);
 		}
 		
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioComponentInstanceDispose(IntPtr inInstance);
 
 		public void Dispose (bool disposing)
@@ -405,26 +406,26 @@ namespace MonoMac.AudioUnit
 			public AURenderCallbackStrct() { }
 		}    
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentInstanceNew")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentInstanceNew")]
 		static extern int AudioComponentInstanceNew(IntPtr inComponent, out IntPtr inDesc);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern IntPtr AudioComponentInstanceGetComponent (IntPtr inComponent);
 		
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitInitialize(IntPtr inUnit);
 		
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitUninitialize(IntPtr inUnit);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioOutputUnitStart(IntPtr ci);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioOutputUnitStop(IntPtr ci);
 
 		[Obsolete]
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitRender(IntPtr inUnit,
 						  ref AudioUnitRenderActionFlags ioActionFlags,
 						  ref AudioTimeStamp inTimeStamp,
@@ -432,13 +433,13 @@ namespace MonoMac.AudioUnit
 						  int inNumberFrames,
 						  AudioBufferList ioData);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern AudioUnitStatus AudioUnitRender(IntPtr inUnit, ref AudioUnitRenderActionFlags ioActionFlags, ref AudioTimeStamp inTimeStamp,
 						  uint inOutputBusNumber, uint inNumberFrames, IntPtr ioData);
 
 
 		[Obsolete]
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitSetProperty(IntPtr inUnit,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitPropertyIDType inID,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitScopeType inScope,
@@ -446,32 +447,32 @@ namespace MonoMac.AudioUnit
 						       AURenderCallbackStrct inData,
 						       uint inDataSize);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitSetProperty(IntPtr inUnit,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitPropertyIDType inID,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitScopeType inScope,
 						       [MarshalAs(UnmanagedType.U4)] uint inElement,
-						       ref MonoMac.AudioToolbox.AudioStreamBasicDescription inData,
+						       ref AudioToolbox.AudioStreamBasicDescription inData,
 						       uint inDataSize);
         
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern AudioUnitStatus AudioUnitSetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement,
 						       ref uint inData, uint inDataSize);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern AudioUnitStatus AudioUnitSetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement,
 						       ref AURenderCallbackStruct inData, int inDataSize);
 
         
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitGetProperty(IntPtr inUnit,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitPropertyIDType inID,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitScopeType inScope,
 						       [MarshalAs(UnmanagedType.U4)] uint inElement,
-						       ref MonoMac.AudioToolbox.AudioStreamBasicDescription outData,
+						       ref AudioToolbox.AudioStreamBasicDescription outData,
 						       ref uint ioDataSize);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary)]
+		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioUnitGetProperty(IntPtr inUnit,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitPropertyIDType inID,
 						       [MarshalAs(UnmanagedType.U4)] AudioUnitScopeType inScope,

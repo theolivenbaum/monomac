@@ -22,7 +22,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public enum NSRunLoopMode {
 		Default,
 		Common,

@@ -30,7 +30,7 @@
 
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	[AttributeUsage (
 		AttributeTargets.Assembly

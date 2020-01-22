@@ -28,11 +28,11 @@
 using System;
 using System.Collections.Generic;
 
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	internal static class Adapter {
 

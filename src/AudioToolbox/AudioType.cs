@@ -35,11 +35,11 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 	public enum AudioFormatType {
 		LinearPCM               = 0x6c70636d,
 		AC3                     = 0x61632d33,

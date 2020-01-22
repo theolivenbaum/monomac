@@ -28,9 +28,9 @@
 //
 using System;
 
-using MonoMac.Foundation; 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
+using Foundation; 
+using ObjCRuntime;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 	public partial class CALayer {
 		const string selInitWithLayer = "initWithLayer:";

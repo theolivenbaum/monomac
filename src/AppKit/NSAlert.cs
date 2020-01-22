@@ -29,8 +29,8 @@
 using System;
 using System.Collections.Generic;
 
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -48,7 +48,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.AppKit
+namespace AppKit
 {
 	[Register ("__MonoMac_NSAlertDidEndDispatcher")]
 	internal class NSAlertDidEndDispatcher : NSObject
@@ -56,8 +56,8 @@ namespace MonoMac.AppKit
 		static List<NSAlertDidEndDispatcher> pendingInvokes = new List<NSAlertDidEndDispatcher> ();
 
 		const string selector = "alertDidEnd:returnCode:contextInfo:";
-		public static readonly global::MonoMac.ObjCRuntime.Selector Selector =
-			new global::MonoMac.ObjCRuntime.Selector (selector);
+		public static readonly global::ObjCRuntime.Selector Selector =
+			new global::ObjCRuntime.Selector (selector);
 
 		Action<int> action;
 

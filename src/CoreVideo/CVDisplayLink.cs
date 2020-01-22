@@ -26,11 +26,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.OpenGL;
+using ObjCRuntime;
+using Foundation;
+using OpenGL;
 
-namespace MonoMac.CoreVideo {
+namespace CoreVideo {
 	public class CVDisplayLink : INativeObject, IDisposable {
 		internal IntPtr handle;
 		GCHandle callbackHandle;

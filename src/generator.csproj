@@ -5,7 +5,7 @@
     <TargetFrameworks>net461</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
-    <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
+    <BaseNamespace Condition="$(BaseNamespace) == ''">ObjCRuntime</BaseNamespace>
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
   </PropertyGroup>

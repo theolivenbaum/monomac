@@ -31,10 +31,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	public enum CFRunLoopExitReason {
 		Finished = 1,

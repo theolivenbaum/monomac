@@ -23,7 +23,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -41,7 +41,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSMutableDictionary : IDictionary, IDictionary<NSObject, NSObject> {
 		
@@ -322,15 +322,15 @@ namespace MonoMac.Foundation {
 					throw new ArgumentNullException ("value");
 #if MONOMAC
 				if (IsDirectBinding) {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, key.Handle);
 				} else {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, key.Handle);
 				}
 #else
 				if (IsDirectBinding) {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
 				} else {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
 				}
 #endif
 			}
@@ -349,15 +349,15 @@ namespace MonoMac.Foundation {
 					throw new ArgumentNullException ("value");
 #if MONOMAC
 				if (IsDirectBinding) {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, key.Handle);
 				} else {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, key.Handle);
 				}
 #else
 				if (IsDirectBinding) {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
 				} else {
-					MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
+					ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, key.Handle);
 				}
 #endif
 			}
@@ -379,15 +379,15 @@ namespace MonoMac.Foundation {
 				using (var nss = new NSString (key)){
 #if MONOMAC
 					if (IsDirectBinding) {
-						MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, nss.Handle);
+						ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, value.Handle, nss.Handle);
 					} else {
-						MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, nss.Handle);
+						ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetObjectForKey_Handle, value.Handle, nss.Handle);
 					}
 #else
 					if (IsDirectBinding) {
-						MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, nss.Handle);
+						ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), value.Handle, nss.Handle);
 					} else {
-						MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, nss.Handle);
+						ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetObjectForKey_), value.Handle, nss.Handle);
 					}
 #endif
 				}
@@ -419,18 +419,18 @@ namespace MonoMac.Foundation {
 		public static NSMutableDictionary LowlevelFromObjectAndKey (IntPtr obj, IntPtr key)
 		{
 #if MONOMAC
-			return Runtime.GetNSObject<NSMutableDictionary> (MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr (class_ptr, selDictionaryWithObjectForKey_Handle, obj, key));
+			return Runtime.GetNSObject<NSMutableDictionary> (ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr (class_ptr, selDictionaryWithObjectForKey_Handle, obj, key));
 #else
-			return Runtime.GetNSObject<NSMutableDictionary> (MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr (class_ptr, Selector.GetHandle (selDictionaryWithObjectForKey_), obj, key));
+			return Runtime.GetNSObject<NSMutableDictionary> (ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr (class_ptr, Selector.GetHandle (selDictionaryWithObjectForKey_), obj, key));
 #endif
 		}
 
 		public void LowlevelSetObject (IntPtr obj, IntPtr key)
 		{
 #if MONOMAC
-			MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, obj, key);
+			ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, obj, key);
 #else
-			MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), obj, key);
+			ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), obj, key);
 #endif
 		}
 
@@ -439,9 +439,9 @@ namespace MonoMac.Foundation {
 			if (obj == null)
 				throw new ArgumentNullException ("obj");
 #if MONOMAC
-			MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, obj.Handle, key);
+			ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetObjectForKey_Handle, obj.Handle, key);
 #else
-			MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), obj.Handle, key);
+			ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetObjectForKey_), obj.Handle, key);
 #endif
 		}
 	}

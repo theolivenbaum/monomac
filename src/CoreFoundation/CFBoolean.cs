@@ -33,10 +33,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 	[Since (3,2)]
 	class CFBoolean : INativeObject, IDisposable {
 		IntPtr handle;

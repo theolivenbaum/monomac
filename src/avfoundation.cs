@@ -28,16 +28,16 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreMedia;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreAnimation;
-using MonoMac.CoreVideo;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using CoreMedia;
+using CoreGraphics;
+using CoreAnimation;
+using CoreVideo;
 using System;
 #if !MONOMAC
-using MonoTouch.MediaToolbox;
+using MediaToolbox;
 #endif
 
 #if MAC64
@@ -55,7 +55,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	delegate void AVAssetImageGeneratorCompletionHandler (CMTime requestedTime, IntPtr imageRef, CMTime actualTime, AVAssetImageGeneratorResult result, NSError error);
 	delegate void AVCompletion (bool finished);
@@ -3487,7 +3487,7 @@ namespace MonoMac.AVFoundation {
 		void CaptureStillImageAsynchronously (AVCaptureConnection connection, AVCaptureCompletionHandler completionHandler);
 
 		[Static, Export ("jpegStillImageNSDataRepresentation:")]
-		NSData JpegStillToNSData (MonoMac.CoreMedia.CMSampleBuffer buffer);
+		NSData JpegStillToNSData (CoreMedia.CMSampleBuffer buffer);
 
 		// 5.0
 		[Export ("capturingStillImage")]
@@ -3649,7 +3649,7 @@ namespace MonoMac.AVFoundation {
 	}
 
 	public delegate void AVCompletionHandler ();
-	public delegate void AVCaptureCompletionHandler (MonoMac.CoreMedia.CMSampleBuffer imageDataSampleBuffer, NSError error);
+	public delegate void AVCaptureCompletionHandler (CoreMedia.CMSampleBuffer imageDataSampleBuffer, NSError error);
 
 	[Since (4,0)]
 	[BaseType (typeof (NSObject))]

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 		
 	public partial class NSDocument {
 		public delegate void DuplicateCallback (NSDocument document, bool didDuplicate);

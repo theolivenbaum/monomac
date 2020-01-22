@@ -1,4 +1,4 @@
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSPopUpButtonCell {
 		public NSMenuItem this [int idx] {
 			get {

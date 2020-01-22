@@ -27,9 +27,9 @@
 // NSString keys to an enum value for better API. An 'Unknown' value
 // exists on these enums for when a key cannot be mapped.
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.AppKit
+namespace AppKit
 {
 	public enum NSFontCollectionAction
 	{

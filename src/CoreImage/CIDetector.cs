@@ -23,12 +23,12 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using Foundation;
+using CoreGraphics;
 using System.Collections.Generic;
-using MonoMac.CoreFoundation;
+using CoreFoundation;
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 	public enum FaceDetectorAccuracy
 	{
 		High,

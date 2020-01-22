@@ -31,11 +31,11 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AddressBook {
+namespace AddressBook {
 
 	public enum ABPersonSortBy : uint {
 		FirstName = 0,

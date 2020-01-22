@@ -23,7 +23,7 @@
 
 using System;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	
 	public partial class NSSpellChecker {
 		

@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     /// <summary>
     /// Contains common mathematical functions and constants.

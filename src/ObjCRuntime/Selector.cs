@@ -24,7 +24,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	[StructLayout(LayoutKind.Sequential)]
 	public class Selector : IEquatable<Selector>{
 		public static readonly IntPtr Init = Selector.GetHandle ("init");

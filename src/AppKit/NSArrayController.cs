@@ -23,9 +23,9 @@
 
 using System;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	public partial class NSArrayController {
 

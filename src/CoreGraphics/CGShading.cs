@@ -28,8 +28,8 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 
 	public class CGShading : INativeObject, IDisposable {
 		internal IntPtr handle;

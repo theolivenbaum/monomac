@@ -27,10 +27,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	[Since (3,2)]
 	public enum CTRunStatus {

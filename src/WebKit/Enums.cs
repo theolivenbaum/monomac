@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoMac.WebKit {
+namespace WebKit {
 
 	public enum DomCssRuleType : ushort {
 		Unknown = 0,

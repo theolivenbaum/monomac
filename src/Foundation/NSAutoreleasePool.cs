@@ -26,9 +26,9 @@ using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	[Register ("NSAutoreleasePool", true)]
 	public class NSAutoreleasePool : NSObject, IDisposable {
 		public override IntPtr ClassHandle { get { return Class.GetHandle ("NSAutoreleasePool"); } }

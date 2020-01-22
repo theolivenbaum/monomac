@@ -29,13 +29,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace MonoMac.Security {
+namespace Security {
 
 	public enum SecKind {
 		InternetPassword,

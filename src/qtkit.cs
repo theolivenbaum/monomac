@@ -40,13 +40,13 @@
 //		[Field ("QTCaptureDeviceLegacySequenceGrabberAttribute")]
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.AppKit;
-using MonoMac.CoreAnimation;
-using MonoMac.CoreVideo;
-using MonoMac.CoreImage;
-using MonoMac.CoreGraphics;
+using Foundation;
+using ObjCRuntime;
+using AppKit;
+using CoreAnimation;
+using CoreVideo;
+using CoreImage;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -63,7 +63,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.QTKit
+namespace QTKit
 {
 	[BaseType (typeof (QTCaptureOutput))]
 	interface QTCaptureAudioPreviewOutput {

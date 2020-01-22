@@ -27,10 +27,10 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
 
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	public static class Runtime {
 		static List <Assembly> assemblies;

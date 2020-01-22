@@ -28,9 +28,8 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,10 +46,10 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 
 	[Since (3,2)]
-	public enum NSRectEdge {
+	public enum CGRectEdge {
 		MinXEdge,
 		MinYEdge,
 		MaxXEdge,
@@ -145,8 +144,8 @@ namespace MonoMac.CoreGraphics {
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
-		static extern void CGRectDivide (CGRect rect, out CGRect slice, out CGRect remainder, nfloat amount, NSRectEdge edge);
-		public static void Divide (this CGRect self, nfloat amount, NSRectEdge edge, out CGRect slice, out CGRect remainder)
+		static extern void CGRectDivide (CGRect rect, out CGRect slice, out CGRect remainder, nfloat amount, CGRectEdge edge);
+		public static void Divide (this CGRect self, nfloat amount, CGRectEdge edge, out CGRect slice, out CGRect remainder)
 		{
 			CGRectDivide (self, out slice, out remainder, amount, edge);
 		}

@@ -36,7 +36,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreData {
+namespace CoreData {
 
         public enum NSEntityMappingType : nuint {
                 Undefined = 0x00,

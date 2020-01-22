@@ -40,7 +40,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public class NSErrorException : Exception {
 		NSError error;
 

@@ -23,7 +23,7 @@
 //
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Class)]
 	public sealed class RegisterAttribute : Attribute {

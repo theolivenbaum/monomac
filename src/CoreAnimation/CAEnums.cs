@@ -28,11 +28,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
+using Foundation;
 using System.Runtime.InteropServices;
-using MonoMac.CoreGraphics;
+using CoreGraphics;
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 	[Flags]
 	public enum CAEdgeAntialiasingMask {

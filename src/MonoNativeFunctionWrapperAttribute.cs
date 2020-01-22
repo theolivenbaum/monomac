@@ -23,7 +23,8 @@
 //
 using System;
 
-namespace MonoMac {
+namespace ObjCRuntime
+{
 
 	[AttributeUsage (AttributeTargets.Delegate)]
 	public class MonoNativeFunctionWrapperAttribute : Attribute {

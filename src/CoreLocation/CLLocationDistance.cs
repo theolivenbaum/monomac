@@ -34,9 +34,9 @@
 #if !COREBUILD
 
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.CoreLocation {
+namespace CoreLocation {
 
 	public static class CLLocationDistance
 	{

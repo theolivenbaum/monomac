@@ -29,9 +29,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public enum AudioServicesError {
 		None = 0,

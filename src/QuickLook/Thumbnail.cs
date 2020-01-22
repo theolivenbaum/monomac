@@ -28,9 +28,10 @@
 
 #if MONOMAC
 using System;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
+using Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreGraphics;
 using System.Runtime.InteropServices;
 
 #if MAC64
@@ -48,7 +49,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.QuickLook {
+namespace QuickLook {
 	public static partial class QLThumbnailImage {
 		[DllImport(Constants.QuickLookLibrary)]
 		extern static IntPtr QLThumbnailImageCreate (IntPtr allocator, IntPtr url, CGSize maxThumbnailSize, IntPtr options);		

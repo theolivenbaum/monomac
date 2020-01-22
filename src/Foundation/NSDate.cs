@@ -30,9 +30,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSDate {
 		const long NSDATE_TICKS = 631139040000000000;

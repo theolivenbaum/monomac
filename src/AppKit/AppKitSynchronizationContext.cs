@@ -3,9 +3,9 @@
 //
 using System.Threading;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	class AppKitSynchronizationContext : SynchronizationContext {
 		public override SynchronizationContext CreateCopy ()
 		{

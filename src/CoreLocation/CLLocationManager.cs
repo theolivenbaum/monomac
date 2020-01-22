@@ -29,12 +29,12 @@
 //
 using System;
 #if !MONOMAC
-using MonoMac.UIKit;
+using UIKit;
 #endif
-using MonoMac.Foundation;
-using MonoMac.CoreLocation;
+using Foundation;
+using CoreLocation;
 
-namespace MonoMac.CoreLocation {
+namespace CoreLocation {
 	public partial class CLLocationManager : NSObject {
 #if MONOMAC
 		public static bool LocationServicesEnabled => CLLocationManager._LocationServicesEnabledStatic;

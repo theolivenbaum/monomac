@@ -1,5 +1,5 @@
 //
-// MonoMac.CFNetwork/WebRequestStream
+// CFNetwork/WebRequestStream
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -32,11 +32,11 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreServices;
-using MonoMac.Foundation;
+using CoreFoundation;
+using CoreServices;
+using Foundation;
 
-namespace MonoMac.CFNetwork {
+namespace CFNetwork {
 
 	class WebRequestStream {
 		Stream stream;

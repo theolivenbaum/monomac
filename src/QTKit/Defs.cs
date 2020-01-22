@@ -23,7 +23,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.QTKit {
+namespace QTKit {
 	
 	[StructLayout (LayoutKind.Sequential)]
 	public partial struct QTTime {

@@ -38,7 +38,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NSEdgeInsets {
 		public nfloat Top, Left, Bottom, Right;

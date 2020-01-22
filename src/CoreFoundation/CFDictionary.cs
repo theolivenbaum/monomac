@@ -30,10 +30,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	[Since (3,2)]
 	class CFDictionary : INativeObject, IDisposable {

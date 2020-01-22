@@ -27,11 +27,11 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreVideo {
+namespace CoreVideo {
 
 	public class CVPixelBufferPoolSettings : DictionaryContainer
 	{

@@ -12,13 +12,12 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreVideo;
-using MonoMac.AudioToolbox;
+using CoreGraphics;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using CoreVideo;
+using AudioToolbox;
 
 #if MAC64
 using nint = System.Int64;
@@ -39,7 +38,7 @@ using CGRect = System.Drawing.RectangleF;
 using CMVideoDimensions = System.Drawing.Size;
 #endif
 
-namespace MonoMac.CoreMedia {
+namespace CoreMedia {
 
 #if !SDCOMPAT
 	[StructLayout(LayoutKind.Sequential)]

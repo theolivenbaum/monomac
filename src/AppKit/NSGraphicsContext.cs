@@ -25,10 +25,10 @@
 //
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using Foundation;
+using CoreGraphics;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSGraphicsContext {
 		public static NSGraphicsContext FromGraphicsPort (CGContext context, bool initialFlippedState)
 		{

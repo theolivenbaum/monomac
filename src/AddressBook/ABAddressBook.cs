@@ -31,12 +31,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.AddressBook {
+namespace AddressBook {
 
 	public enum ABAddressBookError {
 		OperationNotPermittedByStore = 0,
@@ -235,7 +234,7 @@ namespace MonoMac.AddressBook {
                         var descriptor = (BlockLiteral *) block;
                         var del = (Action<bool,NSError>) (descriptor->global_handle != IntPtr.Zero ? GCHandle.FromIntPtr (descriptor->global_handle).Target : GCHandle.FromIntPtr (descriptor->local_handle).Target);
                         if (del != null)
-                                del (success, error == IntPtr.Zero ? null : Runtime.GetNSObject<MonoMac.Foundation.NSError> (error));
+                                del (success, error == IntPtr.Zero ? null : Runtime.GetNSObject<Foundation.NSError> (error));
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]

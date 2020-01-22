@@ -21,7 +21,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public enum NSTextCheckingType : ulong {
 		Orthography   = 1 << 0,
 		Spelling      = 1 << 1,

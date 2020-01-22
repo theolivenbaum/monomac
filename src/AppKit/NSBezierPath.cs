@@ -26,9 +26,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreGraphics;
+using Foundation;
+using ObjCRuntime;
 using System.Runtime.InteropServices;
 
 #if MAC64
@@ -46,7 +46,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSBezierPath {
 
 		public void GetLineDash (out nfloat[] pattern, out nfloat phase)

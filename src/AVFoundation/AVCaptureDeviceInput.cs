@@ -27,10 +27,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 	public partial class AVCaptureDeviceInput {
 		[Obsolete ("Use FromDevice (AVCaptureDevice, ref NSError) instead")]
 		static public AVCaptureDeviceInput FromDevice (AVCaptureDevice device, IntPtr handle)

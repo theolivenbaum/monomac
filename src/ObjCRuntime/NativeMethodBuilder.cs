@@ -26,9 +26,9 @@ using System.Reflection.Emit;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	internal class NativeMethodBuilder : NativeImplementationBuilder {
 		private static MethodInfo creatensstring = typeof (NSString).GetMethod ("op_Explicit", new Type [] { typeof (string) });
 #if !MONOMAC_BOOTSTRAP
@@ -56,7 +56,7 @@ namespace MonoMac.ObjCRuntime {
 			rettype = ConvertReturnType (minfo.ReturnType);
 
 			// FIXME: We should detect if this is in a bound assembly or not and only alloc if needed
-			Selector = MonoMac.ObjCRuntime.Selector.GetHandle(ea.Selector ?? minfo.Name);
+			Selector = ObjCRuntime.Selector.GetHandle(ea.Selector ?? minfo.Name);
 			Signature = string.Format ("{0}@:", TypeConverter.ToNative (minfo.ReturnType));
 
 			ConvertParameters (Parameters, minfo.IsStatic, isstret);

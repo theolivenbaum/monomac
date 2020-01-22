@@ -27,12 +27,12 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using CoreGraphics;
 
-namespace MonoMac.ImageIO {
+namespace ImageIO {
 	public enum CGImageSourceStatus {
 		Complete      = 0,
 		Incomplete    = -1,

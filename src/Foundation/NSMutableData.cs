@@ -4,7 +4,7 @@
 //   Miguel de Icaza
 //
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections;
@@ -26,7 +26,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSMutableData : IEnumerable, IEnumerable<byte> {
 
 		public override byte this [int idx] {

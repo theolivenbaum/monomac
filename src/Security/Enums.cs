@@ -1,6 +1,6 @@
 // Copyright 2011, 2012 Xamarin Inc
 
-namespace MonoMac.Security {
+namespace Security {
 
 	public enum SecStatusCode {
 		Success = 0,

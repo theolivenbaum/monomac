@@ -29,7 +29,7 @@
 using System;
 using System.Threading;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	sealed class DispatchQueueSynchronizationContext : SynchronizationContext
 	{

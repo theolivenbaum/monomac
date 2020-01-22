@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreFoundation.CFReadStream
+// CoreFoundation.CFReadStream
 //
 // Authors:
 //      Martin Baulig (martin.baulig@xamarin.com)
@@ -32,11 +32,11 @@ using System.Text;
 using System.Reflection;
 using System.Threading;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	public class CFReadStream : CFStream {
 		public CFReadStream (IntPtr handle)

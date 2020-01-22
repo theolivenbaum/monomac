@@ -5,10 +5,10 @@
 //   Johan Hammar
 //
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 
 	public partial class NSToolbarItem {
 		

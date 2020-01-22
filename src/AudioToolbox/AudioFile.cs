@@ -32,13 +32,14 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
 using OSStatus = System.Int32;
 using AudioFileID = System.IntPtr;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public enum AudioFileType {
 		AIFF = 0x41494646, // AIFF
@@ -1173,7 +1174,7 @@ namespace MonoMac.AudioToolbox {
 
 		public NSData AlbumArtwork {
 			get {
-				return MonoMac.ObjCRuntime.Runtime.GetNSObject<NSData> (GetIntPtr (AudioFileProperty.AlbumArtwork));
+				return ObjCRuntime.Runtime.GetNSObject<NSData> (GetIntPtr (AudioFileProperty.AlbumArtwork));
 			}
 		}
 		

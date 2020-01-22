@@ -26,12 +26,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
 using System;
 
-namespace MonoMac.ImageIO {
+namespace ImageIO {
 
 	[Since (4,0)]
 	[Static]

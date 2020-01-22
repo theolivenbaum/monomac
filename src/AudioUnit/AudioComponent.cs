@@ -31,11 +31,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
-using MonoMac.AudioToolbox;
-using MonoMac.CoreFoundation;
+using ObjCRuntime;
+using AudioToolbox;
+using CoreFoundation;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
 	public class AudioComponent : INativeObject {
 		internal IntPtr handle;
@@ -108,10 +108,10 @@ namespace MonoMac.AudioUnit
 			return FindComponent (AudioComponentDescription.CreateGenerator (generator));
 		}
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentFindNext")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentFindNext")]
 		static extern IntPtr AudioComponentFindNext(IntPtr inComponent, AudioComponentDescription inDesc);
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCopyName")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCopyName")]
 		static extern int AudioComponentCopyName (IntPtr component, out IntPtr cfstr);
 		
 		public string Name {
@@ -123,7 +123,7 @@ namespace MonoMac.AudioUnit
 			}
 		}
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentGetDescription")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentGetDescription")]
 		static extern int AudioComponentGetDescription (IntPtr component, out AudioComponentDescription desc);
 		public AudioComponentDescription Description {
 			get {
@@ -135,7 +135,7 @@ namespace MonoMac.AudioUnit
 			}
 		}
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCount")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCount")]
 		static extern int AudioComponentCount (AudioComponentDescription desc);
 		static int CountMatches (AudioComponentDescription desc)
 		{
@@ -144,7 +144,7 @@ namespace MonoMac.AudioUnit
 			return AudioComponentCount (desc);
 		}
 
-		[DllImport(MonoMac.Constants.AudioUnitLibrary, EntryPoint = "AudioComponentGetVersion")]
+		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentGetVersion")]
 		static extern int AudioComponentGetVersion (IntPtr component, out int version);
 
 		public Version Version {

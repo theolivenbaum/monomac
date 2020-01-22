@@ -25,11 +25,11 @@
 // growl.cs: Definitions for the Growl Framework
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.AppKit;
+using Foundation;
+using ObjCRuntime;
+using AppKit;
 
-namespace MonoMac.Growl {
+namespace Growl {
 	[BaseType (typeof (NSObject))]
 	interface GrowlApplicationBridge {
 		[Static]

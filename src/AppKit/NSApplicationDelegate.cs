@@ -22,10 +22,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSApplicationDelegate : NSObject {
 
 		[Export ("applicationDidFinishLaunching:")]

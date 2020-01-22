@@ -11,7 +11,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-using MonoMac.OpenGL;
+using OpenGL;
+using ObjCRuntime;
 
 /* Type Mapping
 // 8-bit boolean 
@@ -63,7 +64,7 @@ typedef void ALvoid;
  * void
 */
 
-namespace MonoMac.OpenAL
+namespace OpenAL
 {
     /// <summary>
     /// Provides access to the OpenAL 1.1 flat API.
@@ -74,7 +75,7 @@ namespace MonoMac.OpenAL
         #region Constants
 
         //internal const string Lib = "openal32.dll";
-		internal const string Lib = MonoMac.Constants.OpenALLibrary;		
+		internal const string Lib = Constants.OpenALLibrary;		
         private const CallingConvention Style = CallingConvention.Cdecl;
 
         #endregion Constants

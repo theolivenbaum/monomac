@@ -8,9 +8,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	partial class NSUuid {
 		static unsafe IntPtr GetIntPtr (byte [] bytes)
 		{

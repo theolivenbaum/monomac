@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
 	/// <summary>
 	/// Defines the interface for a GameWindow.

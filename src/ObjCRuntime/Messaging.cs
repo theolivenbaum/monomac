@@ -23,8 +23,8 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using Foundation;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -41,7 +41,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public static partial class Messaging {
 		const string LIBOBJC_DYLIB = "/usr/lib/libobjc.dylib";
 

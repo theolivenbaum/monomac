@@ -32,22 +32,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mono.Options;
 
-#if !MONOMAC
-using MonoTouch.ObjCRuntime;
-#endif
+using ObjCRuntime;
 
 class BindingTouch {
+	static Type CoreObject = typeof(Foundation.NSObject);
 #if MONOMAC
 	static string baselibdll = "MonoMac.dll";
-	static string RootNS = "MonoMac";
-	static Type CoreObject = typeof (MonoMac.Foundation.NSObject);
 	static string tool_name = "bmac";
 	static string compiler = "csc";
 	static string net_sdk = null;
 #else
 	static string baselibdll = "/Developer/MonoTouch/usr/lib/mono/2.1/monotouch.dll";
-	static string RootNS = "MonoTouch";
-	static Type CoreObject = typeof (MonoTouch.Foundation.NSObject);
 	static string tool_name = "btouch";
 	static string compiler = "/Developer/MonoTouch/usr/bin/smcs";
 	static string net_sdk = null;
@@ -261,7 +256,7 @@ class BindingTouch {
 
 			var g = new Generator (pmode, external, debug, types.ToArray ()){
 				MessagingNS = ns == null ? Path.GetFileNameWithoutExtension (api_file) : ns,
-				CoreMessagingNS = RootNS + ".ObjCRuntime",
+				CoreMessagingNS = "ObjCRuntime",
 				BindThirdPartyLibrary = binding_third_party,
 				CoreNSObject = CoreObject,
 				BaseDir = basedir != null ? basedir : tmpdir,
@@ -274,7 +269,7 @@ class BindingTouch {
 				InlineSelectors = inline_selectors,
 			};
 
-			foreach (var mi in baselib.GetType (RootNS + ".ObjCRuntime.Messaging").GetMethods ()){
+			foreach (var mi in baselib.GetType ("ObjCRuntime.Messaging").GetMethods ()){
 				if (mi.Name.IndexOf ("_objc_msgSend") != -1)
 					g.RegisterMethodName (mi.Name);
 			}

@@ -33,14 +33,14 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using Foundation;
 using System.Threading;
 
 using OSStatus = System.Int32;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public class AudioSessionException : Exception {
 		static string Lookup (int k)

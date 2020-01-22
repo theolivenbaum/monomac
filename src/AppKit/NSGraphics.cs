@@ -21,11 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System.Runtime.InteropServices;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
-using MonoMac;
+using CoreGraphics;
+using Foundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -42,7 +41,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public static class NSGraphics {
 		public static readonly nfloat White = 1;
 		public static readonly nfloat Black = 0;

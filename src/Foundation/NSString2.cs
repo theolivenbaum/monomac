@@ -28,7 +28,7 @@ using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -45,7 +45,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSString {
 		const string selDataUsingEncodingAllow = "dataUsingEncoding:allowLossyConversion:";

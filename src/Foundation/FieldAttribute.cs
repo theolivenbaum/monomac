@@ -28,7 +28,7 @@
 //
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	[AttributeUsage (AttributeTargets.Property)]
 	public class FieldAttribute : Attribute {
 		public FieldAttribute (string symbolName) {

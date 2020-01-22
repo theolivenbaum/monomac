@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
 	/// <summary>
 	/// Enumerates available window borders.

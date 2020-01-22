@@ -8,9 +8,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreGraphics;
+using CoreGraphics;
+using ObjCRuntime;
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CATransform3D {

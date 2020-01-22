@@ -24,15 +24,15 @@
 //
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreAnimation;
-using MonoMac.CoreImage;
-using MonoMac.CoreVideo;
+using Foundation;
+using AppKit;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreAnimation;
+using CoreImage;
+using CoreVideo;
 
-namespace MonoMac.QuartzComposer {
+namespace QuartzComposer {
 
 	[BaseType (typeof (NSObject))]
 	interface QCComposition {

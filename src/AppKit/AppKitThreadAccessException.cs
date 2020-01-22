@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoMac.AppKit
+namespace AppKit
 {
 	public class AppKitThreadAccessException : Exception
 	{

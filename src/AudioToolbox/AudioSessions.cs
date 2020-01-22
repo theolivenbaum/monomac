@@ -29,9 +29,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
+using CoreFoundation;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public enum AudioSessionErrors {
 		None                      = 0,

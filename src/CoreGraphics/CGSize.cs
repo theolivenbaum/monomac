@@ -39,7 +39,7 @@ using nuint = System.UInt32;
 using nfloat = System.Single;
 #endif
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
     [StructLayout(LayoutKind.Sequential)]
     public struct CGSize {
 	

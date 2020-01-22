@@ -28,9 +28,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NSDecimal {
 		public int fields;

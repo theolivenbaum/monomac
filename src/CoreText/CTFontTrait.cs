@@ -28,11 +28,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	[Since (3,2)]
 	public static class CTFontTraitKey {

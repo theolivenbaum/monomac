@@ -24,12 +24,12 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 #if !MONOMAC
 using MonoTouch.UIKit;
 using MonoTouch.CoreAnimation;
 #endif
-using MonoMac.CoreGraphics;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public class NSObjectFlag {
 		public static readonly NSObjectFlag Empty;
 		
@@ -476,15 +476,15 @@ namespace MonoMac.Foundation {
 				throw new ArgumentNullException ("keyPath");
 #if MONOMAC
 			if (IsDirectBinding) {
-				MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetValueForKeyPath_Handle, handle, keyPath.Handle);
+				ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, selSetValueForKeyPath_Handle, handle, keyPath.Handle);
 			} else {
-				MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetValueForKeyPath_Handle, handle, keyPath.Handle);
+				ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, selSetValueForKeyPath_Handle, handle, keyPath.Handle);
 			}
 #else
 			if (IsDirectBinding) {
-				MonoMac.ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetValueForKeyPath_), handle, keyPath.Handle);
+				ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle (selSetValueForKeyPath_), handle, keyPath.Handle);
 			} else {
-				MonoMac.ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetValueForKeyPath_), handle, keyPath.Handle);
+				ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (this.SuperHandle, Selector.GetHandle (selSetValueForKeyPath_), handle, keyPath.Handle);
 			}
 #endif
 		}

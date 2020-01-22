@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreServices.CFHTTPStream
+// CoreServices.CFHTTPStream
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -27,11 +27,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreServices {
+namespace CoreServices {
 
 	public class CFHTTPStream : CFReadStream {
 		static readonly NSString _AttemptPersistentConnection;

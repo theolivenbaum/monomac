@@ -23,9 +23,9 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public class SelectorMarshaler : ICustomMarshaler {
 		static SelectorMarshaler marshaler;
 

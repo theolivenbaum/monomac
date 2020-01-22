@@ -30,11 +30,11 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using MonoMac.CoreServices;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using CoreServices;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	[Flags]
 	public enum CFStreamEventType {

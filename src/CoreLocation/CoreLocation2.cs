@@ -29,9 +29,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.CoreLocation {
+namespace CoreLocation {
 
 	public partial class CLLocation {
 		public static readonly double AccuracyBest;

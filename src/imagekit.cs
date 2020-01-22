@@ -27,13 +27,13 @@
 // imagekit.cs: Bindings for the Image Kit API
 //
 using System;
-using MonoMac.AppKit;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreImage;
-//using MonoMac.ImageCaptureCore;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreAnimation;
+using AppKit;
+using Foundation;
+using ObjCRuntime;
+using CoreImage;
+//using ImageCaptureCore;
+using CoreGraphics;
+using CoreAnimation;
 
 #if MAC64
 using nint = System.Int64;
@@ -50,7 +50,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.ImageKit {
+namespace ImageKit {
 
 	[BaseType (typeof (NSView), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (IKCameraDeviceViewDelegate)})]
 	public interface IKCameraDeviceView {

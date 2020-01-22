@@ -27,12 +27,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreVideo;
+using Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreVideo;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	// Wrong binding (PixelFormat is CoreVideo), keeping just to be compatible
 	public partial class AVVideoSettings {

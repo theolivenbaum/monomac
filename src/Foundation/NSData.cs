@@ -27,7 +27,7 @@
 //
 //
 using System;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections;
@@ -49,7 +49,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSData : IEnumerable, IEnumerable<byte> {
 		
 		// some API, like SecItemCopyMatching, returns a retained NSData

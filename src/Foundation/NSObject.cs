@@ -27,9 +27,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	//[StructLayout(LayoutKind.Sequential)]
 	public partial class NSObject : INativeObject, IDisposable {
 		public static readonly Assembly MonoMacAssembly = typeof (NSObject).Assembly;
@@ -43,10 +43,10 @@ namespace MonoMac.Foundation {
 			if (alloced && handle == IntPtr.Zero && Class.ThrowOnInitFailure) {
 				if (ClassHandle == IntPtr.Zero)
 					throw new Exception (string.Format ("Could not create an native instance of the type '{0}': the native class hasn't been loaded.\n" +
-					                                    "It is possible to ignore this condition by setting MonoMac.ObjCRuntime.Class.ThrowOnInitFailure to false.",
+					                                    "It is possible to ignore this condition by setting ObjCRuntime.Class.ThrowOnInitFailure to false.",
 					                                    GetType ().FullName));
 				throw new Exception (string.Format ("Failed to create a instance of the native type '{0}'.\n" +
-				                                    "It is possible to ignore this condition by setting MonoMac.ObjCRuntime.Class.ThrowOnInitFailure to false.",
+				                                    "It is possible to ignore this condition by setting ObjCRuntime.Class.ThrowOnInitFailure to false.",
 				                                    new Class (ClassHandle).Name));
 			}
 

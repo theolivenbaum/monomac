@@ -27,11 +27,11 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
 
-namespace MonoMac.MobileCoreServices {
+namespace MobileCoreServices {
 	
 	public class UTType {
 		

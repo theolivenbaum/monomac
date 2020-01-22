@@ -29,11 +29,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AddressBook {
+namespace AddressBook {
 
 	public enum ABRecordType : uint {
 		Person = 0,

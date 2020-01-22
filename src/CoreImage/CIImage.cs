@@ -23,13 +23,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using Foundation;
+using CoreFoundation;
 #if !MONOMAC
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 #else
-using MonoMac.CoreGraphics;
+using CoreGraphics;
 #endif
 
 #if MAC64
@@ -48,7 +48,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.CoreImage {
+namespace CoreImage {
 	public class CIAutoAdjustmentFilterOptions {
 
 		// The default value is true.

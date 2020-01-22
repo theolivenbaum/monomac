@@ -27,13 +27,13 @@
 //
 //
 using System;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreMedia;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using CoreGraphics;
+using CoreMedia;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public enum NSCalendarType {
 		Gregorian, Buddhist, Chinese, Hebrew, Islamic, IslamicCivil, Japanese, RepublicOfChina, Persian, Indian, ISO8601
 	}

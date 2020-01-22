@@ -28,11 +28,11 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.AudioUnit;
+using CoreFoundation;
+using Foundation;
+using AudioUnit;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioClassDescription

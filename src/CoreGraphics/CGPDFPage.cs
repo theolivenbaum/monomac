@@ -27,10 +27,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 
 	public partial class CGPDFPage : INativeObject, IDisposable {
 		internal IntPtr handle;

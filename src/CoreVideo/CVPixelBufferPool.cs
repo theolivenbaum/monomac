@@ -9,11 +9,11 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreVideo {
+namespace CoreVideo {
 
 	[Since (4,0)]
 	public class CVPixelBufferPool : INativeObject, IDisposable {

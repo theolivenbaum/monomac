@@ -27,9 +27,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MonoMac.AudioToolbox;
+using AudioToolbox;
 
-namespace MonoMac.AudioUnitWrapper
+namespace AudioUnitWrapper
 {
     [Obsolete ("Use AudioConverter")]
     public class _AudioConverterEventArgs : EventArgs
@@ -37,14 +37,14 @@ namespace MonoMac.AudioUnitWrapper
         #region Variables
         public uint NumberDataPackets;
         public readonly AudioBufferList Data;
-        public readonly MonoMac.AudioToolbox.AudioStreamPacketDescription[] DataPacketDescription;
+        public readonly AudioToolbox.AudioStreamPacketDescription[] DataPacketDescription;
         #endregion
 
         #region Constructor
         public _AudioConverterEventArgs(
             uint _NumberDataPackets,
             AudioBufferList _Data,
-            MonoMac.AudioToolbox.AudioStreamPacketDescription[] _DataPacketDescription)
+            AudioToolbox.AudioStreamPacketDescription[] _DataPacketDescription)
         {
             NumberDataPackets = _NumberDataPackets;
             Data = _Data;

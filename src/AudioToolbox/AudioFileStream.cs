@@ -31,13 +31,14 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
 using OSStatus = System.Int32;
 using AudioFileStreamID = System.IntPtr;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	[Flags]
 	public enum AudioFileStreamPropertyFlag {

@@ -29,10 +29,10 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-//using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+//using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	[StructLayout (LayoutKind.Sequential)]
 	public struct BlockDescriptor {

@@ -29,10 +29,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public abstract class DictionaryContainer
 	{

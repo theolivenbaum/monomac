@@ -31,9 +31,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSOrderedSet : IEnumerable<NSObject> {
 		internal const string selSetWithArray = "orderedSetWithArray:";
@@ -65,7 +65,7 @@ namespace MonoMac.Foundation {
 		public static NSOrderedSet MakeNSOrderedSet<T> (T [] values) where T : NSObject
 		{
 			NSArray a = NSArray.FromNSObjects (values);
-			return Runtime.GetNSObject<NSOrderedSet> (MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (class_ptr, Selector.GetHandle (selSetWithArray), a.Handle));
+			return Runtime.GetNSObject<NSOrderedSet> (ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (class_ptr, Selector.GetHandle (selSetWithArray), a.Handle));
 		}
 
 		public IEnumerator<NSObject> GetEnumerator ()

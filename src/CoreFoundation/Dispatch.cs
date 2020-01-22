@@ -31,10 +31,10 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using Foundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	public enum DispatchQueuePriority {
 		High = 2,

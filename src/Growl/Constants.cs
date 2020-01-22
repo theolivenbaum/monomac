@@ -25,11 +25,11 @@
 // Constants.cs: Constants for the Growl Framework
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.AppKit;
+using Foundation;
+using ObjCRuntime;
+using AppKit;
 
-namespace MonoMac.Growl {
+namespace Growl {
     public static class RegistrationUserInfoKeys {
         static public string ApplicationName = "ApplicationName";
         static public string ApplicationId = "ApplicationId";

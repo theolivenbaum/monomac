@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public enum NSUserDefaultsType {
 		UserName,

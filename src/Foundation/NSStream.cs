@@ -26,7 +26,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSStream {
 		public NSObject this [NSString key] {
 			get {

@@ -29,14 +29,14 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreGraphics;
+using Foundation;
 
 using CGGlyph = System.UInt16;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	public enum CTFontManagerScope  {
 		None = 0, Process = 1, User = 2, Session = 3

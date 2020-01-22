@@ -27,11 +27,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreGraphics;
+using ObjCRuntime;
 
-namespace MonoMac.CoreMidi {
+namespace CoreMidi {
 	
 #if !MONOMAC
 	[BaseType (typeof (NSObject), Name="MIDINetworkHost")]

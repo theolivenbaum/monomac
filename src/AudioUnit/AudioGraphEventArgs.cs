@@ -31,14 +31,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MonoMac.AudioToolbox;
+using AudioToolbox;
 
-namespace MonoMac.AudioUnit
+namespace AudioUnit
 {
 	[Obsolete]
     public class AudioGraphEventArgs : AudioUnitEventArgs {
 	    public AudioGraphEventArgs(AudioUnitRenderActionFlags actionFlags,
-				       MonoMac.AudioToolbox.AudioTimeStamp timeStamp,
+				       AudioToolbox.AudioTimeStamp timeStamp,
 				       int busNumber,
 				       int numberFrames,
 				       AudioBufferList data)

@@ -27,11 +27,11 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	public class AVUrlAssetOptions : DictionaryContainer
 	{

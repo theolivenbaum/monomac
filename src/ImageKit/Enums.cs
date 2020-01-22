@@ -28,7 +28,7 @@
 //
 using System;
 
-namespace MonoMac.ImageKit {
+namespace ImageKit {
 
 	public enum IKCameraDeviceViewDisplayMode {
 		Table = 0,

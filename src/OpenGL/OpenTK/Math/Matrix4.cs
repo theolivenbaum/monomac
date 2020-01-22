@@ -25,7 +25,7 @@ SOFTWARE.
 using System;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     /// <summary>
     /// Represents a 4x4 Matrix

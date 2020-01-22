@@ -27,7 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -45,7 +45,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	
 	public partial class NSIndexSet : IEnumerable, IEnumerable<nuint> {
 

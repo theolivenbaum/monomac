@@ -1,12 +1,12 @@
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreAnimation;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
+using CoreAnimation;
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSMenu {
 		object __mt_items_var;
 		

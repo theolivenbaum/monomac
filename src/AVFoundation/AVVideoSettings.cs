@@ -27,12 +27,12 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreVideo;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using CoreVideo;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	public enum AVVideoCodec
 	{

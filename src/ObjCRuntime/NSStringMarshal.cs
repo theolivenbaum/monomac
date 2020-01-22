@@ -1,9 +1,9 @@
 // Copyright 2011, 2012 Xamarin Inc
 using System.Runtime.InteropServices;
 using System;
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	[StructLayout (LayoutKind.Sequential)]
 	public unsafe struct NSStringStruct {

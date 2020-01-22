@@ -28,9 +28,10 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.AudioToolbox;
+using AudioToolbox;
+using ObjCRuntime;
 
-namespace MonoMac.AudioUnitWrapper
+namespace AudioUnitWrapper
 {
     [Obsolete ("Use AudioConverter")]
     public class _AudioConverter : IDisposable
@@ -67,7 +68,7 @@ namespace MonoMac.AudioUnitWrapper
         #endregion
 
         #region Private methods
-        [MonoMac.MonoPInvokeCallback(typeof(AudioConverterComplexInputDataProc))]
+        [MonoPInvokeCallback(typeof(AudioConverterComplexInputDataProc))]
         static int complexInputDataProc(
             IntPtr inAudioConverrter,
             ref uint ioNumberDataPackets,
@@ -142,7 +143,7 @@ namespace MonoMac.AudioUnitWrapper
             IntPtr inUserData
             );
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterNew")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterNew")]
         static extern int AudioConverterFillComplexBuffer(
             IntPtr 		inAudioConverter,
             AudioConverterComplexInputDataProc	inInputDataProc,
@@ -151,19 +152,19 @@ namespace MonoMac.AudioUnitWrapper
             AudioBufferList outOutputData,
             AudioStreamPacketDescription[] outPacketDescription);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterNew")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterNew")]
         static extern int AudioConverterNew(
-            ref MonoMac.AudioToolbox.AudioStreamBasicDescription inSourceFormat,
-            ref MonoMac.AudioToolbox.AudioStreamBasicDescription inDestinationFormat,
+            ref AudioToolbox.AudioStreamBasicDescription inSourceFormat,
+            ref AudioToolbox.AudioStreamBasicDescription inDestinationFormat,
             IntPtr outAudioConverter);
 
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterSetProperty")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterSetProperty")]
         static extern int AudioConverterSetProperty(IntPtr inAudioConverter,
             [MarshalAs(UnmanagedType.U4)] AudioConverterPropertyIDType inID,
             uint inDataSize,
             IntPtr inPrppertyData            
             );
-        [DllImport(MonoMac.Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterSetProperty")]
+        [DllImport(Constants.AudioToolboxLibrary, EntryPoint = "AudioConverterSetProperty")]
         static extern int AudioConverterSetProperty(IntPtr inAudioConverter,
             [MarshalAs(UnmanagedType.U4)] AudioConverterPropertyIDType inID,
             uint inDataSize,

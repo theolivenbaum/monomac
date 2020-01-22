@@ -21,7 +21,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-namespace MonoMac {
+namespace ObjCRuntime {
 	public static partial class Constants {
 		public const string AddressBookLibrary = "/System/Library/Frameworks/AddressBook.framework/AddressBook";
 		public const string AppKitLibrary = "/System/Library/Frameworks/AppKit.framework/AppKit";

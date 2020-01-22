@@ -33,16 +33,16 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
 using OSStatus = System.Int32;
 using AudioQueueParameterValue = System.Single;
 using AudioQueueRef = System.IntPtr;
 using AudioQueueTimelineRef = System.IntPtr;
 
-namespace MonoMac.AudioToolbox {
+namespace AudioToolbox {
 
 	public enum AudioQueueStatus {
 		Ok =  0,

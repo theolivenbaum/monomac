@@ -27,12 +27,12 @@
 using System;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
+using ObjCRuntime;
+using Foundation;
+using CoreFoundation;
 
 #if !(GENERATOR || MONOMAC)
-using MonoMac.CoreText;
+using CoreText;
 #endif
 
 #if MAC64
@@ -50,7 +50,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 
 	public class CGFont : INativeObject, IDisposable {
 		internal IntPtr handle;

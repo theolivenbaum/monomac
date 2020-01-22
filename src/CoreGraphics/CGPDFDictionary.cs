@@ -29,9 +29,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
+using Foundation;
+using ObjCRuntime;
+using CoreFoundation;
 
 #if MAC64
 using nint = System.Int64;
@@ -48,7 +48,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 	public class CGPDFDictionary : INativeObject {
 		internal IntPtr handle;
 

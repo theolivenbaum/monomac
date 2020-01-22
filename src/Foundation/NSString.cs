@@ -25,10 +25,10 @@ using System;
 using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public enum NSStringEncoding : uint {
 		ASCIIStringEncoding = 1,
 		NEXTSTEP = 2,

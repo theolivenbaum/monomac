@@ -21,9 +21,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -41,7 +41,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSInputStream : NSStream {
 		const string selReadMaxLength = "read:maxLength:";
 

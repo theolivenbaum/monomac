@@ -28,8 +28,9 @@
 
 using System;
 using System.Runtime.InteropServices;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation
+namespace Foundation
 {
 	public static class NSSearchPath
 	{

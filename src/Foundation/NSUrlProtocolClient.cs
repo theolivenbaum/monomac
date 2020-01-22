@@ -28,7 +28,7 @@
 
 using System;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -45,7 +45,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public sealed class NSUrlProtocolClient : NSObject
 	{
 		public NSUrlProtocolClient (IntPtr handle)

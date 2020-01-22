@@ -26,7 +26,7 @@
 
 using System;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	public class ThreadSafeAttribute : Attribute {
 	

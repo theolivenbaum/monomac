@@ -30,17 +30,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreMedia;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
+using CoreGraphics;
+using CoreMedia;
 
 #if MONOMAC
-using MonoMac.AppKit;
+using AppKit;
 #else
-using MonoMac.CoreLocation;
-using MonoMac.UIKit;
+using CoreLocation;
+using UIKit;
 #endif
 
 using System;
@@ -62,7 +62,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 
 
-namespace MonoMac.Foundation
+namespace Foundation
 {
 	public delegate nint NSComparator (NSObject obj1, NSObject obj2);
 	public delegate void NSAttributedRangeCallback (NSDictionary attrs, NSRange range, ref bool stop);
@@ -3236,7 +3236,7 @@ namespace MonoMac.Foundation
 #if !MONOMAC
 		// Extension from iOS5, NewsstandKit
 		[Export ("newsstandAssetDownload")]
-		MonoTouch.NewsstandKit.NKAssetDownload NewsstandAssetDownload { get; }
+		NewsstandKit.NKAssetDownload NewsstandAssetDownload { get; }
 #endif
 	}
 
@@ -5552,19 +5552,19 @@ namespace MonoMac.Foundation
 		CMTimeRange CMTimeRangeValue { get; }
 		
 		[Export ("CGAffineTransformValue")]
-		MonoMac.CoreGraphics.CGAffineTransform CGAffineTransformValue { get; }
+		CoreGraphics.CGAffineTransform CGAffineTransformValue { get; }
 		
 		[Export ("UIEdgeInsetsValue")]
-		MonoMac.UIKit.UIEdgeInsets UIEdgeInsetsValue { get; }
+		UIKit.UIEdgeInsets UIEdgeInsetsValue { get; }
 
 		[Export ("valueWithCGAffineTransform:")][Static]
-		NSValue FromCGAffineTransform (MonoMac.CoreGraphics.CGAffineTransform tran);
+		NSValue FromCGAffineTransform (CoreGraphics.CGAffineTransform tran);
 
 		[Export ("valueWithUIEdgeInsets:")][Static]
-		NSValue FromUIEdgeInsets (MonoMac.UIKit.UIEdgeInsets insets);
+		NSValue FromUIEdgeInsets (UIKit.UIEdgeInsets insets);
 
 		[Export ("valueWithUIOffset:")][Static]
-		NSValue FromUIOffset (MonoMac.UIKit.UIOffset insets);
+		NSValue FromUIOffset (UIKit.UIOffset insets);
 
 		[Export ("UIOffsetValue")]
 		UIOffset UIOffsetValue { get; }
@@ -5588,22 +5588,22 @@ namespace MonoMac.Foundation
 		NSValue FromPointF (System.Drawing.PointF point);
 		
 		[Export ("valueWithCATransform3D:")][Static]
-		NSValue FromCATransform3D (MonoMac.CoreAnimation.CATransform3D transform);
+		NSValue FromCATransform3D (CoreAnimation.CATransform3D transform);
 
 		[Export ("CATransform3DValue")]
-		MonoMac.CoreAnimation.CATransform3D CATransform3DValue { get; }
+		CoreAnimation.CATransform3D CATransform3DValue { get; }
 
 		[Static, Export ("valueWithMKCoordinate:")]
-		NSValue FromMKCoordinate (MonoTouch.CoreLocation.CLLocationCoordinate2D coordinate);
+		NSValue FromMKCoordinate (CoreLocation.CLLocationCoordinate2D coordinate);
 
 		[Static, Export ("valueWithMKCoordinateSpan:")]
-		NSValue FromMKCoordinateSpan (MonoTouch.MapKit.MKCoordinateSpan coordinateSpan);
+		NSValue FromMKCoordinateSpan (MapKit.MKCoordinateSpan coordinateSpan);
 
 		[Export ("MKCoordinateValue")]
-		MonoTouch.CoreLocation.CLLocationCoordinate2D CoordinateValue { get; }
+		CoreLocation.CLLocationCoordinate2D CoordinateValue { get; }
 		
 		[Export ("MKCoordinateSpanValue")]
-		MonoTouch.MapKit.MKCoordinateSpan CoordinateSpanValue { get; }
+		MapKit.MKCoordinateSpan CoordinateSpanValue { get; }
 #endif
 	}
 	

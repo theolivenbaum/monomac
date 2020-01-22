@@ -27,12 +27,12 @@
 //
 //
 #if !MONOMAC
-using MonoMac.UIKit;
+using UIKit;
 #endif
 
-using MonoMac.CoreText;
+using CoreText;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSMutableAttributedString {
 

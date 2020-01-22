@@ -21,13 +21,13 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.AudioToolbox;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using AudioToolbox;
+using ObjCRuntime;
 using System;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	[Advice ("Use AudioSettings instead")]
 	public class AVAudioRecorderSettings {

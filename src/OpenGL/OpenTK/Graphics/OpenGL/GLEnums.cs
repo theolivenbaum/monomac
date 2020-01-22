@@ -27,7 +27,7 @@
 
 using System;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     #pragma warning disable 1591
 

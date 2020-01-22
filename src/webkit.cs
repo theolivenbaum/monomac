@@ -23,10 +23,10 @@
 //
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.CoreGraphics;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using AppKit;
+using CoreGraphics;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -43,7 +43,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.WebKit {
+namespace WebKit {
 
 	[BaseType (typeof (WebScriptObject), Name="DOMObject")]
 	[DisableDefaultCtor] // An uncaught exception was raised: +[DOMObject init]: should never be used

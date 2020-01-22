@@ -6,8 +6,8 @@
 //
 
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 using System.Runtime.InteropServices;
 
 #if MAC64
@@ -25,7 +25,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSGradient : NSObject
 	{
 		static IntPtr selInitWithColorsAtLocationsColorSpace = Selector.GetHandle ("initWithColors:atLocations:colorSpace:");
@@ -70,9 +70,9 @@ namespace MonoMac.AppKit {
 			Marshal.Copy(locations,0, pNativeFloatArray, locations.Length);
 			
 			if (IsDirectBinding) {
-				Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr_IntPtr (this.Handle, selInitWithColorsAtLocationsColorSpace, nsa_colorArray.Handle, pNativeFloatArray, colorSpace.Handle);
+				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_IntPtr_IntPtr (this.Handle, selInitWithColorsAtLocationsColorSpace, nsa_colorArray.Handle, pNativeFloatArray, colorSpace.Handle);
 			} else {
-				Handle = MonoMac.ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr_IntPtr_IntPtr (this.SuperHandle, selInitWithColorsAtLocationsColorSpace, nsa_colorArray.Handle, pNativeFloatArray, colorSpace.Handle);
+				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr_IntPtr_IntPtr (this.SuperHandle, selInitWithColorsAtLocationsColorSpace, nsa_colorArray.Handle, pNativeFloatArray, colorSpace.Handle);
 			}
 			nsa_colorArray.Dispose ();
 			Marshal.FreeHGlobal(pNativeFloatArray);

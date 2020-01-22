@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreFoundation.CFIndex
+// CoreFoundation.CFIndex
 //
 // Authors:
 //      Martin Baulig (martin.baulig@gmail.com)
@@ -28,7 +28,7 @@
 //
 using System;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	public struct CFIndex {
 		IntPtr value;

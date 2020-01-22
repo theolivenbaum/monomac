@@ -27,9 +27,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Linq;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime
+namespace ObjCRuntime
 {
     internal abstract class NativeImplementationBuilder
     {

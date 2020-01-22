@@ -27,11 +27,11 @@ using System;
 using System.Drawing;
 using System.ComponentModel;
 
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.CoreVideo;
-using MonoMac.CoreGraphics;
-using MonoMac.OpenGL;
+using Foundation;
+using AppKit;
+using CoreVideo;
+using CoreGraphics;
+using OpenGL;
 
 #if MAC64
 using nint = System.Int64;
@@ -48,9 +48,9 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
-	public class MonoMacGameView : MonoMac.AppKit.NSView, IGameWindow
+	public class MonoMacGameView : AppKit.NSView, IGameWindow
 	{
 		bool disposed;
 		NSOpenGLContext openGLContext;

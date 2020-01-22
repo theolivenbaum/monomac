@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 using System.Runtime.InteropServices;
 
 #if MAC64
@@ -19,7 +19,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.AppKit {
+namespace AppKit {
 	public partial class NSColor {
 
 		public static NSColor FromColorSpace (NSColorSpace space, nfloat[] components)

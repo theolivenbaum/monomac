@@ -27,10 +27,10 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
+using CoreFoundation;
+using ObjCRuntime;
+using Foundation;
+using CoreGraphics;
 
 #if MAC64
 using nint = System.Int64;
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreVideo {
+namespace CoreVideo {
 
 	[Since (4,0)]
 	public class CVImageBuffer : CVBuffer {

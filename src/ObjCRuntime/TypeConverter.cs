@@ -4,9 +4,9 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 
-using MonoMac.Foundation;
+using Foundation;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	public static class TypeConverter {
 		/*

@@ -10,9 +10,9 @@ using System.Reflection;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSUrlConnection {
 		const string selSendSynchronousRequestReturningResponseError = "sendSynchronousRequest:returningResponse:error:";

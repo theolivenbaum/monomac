@@ -38,11 +38,11 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
 
-namespace MonoMac.CoreMidi {
+namespace CoreMidi {
 
 	public enum MidiError {
 		Ok = 0,

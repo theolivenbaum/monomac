@@ -8,10 +8,10 @@
 // Copyright 2011, Xamarin, Inc.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreData
+namespace CoreData
 {
 	[BaseType (typeof (NSPersistentStore))]
 	// Objective-C exception thrown.  Name: NSInternalInconsistencyException Reason: NSMappedObjectStore must be initialized with initWithPersistentStoreCoordinator:configurationName:URL:options

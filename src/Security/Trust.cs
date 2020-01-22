@@ -32,11 +32,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using Foundation;
 
-namespace MonoMac.Security {
+namespace Security {
 	public class SecTrust : INativeObject, IDisposable {
 		IntPtr handle;
 

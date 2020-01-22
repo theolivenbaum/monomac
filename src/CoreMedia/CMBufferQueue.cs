@@ -11,16 +11,16 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using MonoMac;
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
 using OSStatus = System.Int32;
 
 // FIXME64: this will change on 64 bit builds
 //
 using CMItemCount = System.Int32;
 
-namespace MonoMac.CoreMedia {
+namespace CoreMedia {
 	
 	public delegate CMTime CMBufferGetTime (INativeObject buffer);
 	public delegate bool   CMBufferGetBool (INativeObject buffer);

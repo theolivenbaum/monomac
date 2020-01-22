@@ -31,16 +31,16 @@
 
 using System;
 #if MONOMAC
-using MonoMac.AppKit;
-using MonoMac.CoreVideo;
-using MonoMac.CoreImage;
-using MonoMac.OpenGL;
+using AppKit;
+using CoreVideo;
+using CoreImage;
+using OpenGL;
 #else
-using MonoMac.UIKit;
+using UIKit;
 #endif
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using CoreGraphics;
+using ObjCRuntime;
 
 #if MAC64
 using nint = System.Int64;
@@ -57,7 +57,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 #if false
 	public interface CAMediaTiming {

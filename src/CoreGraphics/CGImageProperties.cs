@@ -27,15 +27,15 @@
 
 using System;
 
-using MonoMac.Foundation;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreImage;
+using Foundation;
+using CoreFoundation;
+using ObjCRuntime;
+using CoreImage;
 #if !COREBUILD
-using Keys = MonoMac.ImageIO.CGImageProperties;
+using Keys = ImageIO.CGImageProperties;
 #endif
 
-namespace MonoMac.CoreGraphics {
+namespace CoreGraphics {
 	public enum CGImageColorModel
 	{
 		RGB,

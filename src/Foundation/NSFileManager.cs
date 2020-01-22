@@ -26,10 +26,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 using System;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public enum NSFileType {
 		Directory, Regular, SymbolicLink, Socket, CharacterSpecial, BlockSpecial, Unknown

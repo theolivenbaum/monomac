@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     /// <summary>
     /// 4-component Vector of the Half type. Occupies 8 Byte total.

@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreFoundation.CFSocket
+// CoreFoundation.CFSocket
 //
 // Authors:
 //      Martin Baulig (martin.baulig@xamarin.com)
@@ -31,10 +31,10 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
-using MonoMac.ObjCRuntime;
+using CoreFoundation;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	[Flags]
 	public enum CFSocketCallBackType {

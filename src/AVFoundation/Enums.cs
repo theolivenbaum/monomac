@@ -23,10 +23,10 @@
 //
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
+using Foundation;
+using ObjCRuntime;
 
-namespace MonoMac.AVFoundation {
+namespace AVFoundation {
 
 	public enum AVAudioQuality {
 		Min = 0,

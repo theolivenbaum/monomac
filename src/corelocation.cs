@@ -8,16 +8,16 @@
 // Copyright 2009, Novell, Inc.
 // Copyright 2011, Xamarin, Inc.
 //
-using MonoMac.ObjCRuntime;
-using MonoMac.Foundation;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreLocation;
+using ObjCRuntime;
+using Foundation;
+using CoreGraphics;
+using CoreLocation;
 #if !MONOMAC
-using MonoMac.UIKit;
+using UIKit;
 #endif
 using System;
 
-namespace MonoMac.CoreLocation {
+namespace CoreLocation {
 
 #if !MONOMAC
 	[BaseType (typeof (NSObject))]

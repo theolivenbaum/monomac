@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace MonoMac.OpenGL
+namespace OpenGL
 {
     /// <summary>
     /// Represents a Quaternion.

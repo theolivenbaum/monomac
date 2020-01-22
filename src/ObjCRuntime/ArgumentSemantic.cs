@@ -1,4 +1,4 @@
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 	public enum ArgumentSemantic {
 		None = -1,
 		Assign = 0,

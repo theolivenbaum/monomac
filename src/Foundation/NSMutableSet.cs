@@ -31,9 +31,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	public partial class NSMutableSet : IEnumerable<NSObject> {
 		public NSMutableSet (NSObject [] objs) : this (NSArray.FromNSObjects (objs))

@@ -31,11 +31,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 	public partial class CAEmitterCell {
 		public CGImage Contents {
 			get {

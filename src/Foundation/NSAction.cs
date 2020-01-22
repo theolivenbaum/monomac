@@ -24,9 +24,9 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 
 	// Use this for synchronous operations
 	[Register ("__MonoMac_NSActionDispatcher")]

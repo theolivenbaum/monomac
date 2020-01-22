@@ -1,5 +1,5 @@
 //
-// MonoMac.CoreFoundation.CFDataBuffer
+// CoreFoundation.CFDataBuffer
 //
 // Authors:
 //      Martin Baulig (martin.baulig@xamarin.com)
@@ -28,9 +28,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.CoreFoundation;
+using CoreFoundation;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 
 	class CFDataBuffer : IDisposable {
 		byte[] buffer;

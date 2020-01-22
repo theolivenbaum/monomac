@@ -29,11 +29,12 @@
 //
 //
 using System;
-using MonoMac.Foundation;
+using Foundation;
 using System.Runtime.InteropServices;
-using MonoMac.CoreGraphics;
+using CoreGraphics;
+using ObjCRuntime;
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 	partial class CAAnimation {
 		const string Linear = "linear";

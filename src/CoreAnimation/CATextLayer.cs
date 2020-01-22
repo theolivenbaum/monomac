@@ -30,16 +30,16 @@
 
 using System;
 
-using MonoMac.Foundation; 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreText;
+using Foundation; 
+using ObjCRuntime;
+using CoreGraphics;
+using CoreFoundation;
+using CoreText;
 #if MONOMAC
-using MonoMac.AppKit;
+using AppKit;
 #endif
 
-namespace MonoMac.CoreAnimation {
+namespace CoreAnimation {
 
 	public partial class CATextLayer {
 		public virtual NSAttributedString AttributedString {

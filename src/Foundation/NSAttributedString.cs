@@ -26,10 +26,10 @@
 //
 
 using System;
-using MonoMac.CoreText;
-using MonoMac.ObjCRuntime;
+using CoreText;
+using ObjCRuntime;
 #if !MONOMAC
-using MonoMac.UIKit;
+using UIKit;
 #endif
 
 #if MAC64
@@ -47,7 +47,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.Foundation {
+namespace Foundation {
 	public partial class NSAttributedString {
 
 		public NSAttributedString (string str, CTStringAttributes attributes)

@@ -28,12 +28,12 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreFoundation;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
+using ObjCRuntime;
+using CoreFoundation;
+using CoreGraphics;
+using Foundation;
 
-namespace MonoMac.CoreText {
+namespace CoreText {
 
 	public partial class CTFont : INativeObject, IDisposable {
 		internal IntPtr handle;

@@ -27,10 +27,10 @@
 // PdfKit.cs: Bindings for the PdfKit API
 //
 using System;
-using MonoMac.AppKit;
-using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
-using MonoMac.CoreGraphics;
+using AppKit;
+using Foundation;
+using ObjCRuntime;
+using CoreGraphics;
 
 // Verify/Test Delegate Models
 // Check for missing NullAllowed on all object properties
@@ -53,7 +53,7 @@ using CGRect = System.Drawing.RectangleF;
 #endif
 #endif
 
-namespace MonoMac.PdfKit {
+namespace PdfKit {
 
 	[BaseType (typeof (NSObject), Name="PDFAction")]
 	public interface PdfAction {

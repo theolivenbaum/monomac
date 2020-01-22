@@ -26,7 +26,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace MonoMac.ObjCRuntime {
+namespace ObjCRuntime {
 
 	// mono boxes the IntPtr for each lookup creating huge memory allocations
 	struct IntPtrComparer : IEqualityComparer<IntPtr>

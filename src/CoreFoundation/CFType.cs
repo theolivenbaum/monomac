@@ -3,9 +3,9 @@
 //
 using System;
 using System.Runtime.InteropServices;
-using MonoMac.ObjCRuntime;
+using ObjCRuntime;
 
-namespace MonoMac.CoreFoundation {
+namespace CoreFoundation {
 	public class CFType {
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFGetTypeID")]
 		public static extern int GetTypeID (IntPtr typeRef);
