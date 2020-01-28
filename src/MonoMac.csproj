@@ -8,6 +8,7 @@
     <Version>0.0.1</Version>
     <EnableDefaultItems>False</EnableDefaultItems>
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
+    <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -29,36 +30,27 @@
     <Compile Include="@(OpenGlSource)" />
     <Compile Include="@(CFNetworkSource)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net461">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+      <ExcludeAssets>build</ExcludeAssets>
+    </ProjectReference>
+  </ItemGroup>
   
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
   <PropertyGroup>
+    <!-- needs to be after targets as it's obliterated currently (this will be fixed in the future)-->
     <CoreCompileDependsOn>IncludeGeneratedSource;$(CoreCompileDependsOn)</CoreCompileDependsOn>
   </PropertyGroup>
   
-  <Target Name="IncludeGeneratedSource" DependsOnTargets="GenerateApiSource" BeforeTargets="BeforeBuild">
+  <Target Name="IncludeGeneratedSource" BeforeTargets="BeforeBuild">
     <!-- include generated code in output -->
     <ItemGroup>
       <Compile Include="$(GeneratedOutputDir)**\*.cs" />
     </ItemGroup>
    </Target>
   
-  <Target Name="GenerateApiSource" Inputs="$(MSBuildProjectFile)" Outputs="$(GeneratedOutputDir)generated_sources ">
-    <PropertyGroup>
-      <GeneratorBuildProperties>BaseDefines=$(BaseDefines.Replace(";", "%3b"))</GeneratorBuildProperties>
-      <GeneratorBuildProperties>$(GeneratorBuildProperties);Configuration=$(Configuration)</GeneratorBuildProperties>
-      <GeneratorBuildProperties>$(GeneratorBuildProperties);BaseNamespace=MonoMac.ObjCRuntime</GeneratorBuildProperties>
-      <GenIgnoreProperties>TargetFramework;PlatformTarget</GenIgnoreProperties>
-    </PropertyGroup>
-    
-    <ItemGroup>
-      <GeneratorProjects Include="core.csproj" />
-      <GeneratorProjects Include="generator.csproj" />
-    </ItemGroup>
-    
-    <!-- build generator and core apis (if needed) -->
-    <MSBuild Projects="@(GeneratorProjects)" Targets="Build" Properties="$(GeneratorBuildProperties)" TargetAndPropertyListSeparators="%3b" RemoveProperties="$(GenIgnoreProperties)" />
-
-  </Target>
-  
-  </Project>
+</Project>
