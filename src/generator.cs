@@ -2130,7 +2130,7 @@ public class Generator {
 	{
 		for (int i=0; i < tabs; i++)
 			sw.Write ('\t');
-		//sw.WriteLine ("[CompilerGenerated]");
+		sw.WriteLine ("[CompilerGenerated]");
 	}
 	
 	public void print_generated_code ()
