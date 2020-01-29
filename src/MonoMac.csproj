@@ -35,7 +35,6 @@
     <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net461">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
-      <ExcludeAssets>build</ExcludeAssets>
     </ProjectReference>
   </ItemGroup>
   
@@ -44,9 +43,10 @@
   <PropertyGroup>
     <!-- needs to be after targets as it's obliterated currently (this will be fixed in the future)-->
     <CoreCompileDependsOn>IncludeGeneratedSource;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+    <CompileDependsOn>IncludeGeneratedSource;$(CompileDependsOn)</CompileDependsOn>
   </PropertyGroup>
   
-  <Target Name="IncludeGeneratedSource" BeforeTargets="BeforeBuild">
+  <Target Name="IncludeGeneratedSource">
     <!-- include generated code in output -->
     <ItemGroup>
       <Compile Include="$(GeneratedOutputDir)**\*.cs" />
