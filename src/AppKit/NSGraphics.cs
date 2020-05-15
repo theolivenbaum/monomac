@@ -114,7 +114,14 @@ namespace MonoMac.AppKit {
 
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSRectFill")]
 		public extern static void RectFill (CGRect rect);
-		
+
+		[DllImport(Constants.AppKitLibrary)]
+		extern static void NSRectFillUsingOperation(CGRect rect, nuint op);
+		public static void RectFill(CGRect rect, NSCompositingOperation op)
+		{
+			NSRectFillUsingOperation(rect, (nuint)(ulong)op);
+		}
+
 		[DllImport (Constants.AppKitLibrary, EntryPoint="NSRectFillList")]
 		unsafe extern static void RectFillList (CGRect *rects, int count);
 
