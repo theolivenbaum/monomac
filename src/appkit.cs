@@ -3796,6 +3796,8 @@ namespace MonoMac.AppKit {
 		void MouseExited (NSEvent theEvent);
 	}
 
+	public delegate bool NSCustomImageRepDrawingHandler(CGRect dstRect);
+
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSCustomImageRep init]: unrecognized selector sent to instance 0x54a870
 	public partial interface NSCustomImageRep {
@@ -3806,8 +3808,14 @@ namespace MonoMac.AppKit {
 		Selector DrawSelector { get; }
 		
 		[Export ("delegate", ArgumentSemantic.Assign)]  
-		NSObject Delegate { get; }  
-	}	
+		NSObject Delegate { get; }
+
+		[Export("initWithSize:flipped:drawingHandler:")]
+		IntPtr Constructor(CGSize size, bool flipped, NSCustomImageRepDrawingHandler drawingHandler);
+
+		[Export("drawingHandler")]
+		NSCustomImageRepDrawingHandler DrawingHandler { get; }
+	}
 
 	[BaseType (typeof (NSControl), Delegates=new string [] {"WeakDelegate"}, Events=new Type [] {typeof (NSDatePickerCellDelegate)})]
 	public interface NSDatePicker {
@@ -7350,6 +7358,9 @@ namespace MonoMac.AppKit {
 
 		[Internal, Field ("NSImageNameMobileMe")]
 		NSString NSImageNameMobileMe { get; }
+
+		[Static, Export("imageWithSize:flipped:drawingHandler:")]
+		NSImage ImageWithSize (CGSize size, bool flipped, NSCustomImageRepDrawingHandler drawingHandler);
 	}
 
 	[BaseType (typeof (NSObject))]
