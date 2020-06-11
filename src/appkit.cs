@@ -8341,6 +8341,8 @@ namespace MonoMac.AppKit {
 		[Export ("worksWhenModal")]
 		bool WorksWhenModal { get; set; }
 
+		[Export ("initWithContentRect:styleMask:backing:defer:")]
+		IntPtr Constructor (CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType, bool deferCreation);
 	}
 
 	[BaseType (typeof (NSObject))]
