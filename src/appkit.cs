@@ -15274,6 +15274,7 @@ namespace MonoMac.AppKit {
 		NSSelectionDirection KeyViewSelectionDirection ();
 	
 		[Export ("defaultButtonCell")]
+		[NullAllowed]
 		NSButtonCell DefaultButtonCell { get; set; }
 	
 		[Export ("disableKeyEquivalentForDefaultButtonCell")]
