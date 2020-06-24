@@ -43,6 +43,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+ 	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
   </ItemGroup>
 
   <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis)" Outputs="$(GeneratedOutputDir)generated_sources">

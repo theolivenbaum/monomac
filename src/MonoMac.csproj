@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'False'">
     <Reference Include="System.Net.Http" />
+	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == 'True'">
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
