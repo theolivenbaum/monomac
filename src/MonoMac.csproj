@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net461">
+    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net472">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
     </ProjectReference>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
     <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
