@@ -144,6 +144,7 @@
     <SharedSource Include="Foundation/ToString.cs" />
     <SharedSource Include="ImageIO/CGImageSource.cs" />
     <SharedSource Include="ImageIO/CGImageDestination.cs" />
+    <SharedSource Include="MobileCoreServices/UTType.cs" />
     <SharedSource Include="ObjCRuntime/CompileFlagsAttribute.cs" />
     <SharedSource Include="QuickLook/Thumbnail.cs" />
     <SharedSource Include="Security/Enums.cs" />
@@ -238,7 +239,6 @@
     <SharedCoreSource Include="ObjCRuntime/SinceAttribute.cs" />
     <SharedCoreSource Include="ObjCRuntime/ThreadSafeAttribute.cs" />
     <SharedCoreSource Include="ObjCRuntime/TypeConverter.cs" />
-    <SharedCoreSource Include="MobileCoreServices/UTType.cs" />
     <SharedCoreSource Include="MonoNativeFunctionWrapperAttribute.cs" />
     <SharedCoreSource Include="MonoPInvokeCallbackAttribute.cs" />
     <CoreSource Include="Constants.cs" />

@@ -32,9 +32,9 @@ using MonoMac.CoreFoundation;
 using MonoMac.Foundation;
 
 namespace MonoMac.MobileCoreServices {
-	
-	public class UTType {
-		
+
+	public static partial class UTType {
+
 		public static NSString ExportedTypeDeclarationsKey => _ExportedTypeDeclarationsKey ?? (_ExportedTypeDeclarationsKey = GetString("kUTTypeExportedTypeDeclarationsKey"));
 		public static NSString ImportedTypeDeclarationsKey => _ImportedTypeDeclarationsKey ?? (_ImportedTypeDeclarationsKey = GetString("kUTTypeImportedTypeDeclarationsKey"));
 		public static NSString IdentifierKey => _IdentifierKey ?? (_IdentifierKey = GetString("kUTTypeIdentifierKey"));
@@ -45,11 +45,11 @@ namespace MonoMac.MobileCoreServices {
 		public static NSString ReferenceURLKey => _ReferenceURLKey ?? (_ReferenceURLKey = GetString("kUTTypeReferenceURLKey"));
 		public static NSString VersionKey => _VersionKey ?? (_VersionKey = GetString("kUTTypeVersionKey"));
 
-		public static NSString TagClassFilenameExtension => _TagClassFilenameExtension ?? (_TagClassFilenameExtension = GetString("kUTTypeTagClassFilenameExtension"));
-		public static NSString TagClassMIMEType => _TagClassMIMEType ?? (_TagClassMIMEType = GetString("kUTTypeTagClassMIMEType"));
+		public static NSString TagClassFilenameExtension => _TagClassFilenameExtension ?? (_TagClassFilenameExtension = GetString("kUTTagClassFilenameExtension"));
+		public static NSString TagClassMIMEType => _TagClassMIMEType ?? (_TagClassMIMEType = GetString("kUTTagClassMIMEType"));
 #if MONOMAC
-		public static NSString TagClassNSPboardType => _TagClassNSPboardType ?? (_TagClassNSPboardType = GetString("kUTTypeTagClassNSPboardType"));
-		public static NSString TagClassOSType => _TagClassOSType ?? (_TagClassOSType = GetString("kUTTypeTagClassOSType"));
+		public static NSString TagClassNSPboardType => _TagClassNSPboardType ?? (_TagClassNSPboardType = GetString("kUTTagClassNSPboardType"));
+		public static NSString TagClassOSType => _TagClassOSType ?? (_TagClassOSType = GetString("kUTTagClassOSType"));
 #endif
 		public static NSString Item => _Item ?? (_Item = GetString("kUTTypeItem"));
 		public static NSString Content => _Content ?? (_Content = GetString("kUTTypeContent"));
@@ -230,6 +230,181 @@ namespace MonoMac.MobileCoreServices {
 		static NSString GetString(string name)
 		{
 			return Dlfcn.GetStringConstant (handle, name);
+		}
+
+		[iOS (8,0)][Mac (10,10)]
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static int /* Boolean */ UTTypeIsDynamic (IntPtr /* CFStringRef */ handle);
+		
+		[iOS (8,0)][Mac (10,10)]
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static int /* Boolean */ UTTypeIsDeclared (IntPtr /* CFStringRef */ handle);
+
+		[iOS (8,0)][Mac (10,10)]
+		public static bool IsDynamic (string utType)
+		{
+			if (utType == null)
+				throw new ArgumentNullException ("utType");
+
+			using (var x = new NSString (utType)) 
+				return UTTypeIsDynamic (x.Handle) != 0;
+		}
+
+		[iOS (8,0)][Mac (10,10)]
+		public static bool IsDeclared (string utType)
+		{
+			if (utType == null)
+				throw new ArgumentNullException ("utType");
+
+			using (var x = new NSString (utType)) 
+				return UTTypeIsDeclared (x.Handle) != 0;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSString */ UTTypeCreatePreferredIdentifierForTag (IntPtr /* CFStringRef */ tagClassStr, IntPtr /* CFStringRef */ tagStr, IntPtr /* CFStringRef */ conformingToUtiStr);
+
+		public static string CreatePreferredIdentifier (string tagClass, string tag, string conformingToUti)
+		{
+			var a = NSString.CreateNative (tagClass);
+			var b = NSString.CreateNative (tag);
+			var c = NSString.CreateNative (conformingToUti);
+			var ret = NSString.FromHandle (UTTypeCreatePreferredIdentifierForTag (a, b, c));
+			NSString.ReleaseNative (a);
+			NSString.ReleaseNative (b);
+			NSString.ReleaseNative (c);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSString Array */ UTTypeCreateAllIdentifiersForTag (IntPtr /* CFStringRef */ tagClassStr, IntPtr /* CFStringRef */ tagStr, IntPtr /* CFStringRef */ conformingToUtiStr);
+
+		public static string [] CreateAllIdentifiers (string tagClass, string tag, string conformingToUti)
+		{
+			if (tagClass == null)
+				throw new ArgumentNullException ("tagClass");
+			if (tag == null)
+				throw new ArgumentNullException ("tag");
+
+			var a = NSString.CreateNative (tagClass);
+			var b = NSString.CreateNative (tag);
+			var c = NSString.CreateNative (conformingToUti);
+			var ret = NSArray.StringArrayFromHandle (UTTypeCreateAllIdentifiersForTag (a, b, c));
+			NSString.ReleaseNative (a);
+			NSString.ReleaseNative (b);
+			NSString.ReleaseNative (c);
+			return ret;
+		}
+		
+		[iOS (8,0)][Mac (10,10)]
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSString Array */ UTTypeCopyAllTagsWithClass (IntPtr /* CFStringRef */ utiStr, IntPtr /* CFStringRef */ tagClassStr);
+		
+		[iOS (8,0)][Mac (10,10)]
+		public static string [] CopyAllTags (string uti, string tagClass)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+			if (tagClass == null)
+				throw new ArgumentNullException ("tagClass");
+
+			var a = NSString.CreateNative (uti);
+			var b = NSString.CreateNative (tagClass);
+			var ret = NSArray.StringArrayFromHandle (UTTypeCopyAllTagsWithClass (a, b));
+			NSString.ReleaseNative (a);
+			NSString.ReleaseNative (b);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static int /* Boolean */ UTTypeConformsTo (IntPtr /* CFStringRef */ utiStr, IntPtr /* CFStringRef */ conformsToUtiStr);
+
+		public static bool ConformsTo (string uti, string conformsToUti)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+			if (conformsToUti == null)
+				throw new ArgumentNullException ("conformsToUti");
+
+			var a = NSString.CreateNative (uti);
+			var b = NSString.CreateNative (conformsToUti);
+			var ret = UTTypeConformsTo (a, b);
+			NSString.ReleaseNative (a);
+			NSString.ReleaseNative (b);
+			return ret != 0;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSString */ UTTypeCopyDescription (IntPtr /* CFStringRef */ utiStr);
+
+		public static string GetDescription (string uti)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+
+			var a = NSString.CreateNative (uti);
+			var ret = NSString.FromHandle (UTTypeCopyDescription (a));
+			NSString.ReleaseNative (a);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* CFStringRef */ UTTypeCopyPreferredTagWithClass (IntPtr /* CFStringRef */ uti, IntPtr /* CFStringRef */ tagClass);
+
+		public static string GetPreferredTag (string uti, string tagClass)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+			if (tagClass == null)
+				throw new ArgumentNullException ("tagClass");
+
+			var a = NSString.CreateNative (uti);
+			var b = NSString.CreateNative (tagClass);
+			var ret = NSString.FromHandle (UTTypeCopyPreferredTagWithClass (a, b));
+			NSString.ReleaseNative (a);
+			NSString.ReleaseNative (b);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSDictionary */ UTTypeCopyDeclaration (IntPtr utiStr);
+
+		public static NSDictionary GetDeclaration (string uti)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+
+			var a = NSString.CreateNative (uti);
+			var ret = Runtime.GetNSObject <NSDictionary> (UTTypeCopyDeclaration (a));
+			NSString.ReleaseNative (a);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		extern static IntPtr /* NSUrl */ UTTypeCopyDeclaringBundleURL (IntPtr utiStr);
+
+		public static NSUrl GetDeclaringBundleURL (string uti)
+		{
+			if (uti == null)
+				throw new ArgumentNullException ("uti");
+
+			var a = NSString.CreateNative (uti);
+			var ret = Runtime.GetNSObject <NSUrl> (UTTypeCopyDeclaringBundleURL (a));
+			NSString.ReleaseNative (a);
+			return ret;
+		}
+
+		[DllImport (Constants.CoreServicesLibrary)]
+		[return: MarshalAs (UnmanagedType.I1)]
+		static extern unsafe bool /* Boolean */ UTTypeEqual (/* CFStringRef */ IntPtr inUTI1, /* CFStringRef */ IntPtr inUTI2);
+
+		[iOS (12,0)][TV (12,0)][Watch (5,0)]
+		public static bool Equals (NSString uti1, NSString uti2)
+		{
+			if (uti1 == null)
+				return uti2 == null;
+			else if (uti2 == null)
+				return false;
+			return UTTypeEqual (uti1.Handle, uti2.Handle);
 		}
 	}
 }

@@ -52,6 +52,7 @@
     </ItemGroup>
 
     <PropertyGroup>
+      <ManagedExeLauncher Condition="('$(OS)' != 'Windows_NT')">mono </ManagedExeLauncher>
       <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND Exists('$(_RoslynTasksDirectory)csc.exe')">$(_RoslynTasksDirectory)csc.exe</GeneratorCompiler>
       <GeneratorCompiler Condition="$(GeneratorCompiler) == ''">csc</GeneratorCompiler>
       
@@ -59,7 +60,7 @@
       <GeneratorParameters>$(GeneratorParameters) "--compiler=$(GeneratorCompiler)"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir)."</GeneratorParameters> 
-      <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)\generate_temp"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)generate_temp"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) @(Apis-&gt;'%(Identity)', ' ')</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) @(BaseDefineItems-&gt;'-d=%(Identity)', ' ')</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--baselib=$(TargetDir)core.dll"</GeneratorParameters>
@@ -67,7 +68,7 @@
       
     </PropertyGroup>
     <MakeDir Directories="$(IntermediateOutputPath)\generate_temp" />
-    <Exec Command="$(TargetPath) $(GeneratorParameters)" />
+    <Exec Command="$(ManagedExeLauncher)$(TargetPath) $(GeneratorParameters)" />
   </Target>
   
   <Target Name="CleanGeneratedSource" BeforeTargets="AfterClean">
