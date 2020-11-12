@@ -31,18 +31,21 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mono.Options;
+using System.Text;
 
 #if !MONOMAC
 using MonoTouch.ObjCRuntime;
 #endif
 
-class BindingTouch {
+class BindingTouch
+{
 #if MONOMAC
 	static string baselibdll = "MonoMac.dll";
 	static string RootNS = "MonoMac";
-	static Type CoreObject = typeof (MonoMac.Foundation.NSObject);
+	static Type CoreObject = typeof(MonoMac.Foundation.NSObject);
 	static string tool_name = "bmac";
 	static string compiler = "csc";
+	static string basedir = null;
 	static string net_sdk = null;
 #else
 	static string baselibdll = "/Developer/MonoTouch/usr/lib/mono/2.1/monotouch.dll";
@@ -53,34 +56,38 @@ class BindingTouch {
 	static string net_sdk = null;
 #endif
 
-	public static string ToolName {
+	public static string ToolName
+	{
 		get { return tool_name; }
 	}
 
-	static void ShowHelp (OptionSet os)
+	static void ShowHelp(OptionSet os)
 	{
-		Console.WriteLine ("{0} - Mono Objective-C API binder", tool_name);
-		Console.WriteLine ("Usage is:\n {0} [options] apifile1.cs [apifileN] [-s=core1.cs [-s=core2.cs]] [-x=extra1.cs [-x=extra2.cs]]", tool_name);
-		
-		os.WriteOptionDescriptions (Console.Out);
+		Console.WriteLine("{0} - Mono Objective-C API binder", tool_name);
+		Console.WriteLine("Usage is:\n {0} [options] apifile1.cs [apifileN] [-s=core1.cs [-s=core2.cs]] [-x=extra1.cs [-x=extra2.cs]]", tool_name);
+
+		os.WriteOptionDescriptions(Console.Out);
 	}
-	
-	static int Main (string [] args)
+
+	static int Main(string[] args)
 	{
-		try {
-			return Main2 (args);
-		} catch (Exception ex) {
-			ErrorHelper.Show (ex);
+		try
+		{
+			return Main2(args);
+		}
+		catch (Exception ex)
+		{
+			ErrorHelper.Show(ex);
 			return 1;
 		}
 	}
-	
-	static int Main2 (string [] args)
+
+	static int Main2(string[] args)
 	{
 		bool show_help = false;
 		bool zero_copy = false;
 		bool alpha = false;
-		string basedir = null;
+		string outdir = null;
 		string tmpdir = null;
 		string ns = null;
 		string outfile = null;
@@ -94,22 +101,22 @@ class BindingTouch {
 		bool native_exception_marshalling = false;
 		bool inline_selectors = false;
 		List<string> sources;
-		var resources = new List<string> ();
+		var resources = new List<string>();
 #if !MONOMAC
 		var linkwith = new List<string> ();
 #endif
-		var references = new List<string> ();
-		var libs = new List<string> ();
-		var core_sources = new List<string> ();
-		var extra_sources = new List<string> ();
-		var defines = new List<string> ();
+		var references = new List<string>();
+		var libs = new List<string>();
+		var core_sources = new List<string>();
+		var extra_sources = new List<string>();
+		var defines = new List<string>();
 		bool binding_third_party = true;
 		string generate_file_list = null;
-		
-		var os = new OptionSet () {
+
+		var os = new OptionSet() {
 			{ "h|?|help", "Displays the help", v => show_help = true },
 			{ "a", "Include alpha bindings", v => alpha = true },
-			{ "outdir=", "Sets the output directory for the temporary binding files", v => { basedir = v; }},
+			{ "outdir=", "Sets the output directory for the temporary binding files", v => { outdir = v; }},
 			{ "o|out=", "Sets the name of the output library", v => outfile = v },
 			{ "tmpdir=", "Sets the working directory for temp files", v => { tmpdir = v; delete_temp = false; }},
 			{ "debug", "Generates a debugging build of the binding", v => debug = true },
@@ -124,6 +131,7 @@ class BindingTouch {
 			{ "r=", "Adds a reference", v => references.Add (v) },
 			{ "lib=", "Adds the directory to the search path for the compiler", v => libs.Add (v) },
 			{ "compiler=", "Sets the compiler to use", v => compiler = v },
+			{ "basedir=", "Sets the base directory for source files", v => basedir = v },
 			{ "sdk=", "Sets the .NET SDK to use", v => net_sdk = v },
 			{ "d=", "Defines a symbol", v => defines.Add (v) },
 			{ "s=", "Adds a source file required to build the API", v => core_sources.Add (v) },
@@ -149,95 +157,90 @@ class BindingTouch {
 					if (linkwith.Contains (id))
 						throw new Exception ("-link-with=FILE,ID cannot assign the same resource id to multiple libraries.");
 					
-					resources.Add (string.Format ("-res:{0},{1}", path, id));
+					resources.Add (string.Format ("{0},{1}", path, id));
 					linkwith.Add (id);
 				}
 			},
 #endif
 		};
 
-		try {
-			sources = os.Parse (args);
-		} catch (Exception e){
-			Console.Error.WriteLine ("{0}: {1}", tool_name, e.Message);
-			Console.Error.WriteLine ("see {0} --help for more information", tool_name);
+		try
+		{
+			sources = os.Parse(args);
+		}
+		catch (Exception e)
+		{
+			Console.Error.WriteLine("{0}: {1}", tool_name, e.Message);
+			Console.Error.WriteLine("see {0} --help for more information", tool_name);
 			return 1;
 		}
 
-		if (show_help || sources.Count == 0){
-			Console.WriteLine ("Error: no api file provided");
-			ShowHelp (os);
+		if (show_help || sources.Count == 0)
+		{
+			Console.WriteLine("Error: no api file provided");
+			ShowHelp(os);
 			return 0;
 		}
 
 		if (alpha)
-			defines.Add ("ALPHA");
-		
+			defines.Add("ALPHA");
+
 		if (tmpdir == null)
-			tmpdir = GetWorkDir ();
+			tmpdir = GetWorkDir();
 
 		if (outfile == null)
-			outfile = Path.GetFileNameWithoutExtension (sources [0]) + ".dll";
+			outfile = Path.GetFileNameWithoutExtension(sources[0]) + ".dll";
 
-		string refs = (references.Count > 0 ? "-r:" + String.Join (" -r:", references.ToArray ()) : "");
-		string paths = (libs.Count > 0 ? "-lib:" + String.Join (" -lib:", libs.ToArray ()) : "");
+		string refs = (references.Count > 0 ? "-r:" + String.Join(" -r:", references.ToArray()) : "");
 
-		try {
-			var api_file = sources [0];
-			var tmpass = Path.Combine (tmpdir, "temp.dll");
+		try
+		{
+			var api_file = sources[0];
+			var tmpass = Path.Combine(tmpdir, "temp.dll");
 
-			// -nowarn:436 is to avoid conflicts in definitions between core.dll and the sources
-			var cargs = String.Format("{10} -debug -unsafe -target:library {0} -nowarn:436 -out:{1} -r:{2} {3} {4} {5} -r:{6} {7} {8} {9}",
-						   string.Join(" ", sources.ToArray()),
-						   tmpass,
-						   Environment.GetCommandLineArgs()[0],
-						   string.Join(" ", core_sources.ToArray()),
-						   refs,
-						   unsafef ? "-unsafe" : "",
-						   baselibdll,
-						   string.Join(" ", defines.Select(x => "-define:" + x).ToArray()),
-						   paths,
-						   nostdlib ? "-nostdlib" : null,
-						   !String.IsNullOrEmpty(net_sdk) ? "-sdk:" + net_sdk : null);
+			var exitCode = CompileSource(
+				tmpass,
+				verbose,
+				true,
+				unsafef,
+				nostdlib,
+				clean_mono_path,
+				sources.Concat(core_sources),
+				defines,
+				references.Concat(new[] { Environment.GetCommandLineArgs()[0] }),
+				libs);
 
-			var si = new ProcessStartInfo (compiler, cargs) {
-				UseShellExecute = false,
-			};
-
-			if (clean_mono_path) {
-				// HACK: We are calling btouch with forced 2.1 path but we need working mono for compiler
-				si.EnvironmentVariables.Remove ("MONO_PATH");
-			}
-
-			if (verbose)
-				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
-			
-			var p = Process.Start (si);
-			p.WaitForExit ();
-			if (p.ExitCode != 0){
-				Console.WriteLine ("{0}: API binding contains errors.", tool_name);
+			if (exitCode != 0)
+			{
+				Console.WriteLine("{0}: API binding contains errors.", tool_name);
 				return 1;
 			}
 
 			Assembly api;
-			try {
-				api = Assembly.LoadFrom (tmpass);
-			} catch (Exception e) {
+			try
+			{
+				api = Assembly.LoadFrom(tmpass);
+			}
+			catch (Exception e)
+			{
 				if (verbose)
-					Console.WriteLine (e);
-				
-				Console.Error.WriteLine ("Error loading API definition from {0}", tmpass);
+					Console.WriteLine(e);
+
+				Console.Error.WriteLine("Error loading API definition from {0}", tmpass);
 				return 1;
 			}
 
 			Assembly baselib;
-			try {
-				baselib = Assembly.LoadFrom (baselibdll);
-			} catch (Exception e){
+			try
+			{
+				baselib = Assembly.LoadFrom(baselibdll);
+			}
+			catch (Exception e)
+			{
 				if (verbose)
-					Console.WriteLine (e);
+					Console.WriteLine(e);
 
-				Console.Error.WriteLine ("Error loading base library {0}", baselibdll);
+				Console.Error.WriteLine("Error loading base library {0}", baselibdll);
 				return 1;
 			}
 
@@ -252,19 +255,21 @@ class BindingTouch {
 			}
 #endif
 
-			var types = new List<Type> ();
-			foreach (var t in api.GetTypes ()){
-				if (t.GetCustomAttributes (typeof (BaseTypeAttribute), true).Length > 0 ||
-				    t.GetCustomAttributes (typeof (StaticAttribute), true).Length > 0)
-					types.Add (t);
+			var types = new List<Type>();
+			foreach (var t in api.GetTypes())
+			{
+				if (t.GetCustomAttributes(typeof(BaseTypeAttribute), true).Length > 0 ||
+					t.GetCustomAttributes(typeof(StaticAttribute), true).Length > 0)
+					types.Add(t);
 			}
 
-			var g = new Generator (pmode, external, debug, types.ToArray ()){
-				MessagingNS = ns == null ? Path.GetFileNameWithoutExtension (api_file) : ns,
+			var g = new Generator(pmode, external, debug, types.ToArray())
+			{
+				MessagingNS = ns == null ? Path.GetFileNameWithoutExtension(api_file) : ns,
 				CoreMessagingNS = RootNS + ".ObjCRuntime",
 				BindThirdPartyLibrary = binding_third_party,
 				CoreNSObject = CoreObject,
-				BaseDir = basedir != null ? basedir : tmpdir,
+				BaseDir = outdir != null ? outdir : tmpdir,
 				ZeroCopyStrings = zero_copy,
 				NativeExceptionMarshalling = native_exception_marshalling,
 #if MONOMAC
@@ -274,62 +279,207 @@ class BindingTouch {
 				InlineSelectors = inline_selectors,
 			};
 
-			foreach (var mi in baselib.GetType (RootNS + ".ObjCRuntime.Messaging").GetMethods ()){
-				if (mi.Name.IndexOf ("_objc_msgSend") != -1)
-					g.RegisterMethodName (mi.Name);
+			foreach (var mi in baselib.GetType(RootNS + ".ObjCRuntime.Messaging").GetMethods())
+			{
+				if (mi.Name.IndexOf("_objc_msgSend") != -1)
+					g.RegisterMethodName(mi.Name);
 			}
 
-			g.Go ();
+			g.Go();
 
-			if (generate_file_list != null){
-				using (var f = File.CreateText (generate_file_list)){
-					g.GeneratedFiles.ForEach (x => f.WriteLine (x));
+			if (generate_file_list != null)
+			{
+				using (var f = File.CreateText(generate_file_list))
+				{
+					g.GeneratedFiles.ForEach(x => f.WriteLine(x));
 				}
 				return 0;
 			}
 
-			cargs = String.Format ("{0} -target:library -out:{1} {2} {3} {4} {5} {6} {7} -r:{8} {9} {10}",
-					       unsafef ? "-unsafe" : "", /* 0 */
-					       outfile, /* 1 */
-					       string.Join (" ", defines.Select (x=> "-define:" + x).ToArray ()), /* 2 */
-					       String.Join (" ", g.GeneratedFiles.ToArray ()), /* 3 */
-					       String.Join (" ", core_sources.ToArray ()), /* 4 */
-					       String.Join (" ", sources.Skip (1).ToArray ()), /* 5 */
-					       String.Join (" ", extra_sources.ToArray ()), /* 6 */
-					       refs, /* 7 */
-					       baselibdll, /* 8 */
-					       String.Join (" ", resources.ToArray ()), /* 9 */
-					       nostdlib ? "-nostdlib" : null
-				);
+			exitCode = CompileSource(
+				outfile,
+				verbose,
+				false,
+				unsafef,
+				nostdlib,
+				clean_mono_path,
+				g.GeneratedFiles.Concat(core_sources).Concat(sources.Skip(1)).Concat(extra_sources),
+				null,
+				references,
+				null,
+				resources
+			);
 
-			si = new ProcessStartInfo (compiler, cargs) {
-				UseShellExecute = false,
-			};
-
-			if (verbose)
-				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
-
-			p = Process.Start (si);
-			p.WaitForExit ();
-			if (p.ExitCode != 0){
-				Console.WriteLine ("{0}: API binding contains errors.", tool_name);
+			if (exitCode != 0)
+			{
+				Console.WriteLine("{0}: API binding contains errors.", tool_name);
 				return 1;
 			}
-		} finally {
+		}
+		finally
+		{
 			if (delete_temp && Directory.Exists(tmpdir))
-				Directory.Delete (tmpdir, true);
+				Directory.Delete(tmpdir, true);
 		}
 		return 0;
 	}
 
-	static string GetWorkDir ()
+	private static int CompileSource(string destination, bool verbose, bool debug, bool unsafef, bool nostdlib, bool clean_mono_path, IEnumerable<string> sources, List<string> defines, IEnumerable<string> references = null, IEnumerable<string> libs = null, IEnumerable<string> resources = null)
 	{
-		while (true){
-			string p = Path.Combine (Path.GetTempPath(), Path.GetRandomFileName());
-			if (Directory.Exists (p))
+		if (compiler == "dotnet")
+			return CompileSourceDotNet(destination, verbose, debug, unsafef, nostdlib, clean_mono_path, sources, defines, references, libs, resources);
+		else
+			return CompileSourceCSC(destination, verbose, debug, unsafef, nostdlib, clean_mono_path, sources, defines, references, libs, resources);
+	}
+
+	private static int CompileSourceDotNet(string destination, bool verbose, bool debug, bool unsafef, bool nostdlib, bool clean_mono_path, IEnumerable<string> sources, List<string> defines, IEnumerable<string> references = null, IEnumerable<string> libs = null, IEnumerable<string> resources = null)
+	{
+		// only fool-proof way to compile is with a .csproj, that way we don't have to resolve assemblies manually..
+		var proj = new StringBuilder();
+		string basePath = basedir;
+		if (string.IsNullOrEmpty(basePath))
+			basePath = Directory.GetCurrentDirectory();
+		proj.AppendLine("<Project Sdk=\"Microsoft.NET.Sdk\">");
+
+		proj.AppendLine("<PropertyGroup>");
+		proj.AppendLine($"  <AssemblyName>{Path.GetFileNameWithoutExtension(destination)}</AssemblyName>");
+		proj.AppendLine($"  <TargetFramework>netstandard2.0</TargetFramework>");
+		proj.AppendLine($"  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>");
+		proj.AppendLine($"  <EnableDefaultItems>false</EnableDefaultItems>");
+		proj.AppendLine($"  <OutputPath>{Path.GetDirectoryName(destination)}</OutputPath>");
+		if (unsafef)
+			proj.AppendLine("  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>");
+		if (nostdlib)
+			proj.AppendLine("  <NoStdLib>true</NoStdLib>");
+
+		if (defines != null)
+			proj.AppendLine($"  <DefineConstants>{string.Join(";", defines)}</DefineConstants>");
+		if (libs != null)
+			proj.AppendLine($"  <ReferencePath>{string.Join(";", libs)}</ReferencePath>");
+		proj.AppendLine("</PropertyGroup>");
+
+		proj.AppendLine("<ItemGroup>");
+
+		string Resolve(string file)
+		{
+			if (!Path.IsPathRooted(file))
+				return Path.Combine(basePath, file);
+			return file;
+		}
+
+		if (sources != null)
+		{
+			foreach (var source in sources)
+			{
+				proj.AppendLine($"<Compile Include=\"{Resolve(source)}\" />");
+			}
+		}
+		if (references != null)
+		{
+			foreach (var reference in references)
+			{
+				proj.AppendLine($"<Reference Include=\"{Resolve(reference)}\" />");
+			}
+		}
+
+		if (!string.IsNullOrEmpty(baselibdll))
+				proj.AppendLine($"<Reference Include=\"{Resolve(baselibdll)}\" />");
+
+		
+		if (resources != null)
+		{
+			foreach (var resource in resources)
+			{
+				var resourceInfo = resource.Split(',');
+				proj.Append($"<EmbeddedResource Include=\"{Resolve(resourceInfo[0])}\" ");
+				if (resourceInfo.Length > 1)
+					proj.Append($"LogicalName=\"{resourceInfo[1]}\"");
+				proj.AppendLine(" />");
+			}
+		}
+		proj.AppendLine("</ItemGroup>");
+
+		proj.Append("</Project>");
+
+		var projName = Path.Combine(Path.GetDirectoryName(destination), Path.GetFileNameWithoutExtension(destination) + ".csproj");
+
+		File.WriteAllText(projName, proj.ToString());
+
+		var cargs = new StringBuilder();
+		cargs.Append("build ");
+		cargs.Append(projName);
+		cargs.Append($" /p:Configuration={(debug ? "Debug" : "Release")} ");
+
+		var si = new ProcessStartInfo(compiler, cargs.ToString())
+		{
+			UseShellExecute = false
+		};
+
+		if (verbose)
+			Console.WriteLine("{0} {1}", si.FileName, si.Arguments);
+
+		var p = Process.Start(si);
+		p.WaitForExit();
+
+		return p.ExitCode;
+	}
+
+	private static int CompileSourceCSC(string destination, bool verbose, bool debug, bool unsafef, bool nostdlib, bool clean_mono_path, IEnumerable<string> sources, List<string> defines, IEnumerable<string> references = null, IEnumerable<string> libs = null, IEnumerable<string> resources = null)
+	{
+		// -nowarn:436 is to avoid conflicts in definitions between core.dll and the sources
+		var cargs = new StringBuilder();
+
+		if (!string.IsNullOrEmpty(net_sdk))
+			cargs.Append($"-sdk:{net_sdk} ");
+		if (debug)
+			cargs.Append("-debug ");
+		cargs.Append("-target:library -nowarn:436 ");
+		if (unsafef)
+			cargs.Append("-unsafe ");
+		if (nostdlib)
+			cargs.Append("-nostdlib ");
+		cargs.Append($"-out:{destination} ");
+		cargs.Append(string.Join(" ", sources));
+		cargs.Append(" ");
+		cargs.Append(string.Join(" ", references.Select(r => "-r:" + r)));
+		cargs.Append(" ");
+		cargs.Append(string.Join(" ", defines.Select(x => "-define:" + x)));
+		cargs.Append(" ");
+		cargs.Append(string.Join(" ", libs.Select(l => "-lib:" + l)));
+
+		if (!string.IsNullOrEmpty(baselibdll))
+			cargs.Append($"-r:{baselibdll} ");
+
+
+		var si = new ProcessStartInfo(compiler, cargs.ToString())
+		{
+			UseShellExecute = false,
+		};
+		if (clean_mono_path)
+		{
+			// HACK: We are calling btouch with forced 2.1 path but we need working mono for compiler
+			si.EnvironmentVariables.Remove("MONO_PATH");
+		}
+
+		if (verbose)
+			Console.WriteLine("{0} {1}", si.FileName, si.Arguments);
+
+		// throw new Exception("blar");
+
+		var p = Process.Start(si);
+		p.WaitForExit();
+		return p.ExitCode;
+	}
+
+	static string GetWorkDir()
+	{
+		while (true)
+		{
+			string p = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+			if (Directory.Exists(p))
 				continue;
-			
-			var di = Directory.CreateDirectory (p);
+
+			var di = Directory.CreateDirectory(p);
 			return di.FullName;
 		}
 	}

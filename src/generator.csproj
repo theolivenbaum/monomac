@@ -39,7 +39,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.4.0">
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -52,8 +52,9 @@
     </ItemGroup>
 
     <PropertyGroup>
-      <ManagedExeLauncher Condition="('$(OS)' != 'Windows_NT')">mono </ManagedExeLauncher>
-      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND Exists('$(_RoslynTasksDirectory)csc.exe')">$(_RoslynTasksDirectory)csc.exe</GeneratorCompiler>
+      <ManagedExeLauncher Condition="'$(OS)' != 'Windows_NT'">mono </ManagedExeLauncher>
+      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND '$(MSBuildRuntimeType)' == 'Core'">dotnet</GeneratorCompiler>
+      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND '$(MSBuildRuntimeType)' != 'Core' AND Exists('$(_RoslynTasksDirectory)csc.exe')">$(_RoslynTasksDirectory)csc.exe</GeneratorCompiler>
       <GeneratorCompiler Condition="$(GeneratorCompiler) == ''">csc</GeneratorCompiler>
       
       <GeneratorParameters>$(GeneratorParameters) -a --core -v</GeneratorParameters>
