@@ -30,91 +30,109 @@ using System.Diagnostics;
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
 
-namespace MonoMac.ObjCRuntime {
+namespace MonoMac.ObjCRuntime
+{
 
-	public static class Runtime {
-		static List <Assembly> assemblies;
-		static Dictionary <IntPtr, WeakReference> object_map = new Dictionary <IntPtr, WeakReference> (new IntPtrComparer());
-		static object lock_obj = new object ();
-		static IntPtr selClass = Selector.GetHandle ("class");
+	public static class Runtime
+	{
+		static List<Assembly> assemblies;
+		static Dictionary<IntPtr, WeakReference> object_map = new Dictionary<IntPtr, WeakReference>(new IntPtrComparer());
+		static object lock_obj = new object();
+		internal static IntPtr selClass = Selector.GetHandle("class");
 
-		public static string FrameworksPath {
+		public static string FrameworksPath
+		{
 			get; set;
 		}
 
-		public static string ResourcesPath {
+		public static string ResourcesPath
+		{
 			get; set;
 		}
 
-		static Runtime() {
+		static Runtime()
+		{
 			// BaseDirectory may not be set in some Mono embedded environments
 			// so try some reasonable fallbacks in these cases.
 			string basePath = AppDomain.CurrentDomain.BaseDirectory;
-			if(!string.IsNullOrEmpty(basePath))
-				basePath = Path.Combine (basePath, "..");
-			else {
+			if (!string.IsNullOrEmpty(basePath))
+				basePath = Path.Combine(basePath, "..");
+			else
+			{
 				basePath = Assembly.GetExecutingAssembly().Location;
-				if(!string.IsNullOrEmpty(basePath)) {
-					basePath = Path.Combine (Path.GetDirectoryName(basePath), "..");
+				if (!string.IsNullOrEmpty(basePath))
+				{
+					basePath = Path.Combine(Path.GetDirectoryName(basePath), "..");
 				}
-				else {
+				else
+				{
 					// The executing assembly location may be null if loaded from
 					// memory so the final fallback is the current directory
-					basePath = Path.Combine (Environment.CurrentDirectory, "..");
+					basePath = Path.Combine(Environment.CurrentDirectory, "..");
 				}
 			}
 
-			ResourcesPath = Path.Combine (basePath, "Resources");
-			FrameworksPath = Path.Combine (basePath, "Frameworks");
+			ResourcesPath = Path.Combine(basePath, "Resources");
+			FrameworksPath = Path.Combine(basePath, "Frameworks");
 		}
-		
-		public static void RegisterAssembly (Assembly a) {
-			var attributes = a.GetCustomAttributes (typeof (RequiredFrameworkAttribute), false);
 
-			foreach (var attribute in attributes) {
+		public static void RegisterAssembly(Assembly a)
+		{
+			var attributes = a.GetCustomAttributes(typeof(RequiredFrameworkAttribute), false);
+
+			foreach (var attribute in attributes)
+			{
 				var requiredFramework = (RequiredFrameworkAttribute)attribute;
 				string libPath;
 				string libName = requiredFramework.Name;
-				
-				if (libName.Contains (".dylib")) {
+
+				if (libName.Contains(".dylib"))
+				{
 					libPath = ResourcesPath;
 				}
-				else {
+				else
+				{
 					libPath = FrameworksPath;
-					libPath = Path.Combine (libPath, libName);
-					libName = libName.Replace (".frameworks", "");
+					libPath = Path.Combine(libPath, libName);
+					libName = libName.Replace(".frameworks", "");
 				}
-				libPath = Path.Combine (libPath, libName);
-				
-				if (Dlfcn.dlopen (libPath, 0) == IntPtr.Zero)
-					throw new Exception (string.Format ("Unable to load required framework: '{0}'", requiredFramework.Name),
-				new Exception (Dlfcn.dlerror()));
-			}
-			
-			if (assemblies == null) {
-				assemblies = new List <Assembly> ();
-				Class.Register (typeof (NSObject));
+				libPath = Path.Combine(libPath, libName);
+
+				if (Dlfcn.dlopen(libPath, 0) == IntPtr.Zero)
+					throw new Exception(string.Format("Unable to load required framework: '{0}'", requiredFramework.Name),
+				new Exception(Dlfcn.dlerror()));
 			}
 
-			assemblies.Add (a);
+			if (assemblies == null)
+			{
+				assemblies = new List<Assembly>();
+				Class.Register(typeof(NSObject));
+			}
 
-			foreach (Type type in a.GetTypes ()) {
-				if (type.IsSubclassOf (typeof (NSObject)) && !Attribute.IsDefined (type, typeof (ModelAttribute), false))
-					Class.Register (type);
+			assemblies.Add(a);
+
+			foreach (Type type in a.GetTypes())
+			{
+				if (type.IsSubclassOf(typeof(NSObject)) && !Attribute.IsDefined(type, typeof(ModelAttribute), false))
+					Class.Register(type);
 			}
 		}
 
-		internal static List<Assembly> GetAssemblies () {
-			if (assemblies == null) {
-				var this_assembly = typeof (Runtime).Assembly.GetName ();
-				assemblies = new List <Assembly> ();
+		internal static List<Assembly> GetAssemblies()
+		{
+			if (assemblies == null)
+			{
+				var this_assembly = typeof(Runtime).Assembly.GetName();
+				assemblies = new List<Assembly>();
 
-				foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies ()){
+				foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+				{
 
-					var refs = a.GetReferencedAssemblies ();
-					foreach (var aref in refs){
+					var refs = a.GetReferencedAssemblies();
+					foreach (var aref in refs)
+					{
 						if (aref == this_assembly)
-							assemblies.Add (a);
+							assemblies.Add(a);
 					}
 				}
 			}
@@ -122,104 +140,115 @@ namespace MonoMac.ObjCRuntime {
 			return assemblies;
 		}
 
-		internal static void UnregisterNSObject (IntPtr ptr) {
-			lock (lock_obj) {
-				object_map.Remove (ptr);
+		internal static void UnregisterNSObject(IntPtr ptr)
+		{
+			lock (lock_obj)
+			{
+				object_map.Remove(ptr);
 			}
 		}
 
-		internal static void RegisterNSObject (NSObject obj, IntPtr ptr) {
-			lock (lock_obj) {
-				object_map [ptr] = new WeakReference (obj);
+		internal static void RegisterNSObject(NSObject obj, IntPtr ptr)
+		{
+			lock (lock_obj)
+			{
+				object_map[ptr] = new WeakReference(obj);
 				obj.Handle = ptr;
 			}
 		}
 
-		internal static void NativeObjectHasDied (IntPtr ptr)
+		internal static void NativeObjectHasDied(IntPtr ptr)
 		{
-			lock (lock_obj) {
+			lock (lock_obj)
+			{
 				WeakReference wr;
-				if (object_map.TryGetValue (ptr, out wr)) {
-					object_map.Remove (ptr);
-					
-					var obj = (NSObject) wr.Target;
+				if (object_map.TryGetValue(ptr, out wr))
+				{
+					object_map.Remove(ptr);
+
+					var obj = (NSObject)wr.Target;
 					if (obj != null)
-						obj.ClearHandle ();
+						obj.ClearHandle();
 				}
 			}
 		}
-		
-		public static T GetNSObject<T> (IntPtr ptr)
-			where T: NSObject
+
+		public static T GetNSObject<T>(IntPtr ptr)
+			where T : NSObject
 		{
-			var obj = GetNSObject(ptr);
+			var obj = TryGetNSObject(ptr) ?? InternalGetNSObject<T>(ptr);
 			var result = obj as T;
 			if (result == null && ptr != IntPtr.Zero)
 			{
-			  // native object is dead as we are passed a known handle but it is a different type
-			  // this should theoretically not happen, but it does quite often so this is done
-			  // for resiliency.
-			  Console.WriteLine("Object of type {0} has died but not cleaned up. New type is {1}. Handle: {2}", obj?.GetType(), typeof(T), ptr);
-		  
-			  // kill object in .NET
-			  NativeObjectHasDied (ptr);
-		  
-			  // re-wrap native handle in a new .NET object of the correct type
-			  result = (T)GetNSObject (ptr);
+				// native object is dead as we are passed a known handle but it is a different type
+				// this should theoretically not happen, but it does quite often so this is done
+				// for resiliency.
+				Debug.WriteLine("Object of type {0} has died but not cleaned up. New type is {1}. Handle: {2}", obj?.GetType(), typeof(T), ptr);
+
+				// kill object in .NET
+				NativeObjectHasDied(ptr);
+
+				// re-wrap native handle in a new .NET object of the correct type
+				result = InternalGetNSObject<T>(ptr);
 			}
 			return result;
 		}
 
-		public static NSObject TryGetNSObject (IntPtr ptr) {
-			lock (lock_obj) {
+		public static NSObject TryGetNSObject(IntPtr ptr)
+		{
+			lock (lock_obj)
+			{
 				WeakReference reference;
-				if (object_map.TryGetValue (ptr, out reference))
-					return (NSObject) reference.Target;
+				if (object_map.TryGetValue(ptr, out reference))
+					return (NSObject)reference.Target;
 			}
 
 			return null;
 		}
 
-		public static NSObject GetNSObject (IntPtr ptr) {
+		public static NSObject GetNSObject(IntPtr ptr)
+		{
+			return TryGetNSObject(ptr) ?? InternalGetNSObject<NSObject>(ptr);
+		}
+
+		static T InternalGetNSObject<T>(IntPtr ptr)
+			where T : NSObject
+		{
 			Type type;
 
 			if (ptr == IntPtr.Zero)
-				return null;
+				return default;
 
-			lock (lock_obj) {
-				WeakReference reference;
-				if (object_map.TryGetValue (ptr, out reference)) {
-					NSObject target = (NSObject) reference.Target;
+			var clsPtr = Messaging.intptr_objc_msgSend(ptr, selClass);
+			type = Class.Lookup(clsPtr, false);
 
-					if (target != null)
-						return target;
-				}
+			if (type != null)
+			{
+				return Activator.CreateInstance(type, new object[] { ptr }) as T;
 			}
-			
-			type = Class.Lookup (Messaging.intptr_objc_msgSend (ptr, selClass));
-
-			if (type != null) {
-				return (NSObject) Activator.CreateInstance (type, new object[] { ptr });
-			} else {
-				Debug.WriteLine ("WARNING: Cannot find type for {0} ({1}) using NSObject", new Class (ptr).Name, ptr);
-				return new NSObject (ptr);
+			else
+			{
+				// could not find the type, it could be a proxy so we create the type we expect
+				return (T)Activator.CreateInstance(typeof(T), new object[] { ptr });
 			}
 		}
 
-		public static void ConnectMethod (MethodInfo method, Selector selector) {
+
+		public static void ConnectMethod(MethodInfo method, Selector selector)
+		{
 			if (method == null)
-				throw new ArgumentNullException ("method");
+				throw new ArgumentNullException("method");
 			if (selector == null)
-				throw new ArgumentNullException ("selector");
+				throw new ArgumentNullException("selector");
 			var type = method.DeclaringType;
 
-			if (!Class.IsCustomType (type))
-				throw new ArgumentException ("Cannot late bind methods on core types");
+			if (!Class.IsCustomType(type))
+				throw new ArgumentException("Cannot late bind methods on core types");
 
-			var ea = new ExportAttribute (selector.Name);
-			var klass = new Class (type);
+			var ea = new ExportAttribute(selector.Name);
+			var klass = new Class(type);
 
-			Class.RegisterMethod (method, ea, type, klass.Handle);
+			Class.RegisterMethod(method, ea, type, klass.Handle);
 		}
 	}
 }
