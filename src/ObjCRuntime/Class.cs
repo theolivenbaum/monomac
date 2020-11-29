@@ -472,7 +472,7 @@ retl    $0x4                   */  0xc2, 0x04, 0x00,                            
 		[DllImport ("/usr/lib/libobjc.dylib")]
 		extern static IntPtr objc_allocateClassPair (IntPtr superclass, string name, IntPtr extraBytes);
 		[DllImport ("/usr/lib/libobjc.dylib")]
-		extern static IntPtr objc_getClass (string name);
+		internal extern static IntPtr objc_getClass (string name);
 		[DllImport ("/usr/lib/libobjc.dylib")]
 		extern static IntPtr objc_getProtocol (string name);
 		[DllImport ("/usr/lib/libobjc.dylib")]

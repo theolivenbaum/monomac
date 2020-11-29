@@ -39,6 +39,7 @@ namespace MonoMac.ObjCRuntime
 		static Dictionary<IntPtr, WeakReference> object_map = new Dictionary<IntPtr, WeakReference>(new IntPtrComparer());
 		static object lock_obj = new object();
 		internal static IntPtr selClass = Selector.GetHandle("class");
+		internal static readonly IntPtr selDescriptionHandle = Selector.GetHandle ("description");
 
 		public static string FrameworksPath
 		{
@@ -211,6 +212,8 @@ namespace MonoMac.ObjCRuntime
 			return TryGetNSObject(ptr) ?? InternalGetNSObject<NSObject>(ptr);
 		}
 
+		static readonly Type[] s_IntPtrTypes = new [] { typeof(IntPtr) };
+
 		static T InternalGetNSObject<T>(IntPtr ptr)
 			where T : NSObject
 		{
@@ -222,15 +225,35 @@ namespace MonoMac.ObjCRuntime
 			var clsPtr = Messaging.intptr_objc_msgSend(ptr, selClass);
 			type = Class.Lookup(clsPtr, false);
 
-			if (type != null)
+			if (type != null && typeof(NSProxy).IsAssignableFrom(type) && !typeof(T).IsAssignableFrom(type))
 			{
-				return Activator.CreateInstance(type, new object[] { ptr }) as T;
+				// got a proxy, let's attempt to get the real type from the description if it isn't what we are expecting
+				// is this the only way to get the concrete underlying class? does it always work?
+				type = null;
+				var str = NSString.FromHandle(Messaging.intptr_objc_msgSend(ptr, selDescriptionHandle));
+				var classIdx = str.IndexOf(' ');
+				if (classIdx > 0)
+				{
+					var clsName = str.Substring(0, classIdx);
+					if (!string.IsNullOrEmpty(clsName))
+					{
+						clsPtr = Class.objc_getClass(clsName);
+						if (clsPtr != IntPtr.Zero)
+						{
+							type = Class.Lookup(clsPtr, false);
+							if (type.GetConstructor(s_IntPtrTypes) == null)
+							{
+								type = null;
+							}
+						}
+					}
+				}
 			}
-			else
-			{
-				// could not find the type, it could be a proxy so we create the type we expect
-				return (T)Activator.CreateInstance(typeof(T), new object[] { ptr });
-			}
+
+			if (type == null)
+				type = typeof(T);
+
+			return Activator.CreateInstance(type, new object[] { ptr }) as T;
 		}
 
 

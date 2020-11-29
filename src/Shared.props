@@ -229,6 +229,7 @@
     <SharedCoreSource Include="Foundation/RegisterAttribute.cs" />
     <SharedCoreSource Include="Foundation/PreserveAttribute.cs" />
     <SharedCoreSource Include="Foundation/LinkerSafeAttribute.cs" />
+    <SharedCoreSource Include="Foundation/NSProxy.cs" />
     <SharedCoreSource Include="ObjCRuntime/AdoptsAttribute.cs" />
     <SharedCoreSource Include="ObjCRuntime/ArgumentSemantic.cs" />
     <SharedCoreSource Include="ObjCRuntime/AlphaAttribute.cs" />
