@@ -7144,6 +7144,7 @@ namespace MonoMac.AppKit {
 		[Export ("unlockFocus")]
 		void UnlockFocus ();
 
+		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use BestRepresentation instead")]
 		[Export ("bestRepresentationForDevice:")]
 		NSImageRep BestRepresentationForDevice ([NullAllowed] NSDictionary deviceDescription);
 
