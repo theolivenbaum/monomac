@@ -1,6 +1,6 @@
 //
 // Copyright 2010, Novell, Inc.
-// Copyright 2011, 2012 Xamarin Inc
+// Copyright 2013, Xamarin Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -22,34 +22,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
-namespace MonoMac.Foundation {
+namespace MonoMac.ObjCRuntime {
 
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class RegisterAttribute : Attribute {
-		string name;
-		bool is_wrapper;
-
-		public RegisterAttribute () {}
-		public RegisterAttribute (string name) {
-			this.name = name;
+	// mono boxes the IntPtr for each lookup creating huge memory allocations
+	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>
+	{
+		public bool Equals(IntPtr x, IntPtr y)
+		{
+			return x == y;
 		}
 
-		public RegisterAttribute (string name, bool isWrapper) {
-			this.name = name;
-			this.is_wrapper = isWrapper;
+		public int GetHashCode(IntPtr obj)
+		{
+			return obj.GetHashCode();
 		}
-
-		public string Name {
-			get { return this.name; }
-			set { this.name = value; }
-		}
-
-		public bool IsWrapper {
-			get { return this.is_wrapper; }
-			set { this.is_wrapper = value; }
-		}
-
-		public bool SkipRegistration { get; set; }
 	}
+
+	internal class TypeEqualityComparer : IEqualityComparer<Type>
+	{
+		public bool Equals (Type x, Type y)
+		{
+			return x == y;
+		}
+		public int GetHashCode (Type obj)
+		{
+			if (obj == null)
+				return 0;
+			return obj.GetHashCode ();
+		}
+	}
+
 }

@@ -55,7 +55,7 @@ namespace MonoMac.ObjCRuntime {
 
 			Signature = "@@:";
 			ConvertParameters (Parameters, true, false);
-			DelegateType = CreateDelegateType (typeof (IntPtr), ParameterTypes);
+			DelegateType = CreateDelegateType (typeof (IntPtr));
 
 			this.cinfo = cinfo;
 		}

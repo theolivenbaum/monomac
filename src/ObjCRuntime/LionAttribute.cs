@@ -160,7 +160,15 @@ namespace MonoMac.ObjCRuntime
         TvOS
     }
 
-    [Flags]
+	public enum AvailabilityKind
+	{
+		Introduced,
+		Deprecated,
+		Obsoleted,
+		Unavailable
+	}
+	
+	[Flags]
     public enum PlatformArchitecture : byte
     {
         None = 0x00,
@@ -176,5 +184,6 @@ namespace MonoMac.ObjCRuntime
     public class NoiOSAttribute : UnavailableAttribute {  }
 
     // not used
-    public class DesignatedInitializer : UnavailableAttribute { }
+    public class DesignatedInitializerAttribute : UnavailableAttribute { }
+
 }

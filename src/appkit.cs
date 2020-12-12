@@ -16527,4 +16527,14 @@ namespace MonoMac.AppKit {
 		[Export ("allowsVibrancy")]
 		bool AllowsVibrancy { get; }
 	}
+
+	[Protocol]
+	[Mac (10,11)]
+	interface NSUserInterfaceValidations
+	{
+		[Abstract]
+		[Export ("validateUserInterfaceItem:")]
+		bool ValidateUserInterfaceItem (NSObject item);
+	}
+
 }

@@ -653,6 +653,14 @@ namespace MonoMac.Foundation  {
 		Stable = 1 << 4
 	}
 
+	[Native]
+	public enum NSUrlSessionAuthChallengeDisposition : long {
+		UseCredential = 0,
+		PerformDefaultHandling = 1,
+		CancelAuthenticationChallenge = 2,
+		RejectProtectionSpace = 3
+	}
+
 #if MONOMAC
     internal enum NSAttributedStringDataType
     {

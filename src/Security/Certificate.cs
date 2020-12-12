@@ -62,6 +62,7 @@ namespace MonoMac.Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr SecCertificateCreateWithData (IntPtr allocator, IntPtr cfData);
 
+#if !COREBUILD
 		public SecCertificate (NSData data)
 		{
 			if (data == null)
@@ -107,6 +108,7 @@ namespace MonoMac.Security {
 			if (handle == IntPtr.Zero)
 				throw new ArgumentException ("Not a valid DER-encoded X.509 certificate");
 		}
+#endif
 
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr SecCertificateCopySubjectSummary (IntPtr cert);
@@ -126,6 +128,7 @@ namespace MonoMac.Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr SecCertificateCopyData (IntPtr cert);
 
+#if !COREBUILD
 		public NSData DerData {
 			get {
 				if (handle == IntPtr.Zero)
@@ -137,6 +140,7 @@ namespace MonoMac.Security {
 				return new NSData (data);
 			}
 		}
+#endif
 		
 		~SecCertificate ()
 		{
@@ -249,6 +253,7 @@ namespace MonoMac.Security {
 
 		// TODO: pull all the TypeRefs needed for the NSDictionary
 		
+#if !COREBUILD
 		public static SecStatusCode GenerateKeyPair (NSDictionary parameters, out SecKey publicKey, out SecKey privateKey)
 		{
 			if (parameters == null)
@@ -264,6 +269,7 @@ namespace MonoMac.Security {
 				publicKey = privateKey = null;
 			return res;
 		}
+#endif
 			
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr SecKeyGetBlockSize (IntPtr handle);

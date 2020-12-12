@@ -233,7 +233,7 @@ namespace MonoMac.AddressBook {
 		static unsafe void TrampolineCompletionHandler (IntPtr block, bool success, IntPtr error)
 		{
                         var descriptor = (BlockLiteral *) block;
-                        var del = (Action<bool,NSError>) (descriptor->global_handle != IntPtr.Zero ? GCHandle.FromIntPtr (descriptor->global_handle).Target : GCHandle.FromIntPtr (descriptor->local_handle).Target);
+                        var del = (Action<bool,NSError>) (descriptor->Target);
                         if (del != null)
                                 del (success, error == IntPtr.Zero ? null : Runtime.GetNSObject<MonoMac.Foundation.NSError> (error));
 		}

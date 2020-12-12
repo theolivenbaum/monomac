@@ -51,7 +51,7 @@ namespace MonoMac.ObjCRuntime {
 			if (minfo.DeclaringType.IsGenericType)
 				throw new ArgumentException ("MethodInfo cannot be in a generic type");
 
-			Parameters = minfo.GetParameters ();
+			Parameters = minfo.GetBaseDefinition().GetParameters ();
 
 			rettype = ConvertReturnType (minfo.ReturnType);
 
@@ -61,7 +61,7 @@ namespace MonoMac.ObjCRuntime {
 
 			ConvertParameters (Parameters, minfo.IsStatic, isstret);
 			
-			DelegateType = CreateDelegateType (rettype, ParameterTypes);
+			DelegateType = CreateDelegateType (rettype);
 
 			this.minfo = minfo;
 			this.type = type;

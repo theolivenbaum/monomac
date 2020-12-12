@@ -1,7 +1,5 @@
-﻿<Project>
+﻿<Project Sdk="Microsoft.NET.Sdk">
   
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
@@ -33,25 +31,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net472">
+    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net5.0" ExcludeAssets="all" Private="False">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
     </ProjectReference>
   </ItemGroup>
   
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-
-  <PropertyGroup>
-    <!-- needs to be after targets as it's obliterated currently (this will be fixed in the future)-->
-    <CoreCompileDependsOn>IncludeGeneratedSource;$(CoreCompileDependsOn)</CoreCompileDependsOn>
-    <CompileDependsOn>IncludeGeneratedSource;$(CompileDependsOn)</CompileDependsOn>
-  </PropertyGroup>
-  
-  <Target Name="IncludeGeneratedSource">
+  <Target Name="IncludeGeneratedSource" BeforeTargets="Compile;CoreCompile">
     <!-- include generated code in output -->
     <ItemGroup>
       <Compile Include="$(GeneratedOutputDir)**\*.cs" />
     </ItemGroup>
    </Target>
+  
   
 </Project>

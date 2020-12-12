@@ -105,6 +105,17 @@ namespace MonoMac.ObjCRuntime {
 		{
 			GCHandle.FromIntPtr (local_handle).Free ();
 		}
+
+		public object Target {
+			get {
+				var handle = global_handle != IntPtr.Zero ? global_handle : local_handle;
+				var target = GCHandle.FromIntPtr (handle).Target;
+				var tuple = target as Tuple<Delegate, Delegate>;
+				if (tuple != null)
+					return tuple.Item2;
+				return target;
+			}
+		}
 	}
 
 	[Flags]

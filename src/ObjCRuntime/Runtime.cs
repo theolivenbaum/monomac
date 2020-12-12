@@ -28,19 +28,20 @@ using System.IO;
 using System.Diagnostics;
 
 using MonoMac.Foundation;
-using MonoMac.ObjCRuntime;
 
 namespace MonoMac.ObjCRuntime
 {
-
 	public static class Runtime
 	{
 		static List<Assembly> assemblies;
-		static Dictionary<IntPtr, WeakReference> object_map = new Dictionary<IntPtr, WeakReference>(new IntPtrComparer());
+		static Dictionary<IntPtrTypeValueTuple,Delegate> block_to_delegate_cache;
+		static Dictionary<IntPtr, WeakReference> object_map = new Dictionary<IntPtr, WeakReference>(IntPtrEqualityComparer);
 		static object lock_obj = new object();
 		internal static IntPtr selClass = Selector.GetHandle("class");
 		internal static readonly IntPtr selDescriptionHandle = Selector.GetHandle ("description");
 
+		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
+		internal static TypeEqualityComparer TypeEqualityComparer;
 		public static string FrameworksPath
 		{
 			get; set;
@@ -75,14 +76,19 @@ namespace MonoMac.ObjCRuntime
 
 			ResourcesPath = Path.Combine(basePath, "Resources");
 			FrameworksPath = Path.Combine(basePath, "Frameworks");
+
+			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
+			TypeEqualityComparer = new TypeEqualityComparer ();
 		}
 
 		public static void RegisterAssembly(Assembly a)
 		{
 			var attributes = a.GetCustomAttributes(typeof(RequiredFrameworkAttribute), false);
 
-			foreach (var attribute in attributes)
+			for (int i = 0; i < attributes.Length; i++)
 			{
+				object attribute = attributes[i];
+
 				var requiredFramework = (RequiredFrameworkAttribute)attribute;
 				string libPath;
 				string libName = requiredFramework.Name;
@@ -112,8 +118,10 @@ namespace MonoMac.ObjCRuntime
 
 			assemblies.Add(a);
 
-			foreach (Type type in a.GetTypes())
+			Type[] types = a.GetTypes();
+			for (int i = 0; i < types.Length; i++)
 			{
+				Type type = types[i];
 				if (type.IsSubclassOf(typeof(NSObject)) && !Attribute.IsDefined(type, typeof(ModelAttribute), false))
 					Class.Register(type);
 			}
@@ -126,12 +134,14 @@ namespace MonoMac.ObjCRuntime
 				var this_assembly = typeof(Runtime).Assembly.GetName();
 				assemblies = new List<Assembly>();
 
-				foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+				Assembly[] domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+				for (int i = 0; i < domainAssemblies.Length; i++)
 				{
-
+					Assembly a = domainAssemblies[i];
 					var refs = a.GetReferencedAssemblies();
-					foreach (var aref in refs)
+					for (int j = 0; j < refs.Length; j++)
 					{
+						AssemblyName aref = refs[j];
 						if (aref == this_assembly)
 							assemblies.Add(a);
 					}
@@ -172,6 +182,29 @@ namespace MonoMac.ObjCRuntime
 						obj.ClearHandle();
 				}
 			}
+		}
+
+		public static T GetINativeObject<T>(IntPtr ptr)
+			where T: INativeObject
+		{
+			if (TryGetNSObject(ptr) is T nsobj)
+				return nsobj;
+
+			var obj = InternalGetNSObject<T>(ptr);
+			if (obj == null && ptr != IntPtr.Zero)
+			{
+				// native object is dead as we are passed a known handle but it is a different type
+				// this should theoretically not happen, but it does quite often so this is done
+				// for resiliency.
+				Debug.WriteLine("Object of type {0} has died but not cleaned up. New type is {1}. Handle: {2}", obj?.GetType(), typeof(T), ptr);
+
+				// kill object in .NET
+				NativeObjectHasDied(ptr);
+
+				// re-wrap native handle in a new .NET object of the correct type
+				obj = InternalGetNSObject<T>(ptr);
+			}
+			return obj;
 		}
 
 		public static T GetNSObject<T>(IntPtr ptr)
@@ -215,7 +248,6 @@ namespace MonoMac.ObjCRuntime
 		static readonly Type[] s_IntPtrTypes = new [] { typeof(IntPtr) };
 
 		static T InternalGetNSObject<T>(IntPtr ptr)
-			where T : NSObject
 		{
 			Type type;
 
@@ -253,7 +285,7 @@ namespace MonoMac.ObjCRuntime
 			if (type == null)
 				type = typeof(T);
 
-			return Activator.CreateInstance(type, new object[] { ptr }) as T;
+			return (T)Activator.CreateInstance(type, new object[] { ptr });
 		}
 
 
@@ -272,6 +304,73 @@ namespace MonoMac.ObjCRuntime
 			var klass = new Class(type);
 
 			Class.RegisterMethod(method, ea, type, klass.Handle);
+		}
+
+		internal static Delegate GetDelegateForBlock (IntPtr methodPtr, Type type)
+		{
+			// We do not care if there is a race condition and we initialize two caches
+			// since the worst that can happen is that we end up with an extra
+			// delegate->function pointer.
+			Delegate val;
+			var pair = new IntPtrTypeValueTuple (methodPtr, type);
+			lock (lock_obj) {
+				if (block_to_delegate_cache == null)
+					block_to_delegate_cache = new Dictionary<IntPtrTypeValueTuple, Delegate> ();
+
+				if (block_to_delegate_cache.TryGetValue (pair, out val))
+					return val;
+			}
+
+			val = Marshal.GetDelegateForFunctionPointer (methodPtr, type);
+
+			lock (lock_obj) {
+				block_to_delegate_cache [pair] = val;
+			}
+			return val;
+		}
+	}
+
+	internal struct IntPtrTypeValueTuple : IEquatable<IntPtrTypeValueTuple>
+	{
+		static readonly IEqualityComparer<IntPtr> item1Comparer = Runtime.IntPtrEqualityComparer;
+		static readonly IEqualityComparer<Type> item2Comparer = Runtime.TypeEqualityComparer;
+
+		public readonly IntPtr Item1;
+		public readonly Type Item2;
+
+		public IntPtrTypeValueTuple (IntPtr item1, Type item2)
+		{
+			Item1 = item1;
+			Item2 = item2;
+		}
+
+		public bool Equals (IntPtrTypeValueTuple other)
+		{
+			return item1Comparer.Equals (Item1, other.Item1) &&
+				item2Comparer.Equals (Item2, other.Item2);
+		}
+
+		public override bool Equals (object obj)
+		{
+			if (obj is IntPtrTypeValueTuple)
+				return Equals ((IntPtrTypeValueTuple)obj);
+
+			return false;
+		}
+
+		public override int GetHashCode ()
+		{
+			return item1Comparer.GetHashCode (Item1) ^ item2Comparer.GetHashCode (Item2);
+		}
+
+		public static bool operator == (IntPtrTypeValueTuple left, IntPtrTypeValueTuple right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator != (IntPtrTypeValueTuple left, IntPtrTypeValueTuple right)
+		{
+			return !left.Equals(right);
 		}
 	}
 }

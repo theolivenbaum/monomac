@@ -63,6 +63,7 @@ namespace MonoMac.Security {
 		extern static SecStatusCode SecTrustCreateWithCertificates (IntPtr certOrCertArray, IntPtr policies, out IntPtr sectrustref);
 		
 
+#if !COREBUILD
 		public SecTrust (X509Certificate certificate, SecPolicy policy)
 		{
 			if (certificate == null)
@@ -113,6 +114,7 @@ namespace MonoMac.Security {
 				Initialize (certs.Handle, policy);
 			}
 		}
+#endif
 
 		void Initialize (IntPtr certHandle, SecPolicy policy)
 		{
@@ -178,6 +180,7 @@ namespace MonoMac.Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* CFDataRef */ SecTrustCopyExceptions (IntPtr /* SecTrustRef */ trust);
 
+#if !COREBUILD
 		public NSData GetExceptions ()
 		{
 			if (handle == IntPtr.Zero)
@@ -197,6 +200,7 @@ namespace MonoMac.Security {
 			IntPtr p = data == null ? IntPtr.Zero : data.Handle;
 			return SecTrustSetExceptions (handle, p);
 		}
+#endif
 
 		[DllImport (Constants.SecurityLibrary)]
 		extern static double /* CFAbsoluteTime */ SecTrustGetVerifyTime (IntPtr /* SecTrustRef */ trust);
@@ -212,6 +216,7 @@ namespace MonoMac.Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode /* OSStatus */ SecTrustSetVerifyDate (IntPtr /* SecTrustRef */ trust, IntPtr /* CFDateRef */ verifyDate);
 
+#if !COREBUILD
 		public SecStatusCode SetVerifyDate (DateTime date)
 		{
 			if (handle == IntPtr.Zero)
@@ -260,6 +265,8 @@ namespace MonoMac.Security {
 				return SecTrustSetAnchorCertificates (handle, certs.Handle);
 			}
 		}
+#endif
+
 
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode /* OSStatus */ SecTrustSetAnchorCertificatesOnly (IntPtr /* SecTrustRef */ trust, bool anchorCertificatesOnly);

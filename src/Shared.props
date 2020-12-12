@@ -147,13 +147,10 @@
     <SharedSource Include="MobileCoreServices/UTType.cs" />
     <SharedSource Include="ObjCRuntime/CompileFlagsAttribute.cs" />
     <SharedSource Include="QuickLook/Thumbnail.cs" />
-    <SharedSource Include="Security/Enums.cs" />
-    <SharedSource Include="Security/Certificate.cs" />
     <SharedSource Include="Security/Items.cs" />
-    <SharedSource Include="Security/Policy.cs" />
-    <SharedSource Include="Security/Trust.cs" />
     <SharedSource Include="Darwin/KernelNotification.cs" />
     <SharedSource Include="Darwin/SystemLog.cs" />
+
     <SharedCoreSource Include="AVFoundation/Enums.cs" />
     <SharedCoreSource Include="AVFoundation/AVAudioSettings.cs" />
     <SharedCoreSource Include="AVFoundation/AVUrlAssetOptions.cs" />
@@ -240,16 +237,23 @@
     <SharedCoreSource Include="ObjCRuntime/SinceAttribute.cs" />
     <SharedCoreSource Include="ObjCRuntime/ThreadSafeAttribute.cs" />
     <SharedCoreSource Include="ObjCRuntime/TypeConverter.cs" />
+    <SharedCoreSource Include="ObjCRuntime/BlockProxyAttribute.cs" />
     <SharedCoreSource Include="MonoNativeFunctionWrapperAttribute.cs" />
     <SharedCoreSource Include="MonoPInvokeCallbackAttribute.cs" />
+    <SharedCoreSource Include="Security/Enums.cs" />
+    <SharedCoreSource Include="Security/Certificate.cs" />
+    <SharedCoreSource Include="Security/Trust.cs" />
+    <SharedCoreSource Include="Security/Policy.cs" />
+    
     <CoreSource Include="Constants.cs" />
     <CoreSource Include="AppKit/Enums.cs" />
     <CoreSource Include="AppKit/Defs.cs" />
     <CoreSource Include="Foundation/EnumDesktop.cs" />
     <CoreSource Include="Foundation/NSObject.cs" />
+    <CoreSource Include="Foundation/NSZone.cs" />
     <CoreSource Include="ImageKit/Enums.cs" />
     <CoreSource Include="ObjCRuntime/Class.cs" />
-    <CoreSource Include="ObjCRuntime/IntPtrComparer.cs" />
+    <CoreSource Include="ObjCRuntime/Comparers.cs" />
     <CoreSource Include="ObjCRuntime/Messaging.cs" />
     <CoreSource Include="ObjCRuntime/NativeConstructorBuilder.cs" />
     <CoreSource Include="ObjCRuntime/NativeImplementationBuilder.cs" />
@@ -260,6 +264,7 @@
     <CoreSource Include="ObjCRuntime/Runtime.cs" />
     <CoreSource Include="ObjCRuntime/RequiredFrameworkAttribute.cs" />
     <CoreSource Include="ObjCRuntime/Selector.cs" />
+    <CoreSource Include="ObjCRuntime/NativeAttribute.cs" />
     <CoreSource Include="OpenGL/OpenTK/Math/Quaternion.cs" />
     <CoreSource Include="OpenGL/OpenTK/Math/MathHelper.cs" />
     <CoreSource Include="OpenGL/OpenTK/Math/Matrix4.cs" />
@@ -274,7 +279,8 @@
     <CoreSource Include="OpenGL/CGLPixelFormat.cs" />
     <CoreSource Include="ScriptingBridge/Enums.cs" />
     <CoreSource Include="WebKit/Enums.cs" />
-    <BaseSource Include="Compat.cs" />
+    <CoreSource Include="WKWebKit/Defs.cs" />
+
     <BaseSource Include="Foundation/NSObjectMac.cs" />
     <BaseSource Include="Foundation/NSConnection.cs" />
     <BaseSource Include="AppKit/EventArgs.cs" />

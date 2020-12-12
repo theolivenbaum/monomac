@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <EnableDefaultItems>False</EnableDefaultItems>
     <BaseNamespace Condition="$(BaseNamespace) == ''">MonoMac.ObjCRuntime</BaseNamespace>
@@ -27,38 +27,27 @@
     <Apis Include="qtkit.cs" />
     <Apis Include="pdfkit.cs" />
     <Apis Include="webkit.cs" />
+    <Apis Include="wkwebkit.cs" />
     <Apis Include="composer.cs" />
     <Apis Include="scriptingbridge.cs" />
   </ItemGroup>
   
   <ItemGroup>
     <Compile Include="generator.cs" />
+    <Compile Include="generator-attributes.cs" />
     <Compile Include="error.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="btouch.cs" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.7.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
- 	<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
-  </ItemGroup>
 
-  <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis)" Outputs="$(GeneratedOutputDir)generated_sources">
+  <Target Name="GenerateSources" AfterTargets="AfterBuild" Inputs="@(Apis);$(TargetPath)" Outputs="$(GeneratedOutputDir)generated_sources">
     <ItemGroup>
       <BaseDefineItems Include="$(BaseDefines)" />
     </ItemGroup>
 
     <PropertyGroup>
-      <ManagedExeLauncher Condition="'$(OS)' != 'Windows_NT'">mono </ManagedExeLauncher>
-      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND '$(MSBuildRuntimeType)' == 'Core'">dotnet</GeneratorCompiler>
-      <GeneratorCompiler Condition="$(GeneratorCompiler) == '' AND '$(MSBuildRuntimeType)' != 'Core' AND Exists('$(_RoslynTasksDirectory)csc.exe')">$(_RoslynTasksDirectory)csc.exe</GeneratorCompiler>
-      <GeneratorCompiler Condition="$(GeneratorCompiler) == ''">csc</GeneratorCompiler>
-      
       <GeneratorParameters>$(GeneratorParameters) -a --core -v</GeneratorParameters>
-      <GeneratorParameters>$(GeneratorParameters) "--compiler=$(GeneratorCompiler)"</GeneratorParameters> 
+      <GeneratorParameters>$(GeneratorParameters) "--compiler=dotnet"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "--sourceonly=$(GeneratedOutputDir)generated_sources"</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-outdir=$(GeneratedOutputDir)."</GeneratorParameters> 
       <GeneratorParameters>$(GeneratorParameters) "-tmpdir=$(IntermediateOutputPath)generate_temp"</GeneratorParameters> 
@@ -69,7 +58,7 @@
       
     </PropertyGroup>
     <MakeDir Directories="$(IntermediateOutputPath)\generate_temp" />
-    <Exec Command="$(ManagedExeLauncher)$(TargetPath) $(GeneratorParameters)" />
+    <Exec Command="dotnet $(TargetPath) $(GeneratorParameters)" />
   </Target>
   
   <Target Name="CleanGeneratedSource" BeforeTargets="AfterClean">

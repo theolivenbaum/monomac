@@ -32,12 +32,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mono.Options;
 using System.Text;
+using MonoMac.ObjCRuntime;
 
 #if !MONOMAC
 using MonoTouch.ObjCRuntime;
 #endif
 
-class BindingTouch
+public class BindingTouch
 {
 #if MONOMAC
 	static string baselibdll = "MonoMac.dll";
@@ -82,7 +83,13 @@ class BindingTouch
 		}
 	}
 
-	static int Main2(string[] args)
+	static int Main2 (string [] args)
+	{
+		var touch = new BindingTouch ();
+		return touch.Main3 (args);
+	}
+
+	int Main3 (string [] args)
 	{
 		bool show_help = false;
 		bool zero_copy = false;
@@ -343,9 +350,10 @@ class BindingTouch
 
 		proj.AppendLine("<PropertyGroup>");
 		proj.AppendLine($"  <AssemblyName>{Path.GetFileNameWithoutExtension(destination)}</AssemblyName>");
-		proj.AppendLine($"  <TargetFramework>netstandard2.0</TargetFramework>");
+		proj.AppendLine($"  <TargetFramework>net5.0</TargetFramework>");
 		proj.AppendLine($"  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>");
 		proj.AppendLine($"  <EnableDefaultItems>false</EnableDefaultItems>");
+		proj.AppendLine($"  <SelfContained>false</SelfContained>");
 		proj.AppendLine($"  <OutputPath>{Path.GetDirectoryName(destination)}</OutputPath>");
 		if (unsafef)
 			proj.AppendLine("  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>");
@@ -408,7 +416,7 @@ class BindingTouch
 		var cargs = new StringBuilder();
 		cargs.Append("build ");
 		cargs.Append(projName);
-		cargs.Append($" /p:Configuration={(debug ? "Debug" : "Release")} ");
+		cargs.Append($" /nologo /consoleLoggerParameters:NoSummary /p:Configuration={(debug ? "Debug" : "Release")} ");
 
 		var si = new ProcessStartInfo(compiler, cargs.ToString())
 		{

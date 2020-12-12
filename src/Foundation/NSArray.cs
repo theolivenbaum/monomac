@@ -235,8 +235,7 @@ namespace MonoMac.Foundation {
 			return ret;
 		}
 
-		// Used for NSObjects only
-		static public T [] ArrayFromHandle<T> (IntPtr handle) where T : NSObject
+		static public T [] ArrayFromHandle<T> (IntPtr handle) where T : INativeObject
 		{
 			if (handle == IntPtr.Zero)
 				return null;
@@ -255,8 +254,7 @@ namespace MonoMac.Foundation {
 				IntPtr p = Messaging.IntPtr_objc_msgSend_UInt32 (handle, Selector.GetHandle (selObjectAtIndex_), i);
 #endif
 
-				ret [i] = Runtime.GetNSObject<T> (p);
-				ret [i].Handle = p;
+				ret [i] = Runtime.GetINativeObject<T> (p);
 			}
 			return ret;
 		}

@@ -22,6 +22,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -56,17 +57,18 @@ namespace MonoMac.AppKit {
 			var monomac = Assembly.GetExecutingAssembly ();
 			Runtime.RegisterAssembly (monomac);
 
-			var name = monomac.GetName ().ToString ();
+			var monomacName = monomac.GetName ();
 
-			foreach (var a in AppDomain.CurrentDomain.GetAssemblies ()) {
-
-                foreach (var r in a.GetReferencedAssemblies())
+			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies ();
+			for (int i = 0; i < domainAssemblies.Length; i++) {
+				Assembly assembly = domainAssemblies[i];
+				AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies();
+				for (int j = 0; j < referencedAssemblies.Length; j++)
                 {
-                    //FIXME: Mono's ReferenceMatchesDefinition isn't implemented, so check string values instead
-                    //if (AssemblyName.ReferenceMatchesDefinition (r, name)) {
-                    if (name == r.ToString())
+					AssemblyName referenceName = referencedAssemblies[j];
+					if (monomacName == referenceName)
                     {
-                        Runtime.RegisterAssembly(a);
+                        Runtime.RegisterAssembly(assembly);
                         break;
                     }
                 }

@@ -101,8 +101,10 @@ namespace MonoMac.ObjCRuntime
             get; set;
         }
 
-        protected Type CreateDelegateType(Type return_type, Type[] argument_types)
+        protected Type CreateDelegateType(Type return_type)
         {
+			var argument_types = ParameterTypes;
+
             TypeBuilder type = module.DefineType(Guid.NewGuid().ToString(), TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.AnsiClass | TypeAttributes.AutoClass, typeof(MulticastDelegate));
 
 			// doesn't work on .NET Core.. not sure why, but it works without..
@@ -114,14 +116,16 @@ namespace MonoMac.ObjCRuntime
 
             MethodBuilder method = null;
 
-            method = type.DefineMethod("Invoke", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual, return_type, argument_types);
+            method = type.DefineMethod("Invoke", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot, return_type, argument_types);
 
             if (NeedsCustomMarshaler(return_type))
                 SetupParameter(method, 0, return_type);
 
             for (int i = 1; i <= argument_types.Length; i++)
+			{
                 if (NeedsCustomMarshaler(argument_types[i - 1]))
                     SetupParameter(method, i, argument_types[i - 1]);
+			}
 
             method.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
@@ -149,12 +153,15 @@ namespace MonoMac.ObjCRuntime
 
 			throw new ArgumentException ("Cannot determine marshaler type for: " + t);
 		}
+		static ConstructorInfo cinfo = typeof (MarshalAsAttribute).GetConstructor (new Type[] { typeof (UnmanagedType) });
+		static FieldInfo[] mtrfld = new FieldInfo [] { typeof (MarshalAsAttribute).GetField ("MarshalTypeRef") };
+		static object[] customMarshalerArgs = new object [] { UnmanagedType.CustomMarshaler };
 
 		private void SetupParameter (MethodBuilder builder, int index, Type t) {
+			var marshaler = MarshalerForType (t);
+
 			ParameterBuilder pb = builder.DefineParameter (index, ParameterAttributes.HasFieldMarshal, string.Format ("arg{0}", index));
-			ConstructorInfo cinfo = typeof (MarshalAsAttribute).GetConstructor (new Type[] { typeof (UnmanagedType) });
-			FieldInfo mtrfld = typeof (MarshalAsAttribute).GetField ("MarshalTypeRef");
-			CustomAttributeBuilder cabuilder = new CustomAttributeBuilder (cinfo, new object [] { UnmanagedType.CustomMarshaler }, new FieldInfo [] { mtrfld }, new object [] { MarshalerForType (t) });
+			CustomAttributeBuilder cabuilder = new CustomAttributeBuilder (cinfo, customMarshalerArgs, mtrfld, new object [] { marshaler });
 
 			pb.SetCustomAttribute (cabuilder);
 		}
@@ -181,32 +188,42 @@ namespace MonoMac.ObjCRuntime
 			}
 
 			for (int i = 0; i < Parameters.Length; i++) {
-				if (Parameters [i].ParameterType.IsByRef && IsWrappedType (Parameters [i].ParameterType.GetElementType ()))
+				var parameter = Parameters[i];
+				if (parameter.ParameterType.IsByRef && IsWrappedType (parameter.ParameterType.GetElementType ()))
 					ParameterTypes [i + ArgumentOffset] = typeof (IntPtr).MakeByRefType ();
-				else if (Parameters [i].ParameterType.IsArray && IsWrappedType (Parameters [i].ParameterType.GetElementType ()))
+				else if (parameter.ParameterType.IsArray && IsWrappedType (parameter.ParameterType.GetElementType ()))
 					ParameterTypes [i + ArgumentOffset] = typeof (IntPtr);
-				else if (typeof (INativeObject).IsAssignableFrom (Parameters [i].ParameterType) && !IsWrappedType (Parameters [i].ParameterType))
+				else if (typeof (INativeObject).IsAssignableFrom (parameter.ParameterType) && !IsWrappedType (parameter.ParameterType))
 					ParameterTypes [i + ArgumentOffset] = typeof (IntPtr);
-				else if (Parameters [i].ParameterType == typeof (string))
+				else if (parameter.ParameterType == typeof (string))
 					ParameterTypes [i + ArgumentOffset] = typeof (NSString);
+				else if (parameter.GetCustomAttribute<BlockProxyAttribute>() != null)
+				{
+					ParameterTypes [i + ArgumentOffset] = typeof (IntPtr);
+				}
 				else
-					ParameterTypes [i + ArgumentOffset] = Parameters [i].ParameterType;
+				{
+					ParameterTypes [i + ArgumentOffset] = parameter.ParameterType;
+				}
 				// The TypeConverter will emit a ^@ for a byref type that is a NSObject or NSObject subclass in this case
 				// If we passed the ParameterTypes [i+ArgumentOffset] as would be more logical we would emit a ^^v for that case, which
 				// while currently acceptible isn't representative of what obj-c wants.
-				Signature += TypeConverter.ToNative (Parameters [i].ParameterType);
+				Signature += TypeConverter.ToNative (parameter.ParameterType);
 			}
 		}
 
 		protected void DeclareLocals (ILGenerator il) {
 			// Keep in sync with UpdateByRefArguments()
 			for (int i = 0; i < Parameters.Length; i++) {
-				if (Parameters [i].ParameterType.IsByRef && IsWrappedType (Parameters [i].ParameterType.GetElementType ())) {
-					il.DeclareLocal (Parameters [i].ParameterType.GetElementType ());
-				} else if (Parameters [i].ParameterType.IsArray && IsWrappedType (Parameters [i].ParameterType.GetElementType ())) {
-					il.DeclareLocal (Parameters [i].ParameterType);
-				} else if (Parameters [i].ParameterType == typeof (string)) {
+				var parameter = Parameters[i];
+				if (parameter.ParameterType.IsByRef && IsWrappedType (parameter.ParameterType.GetElementType ())) {
+					il.DeclareLocal (parameter.ParameterType.GetElementType ());
+				} else if (parameter.ParameterType.IsArray && IsWrappedType (parameter.ParameterType.GetElementType ())) {
+					il.DeclareLocal (parameter.ParameterType);
+				} else if (parameter.ParameterType == typeof (string)) {
 					il.DeclareLocal (typeof (string));
+				} else if (parameter.GetCustomAttribute<BlockProxyAttribute>() != null) {
+					il.DeclareLocal (parameter.ParameterType);
 				}
 			}
 		}
@@ -215,7 +232,8 @@ namespace MonoMac.ObjCRuntime
 		protected void ConvertArguments (ILGenerator il, int locoffset) {
 #if !MONOMAC_BOOTSTRAP
 			for (int i = ArgumentOffset, j = 0; i < ParameterTypes.Length; i++) {
-				if (Parameters [i-ArgumentOffset].ParameterType.IsByRef && (Attribute.GetCustomAttribute (Parameters [i-ArgumentOffset], typeof (OutAttribute)) == null) && IsWrappedType (Parameters[i-ArgumentOffset].ParameterType.GetElementType ())) {
+				var parameter = Parameters[i - ArgumentOffset];
+				if (parameter.ParameterType.IsByRef && (Attribute.GetCustomAttribute (parameter, typeof (OutAttribute)) == null) && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					var nullout = il.DefineLabel ();
 					var done = il.DefineLabel ();
 					il.Emit (OpCodes.Ldarg, i);
@@ -229,23 +247,23 @@ namespace MonoMac.ObjCRuntime
 					il.MarkLabel (done);
 					il.Emit (OpCodes.Stloc, j+locoffset);
 					j++;
-				} else if (Parameters [i-ArgumentOffset].ParameterType.IsArray && IsWrappedType (Parameters [i-ArgumentOffset].ParameterType.GetElementType ())) {
+				} else if (parameter.ParameterType.IsArray && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					var nullout = il.DefineLabel ();
 					var done = il.DefineLabel ();
 					il.Emit (OpCodes.Ldarg, i);
 					il.Emit (OpCodes.Brfalse, nullout);
 					il.Emit (OpCodes.Ldarg, i);
-					if (Parameters [i-ArgumentOffset].ParameterType.GetElementType () == typeof (string))
+					if (parameter.ParameterType.GetElementType () == typeof (string))
 						il.Emit (OpCodes.Call, convertsarray);
 					else
-						il.Emit (OpCodes.Call, convertarray.MakeGenericMethod (Parameters [i-ArgumentOffset].ParameterType.GetElementType ()));
+						il.Emit (OpCodes.Call, convertarray.MakeGenericMethod (parameter.ParameterType.GetElementType ()));
 					il.Emit (OpCodes.Br, done);
 					il.MarkLabel (nullout);
 					il.Emit (OpCodes.Ldnull);
 					il.MarkLabel (done);
 					il.Emit (OpCodes.Stloc, j+locoffset);
 					j++;
-				} else if (Parameters [i-ArgumentOffset].ParameterType == typeof (string)) {
+				} else if (parameter.ParameterType == typeof (string)) {
 					var nullout = il.DefineLabel ();
 					var done = il.DefineLabel ();
 					il.Emit (OpCodes.Ldarg, i);
@@ -258,23 +276,35 @@ namespace MonoMac.ObjCRuntime
 					il.MarkLabel (done);
 					il.Emit (OpCodes.Stloc, j+locoffset);
 					j++;
+				} else {
+					var blockProxyAttribute = parameter.GetCustomAttribute<BlockProxyAttribute>();
+					if (blockProxyAttribute != null)
+					{
+						var createDelegate = blockProxyAttribute.Type.GetMethod("CreateDelegate", BindingFlags.Static | BindingFlags.Public);
+						il.Emit (OpCodes.Ldarg, i);
+						il.Emit (OpCodes.Call, createDelegate);
+						il.Emit (OpCodes.Stloc, j+locoffset);
+						j++;
+					}
 				}
+
 			}
 #endif
 		}
 
 		protected void LoadArguments (ILGenerator il, int locoffset) {
 			for (int i = ArgumentOffset, j = 0; i < ParameterTypes.Length; i++) {
-				if (Parameters [i-ArgumentOffset].ParameterType.IsByRef && IsWrappedType (Parameters[i-ArgumentOffset].ParameterType.GetElementType ())) {
+				var parameter = Parameters[i - ArgumentOffset];
+				if (parameter.ParameterType.IsByRef && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					il.Emit (OpCodes.Ldloca_S, j+locoffset);
 					j++;
-				} else if (Parameters [i-ArgumentOffset].ParameterType.IsArray && IsWrappedType (Parameters [i-ArgumentOffset].ParameterType.GetElementType ())) {
+				} else if (parameter.ParameterType.IsArray && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					il.Emit (OpCodes.Ldloc, j+locoffset);
 					j++;
-				} else if (typeof (INativeObject).IsAssignableFrom (Parameters [i-ArgumentOffset].ParameterType) && !IsWrappedType (Parameters [i-ArgumentOffset].ParameterType)) {
+				} else if (typeof (INativeObject).IsAssignableFrom (parameter.ParameterType) && !IsWrappedType (parameter.ParameterType)) {
 					il.Emit (OpCodes.Ldarg, i);
-					il.Emit (OpCodes.Newobj, Parameters [i-ArgumentOffset].ParameterType.GetConstructor (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type [] { typeof (IntPtr) }, null));
-				} else if (Parameters [i-ArgumentOffset].ParameterType == typeof (string)) {
+					il.Emit (OpCodes.Newobj, parameter.ParameterType.GetConstructor (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type [] { typeof (IntPtr) }, null));
+				} else if (parameter.ParameterType == typeof (string) || parameter.GetCustomAttribute<BlockProxyAttribute>() != null) {
 					il.Emit (OpCodes.Ldloc, j+locoffset);
 					j++;
 				} else {
@@ -287,7 +317,8 @@ namespace MonoMac.ObjCRuntime
 #if !MONOMAC_BOOTSTRAP
 			// Keep in sync with DeclareLocals()
 			for (int i = ArgumentOffset, j = 0; i < ParameterTypes.Length; i++) {
-				if (Parameters [i-ArgumentOffset].ParameterType.IsByRef && IsWrappedType (Parameters[i-ArgumentOffset].ParameterType.GetElementType ())) {
+				var parameter = Parameters[i - ArgumentOffset];
+				if (parameter.ParameterType.IsByRef && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					Label nullout = il.DefineLabel ();
 					Label done = il.DefineLabel ();
 					il.Emit (OpCodes.Ldloc, j+locoffset);
@@ -303,9 +334,9 @@ namespace MonoMac.ObjCRuntime
 					il.Emit (OpCodes.Stind_I);
 					il.MarkLabel (done);
 					j++;
-				} else if (Parameters [i-ArgumentOffset].ParameterType.IsArray && IsWrappedType (Parameters [i-ArgumentOffset].ParameterType.GetElementType ())) {
+				} else if (parameter.ParameterType.IsArray && IsWrappedType (parameter.ParameterType.GetElementType ())) {
 					j++;
-				} else if (Parameters [i-ArgumentOffset].ParameterType == typeof (string)) {
+				} else if (parameter.ParameterType == typeof (string) || parameter.GetCustomAttribute<BlockProxyAttribute>() != null) {
 					j++;
 				}
 			}
