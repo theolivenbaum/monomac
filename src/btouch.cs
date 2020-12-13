@@ -47,6 +47,7 @@ public class BindingTouch
 	static string tool_name = "bmac";
 	static string compiler = "csc";
 	static string basedir = null;
+	static string outdir = null;
 	static string net_sdk = null;
 #else
 	static string baselibdll = "/Developer/MonoTouch/usr/lib/mono/2.1/monotouch.dll";
@@ -94,7 +95,6 @@ public class BindingTouch
 		bool show_help = false;
 		bool zero_copy = false;
 		bool alpha = false;
-		string outdir = null;
 		string tmpdir = null;
 		string ns = null;
 		string outfile = null;
@@ -410,13 +410,14 @@ public class BindingTouch
 		proj.Append("</Project>");
 
 		var projName = Path.Combine(Path.GetDirectoryName(destination), Path.GetFileNameWithoutExtension(destination) + ".csproj");
+		var logName = Path.Combine(outdir, Path.GetFileNameWithoutExtension(destination) + ".binlog");
 
 		File.WriteAllText(projName, proj.ToString());
 
 		var cargs = new StringBuilder();
 		cargs.Append("build ");
 		cargs.Append(projName);
-		cargs.Append($" /nologo /consoleLoggerParameters:NoSummary /p:Configuration={(debug ? "Debug" : "Release")} ");
+		cargs.Append($" /nologo /consoleLoggerParameters:NoSummary /p:Configuration={(debug ? "Debug" : "Release")} /bl:\"{logName}\"");
 
 		var si = new ProcessStartInfo(compiler, cargs.ToString())
 		{
