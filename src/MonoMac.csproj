@@ -6,7 +6,6 @@
     <Version>0.0.1</Version>
     <EnableDefaultItems>False</EnableDefaultItems>
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
-    <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -31,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="generator.csproj" AdditionalProperties="TargetFramework=net5.0" ExcludeAssets="all" Private="False">
+    <ProjectReference Include="generator.csproj" SetTargetFramework="TargetFramework=net5.0">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
     </ProjectReference>
