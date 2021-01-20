@@ -26,6 +26,7 @@ using System;
 namespace MonoMac.Foundation {
 	public class ObjCException : Exception {
 		NSException native_exc;
+		string _stackTrace;
 
 		public ObjCException () : base ()
 		{
@@ -37,34 +38,26 @@ namespace MonoMac.Foundation {
 			native_exc = exc;
 		}
 
+		public ObjCException (NSException exc, string stackTrace)
+		{
+			native_exc = exc;
+			_stackTrace = stackTrace;
+		}
+
 		[Preserve]
 		internal static void Throw (IntPtr handle)
 		{
 			throw new ObjCException (new NSException (handle));
 		}
 
-		public NSException NSException {
-			get {
-				return native_exc;
-			}
-		}
+		public NSException NSException => native_exc;
 
-		public string Reason {
-			get {
-				return native_exc.Reason;
-			}
-		}
+		public string Reason => native_exc.Reason;
 
-		public string Name {
-			get {
-				return native_exc.Name;
-			}
-		}
+		public string Name => native_exc.Name;
 
-		public override string Message {
-			get {
-				return string.Format ("{0}: {1}", Name, Reason);
-			}
-		}
+		public override string StackTrace => _stackTrace ?? base.StackTrace;
+
+		public override string Message => $"{Name}: {Reason}";
 	}
 }
