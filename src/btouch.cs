@@ -415,9 +415,7 @@ public class BindingTouch
 		File.WriteAllText(projName, proj.ToString());
 
 		var cargs = new StringBuilder();
-		cargs.Append("build ");
-		cargs.Append(projName);
-		cargs.Append($" /nologo /consoleLoggerParameters:NoSummary /p:Configuration={(debug ? "Debug" : "Release")} /bl:\"{logName}\"");
+		cargs.Append($"build \"{projName}\" /nologo /consoleLoggerParameters:NoSummary /p:Configuration={(debug ? "Debug" : "Release")} /bl:\"{logName}\"");
 
 		var si = new ProcessStartInfo(compiler, cargs.ToString())
 		{
