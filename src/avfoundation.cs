@@ -3243,6 +3243,32 @@ namespace MonoMac.AVFoundation {
 #endif
 	}
 
+#if MONOMAC
+	[BaseType (typeof (AVCaptureInput))]
+	interface AVCaptureScreenInput {
+		[Export ("initWithDisplayID:")]
+		IntPtr Constructor (uint /* CGDirectDisplayID = uint32_t */ displayID);
+
+		[Export ("minFrameDuration")]
+		CMTime MinFrameDuration { get; set; }
+
+		[Export ("cropRect")]
+		CGRect CropRect { get; set; }
+
+		[Export ("scaleFactor")]
+		nfloat ScaleFactor { get; set; }
+
+		[Export ("capturesMouseClicks")]
+		bool CapturesMouseClicks { get; set; }
+
+		[Export ("capturesCursor")]
+		bool CapturesCursor { get; set; }
+
+		[Export ("removesDuplicateFrames")]
+		bool RemovesDuplicateFrames { get; set; }
+	}
+#endif
+
 	[Since (4,0)]
         [BaseType (typeof (CALayer))]
         interface AVCaptureVideoPreviewLayer {
