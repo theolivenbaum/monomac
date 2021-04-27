@@ -31,55 +31,60 @@ using MonoMac;
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
 
-namespace MonoMac.AppKit {
-	public partial class NSApplication : NSResponder {
+namespace MonoMac.AppKit
+{
+	public partial class NSApplication : NSResponder
+	{
 		public static bool CheckForIllegalCrossThreadCalls = true;
 		private static Thread mainThread;
 
-		static NSApplication () {
-			System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof (NSObject).TypeHandle);
-			class_ptr = Class.GetHandle ("NSApplication");
+		static NSApplication()
+		{
+			System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(NSObject).TypeHandle);
+			class_ptr = Class.GetHandle("NSApplication");
 		}
 
-		[DllImport (Constants.AppKitLibrary)]
-		extern static void NSApplicationMain (int argc, string [] argv);
+		[DllImport(Constants.AppKitLibrary)]
+		extern static void NSApplicationMain(int argc, string[] argv);
 
 		static bool initialized;
 
-		public static void Init ()
+		public static void Init()
 		{
-			if (initialized) {
-				throw new InvalidOperationException ("Init has already be be invoked; it can only be invoke once");
+			if (initialized)
+			{
+				throw new InvalidOperationException("Init has already be be invoked; it can only be invoke once");
 			}
 
 			initialized = true;
 
-			var monomac = Assembly.GetExecutingAssembly ();
-			Runtime.RegisterAssembly (monomac);
+			var monomac = Assembly.GetExecutingAssembly();
+			Runtime.RegisterAssembly(monomac);
 
-			var monomacName = monomac.GetName ();
+			var monomacName = monomac.GetName();
 
-			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies ();
-			for (int i = 0; i < domainAssemblies.Length; i++) {
+			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+			for (int i = 0; i < domainAssemblies.Length; i++)
+			{
 				Assembly assembly = domainAssemblies[i];
 				AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies();
 				for (int j = 0; j < referencedAssemblies.Length; j++)
-                {
+				{
 					AssemblyName referenceName = referencedAssemblies[j];
-					if (monomacName == referenceName)
-                    {
-                        Runtime.RegisterAssembly(assembly);
-                        break;
-                    }
-                }
-            }
+					if (AssemblyName.ReferenceMatchesDefinition(referenceName, monomacName) || monomacName == referenceName)
+					{
+						Runtime.RegisterAssembly(assembly);
+						break;
+					}
+				}
+			}
 
 			// Runtime hosts embedding MonoMac may use a different sync context 
 			// and call NSApplicationMain externally prior to this Init, so only
 			// initialize the context if it hasn't been set externally. Alternatively,
 			// AppKitSynchronizationContext could be made public.
-			if(SynchronizationContext.Current == null)
-				SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
+			if (SynchronizationContext.Current == null)
+				SynchronizationContext.SetSynchronizationContext(new AppKitSynchronizationContext());
 
 			// Establish the main thread at the time of Init to support hosts
 			// that don't call Main.
@@ -89,26 +94,26 @@ namespace MonoMac.AppKit {
 			//   Install hook to register dynamically loaded assemblies
 		}
 
-		public static void InitDrawingBridge ()
+		public static void InitDrawingBridge()
 		{
-			FieldInfo UseCocoaDrawableField = Type.GetType ("System.Drawing.GDIPlus, System.Drawing").GetField ("UseCocoaDrawable", BindingFlags.Static | BindingFlags.Public);
-			FieldInfo UseCarbonDrawableField = Type.GetType ("System.Drawing.GDIPlus, System.Drawing").GetField ("UseCarbonDrawable", BindingFlags.Static | BindingFlags.Public);
+			FieldInfo UseCocoaDrawableField = Type.GetType("System.Drawing.GDIPlus, System.Drawing").GetField("UseCocoaDrawable", BindingFlags.Static | BindingFlags.Public);
+			FieldInfo UseCarbonDrawableField = Type.GetType("System.Drawing.GDIPlus, System.Drawing").GetField("UseCarbonDrawable", BindingFlags.Static | BindingFlags.Public);
 
-			UseCocoaDrawableField.SetValue (null, true);
-			UseCarbonDrawableField.SetValue (null, false);
+			UseCocoaDrawableField.SetValue(null, true);
+			UseCarbonDrawableField.SetValue(null, false);
 		}
 
-		public static void Main (string [] args)
+		public static void Main(string[] args)
 		{
 			// Switch to an AppKitSynchronizationContext if Main is invoked
-			if(SynchronizationContext.Current == null || !typeof(AppKitSynchronizationContext).IsAssignableFrom(SynchronizationContext.Current.GetType()))
-				SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
+			if (SynchronizationContext.Current == null || !typeof(AppKitSynchronizationContext).IsAssignableFrom(SynchronizationContext.Current.GetType()))
+				SynchronizationContext.SetSynchronizationContext(new AppKitSynchronizationContext());
 
 			// Init where this is set the first time is generally paired
 			// with a call to Main, but this guarantees the right thread.
 			NSApplication.mainThread = Thread.CurrentThread;
 
-			NSApplicationMain (args.Length, args);
+			NSApplicationMain(args.Length, args);
 		}
 
 		public static void EnsureUIThread()
@@ -119,21 +124,22 @@ namespace MonoMac.AppKit {
 
 		// NSEventMask is a superset (64 bits) of the mask that can be used (32 bits)
 		// NSEventMaskFromType is often used to convert from NSEventType to the mask
-		public NSEvent NextEvent (NSEventMask mask, NSDate expiration, string mode, bool deqFlag)
+		public NSEvent NextEvent(NSEventMask mask, NSDate expiration, string mode, bool deqFlag)
 		{
-			return NextEvent ((uint) mask, expiration, mode, deqFlag);
+			return NextEvent((uint)mask, expiration, mode, deqFlag);
 		}
 
-		public void DiscardEvents (NSEventMask mask, NSEvent lastEvent)
+		public void DiscardEvents(NSEventMask mask, NSEvent lastEvent)
 		{
-			DiscardEvents ((uint) mask, lastEvent);
+			DiscardEvents((uint)mask, lastEvent);
 		}
 
 		// note: if needed override the protected Get|Set methods
-		public NSApplicationActivationPolicy ActivationPolicy { 
-			get { return GetActivationPolicy (); }
+		public NSApplicationActivationPolicy ActivationPolicy
+		{
+			get { return GetActivationPolicy(); }
 			// ignore return value (bool)
-			set { SetActivationPolicy (value); }
+			set { SetActivationPolicy(value); }
 		}
 	}
 }
