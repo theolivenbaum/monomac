@@ -84,15 +84,12 @@ namespace MonoMac.CoreGraphics {
 			handle = CGPathCreateMutable ();
 		}
 
-#if !MONOMAC
-		[Since (5,0)]
 		public CGPath (CGPath reference, CGAffineTransform transform)
 		{
 			if (reference == null)
 				throw new ArgumentNullException ("reference");
 			handle = CGPathCreateMutableCopyByTransformingPath (reference.Handle, ref transform);
 		}
-#endif
 	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateMutableCopy(IntPtr path);
@@ -356,15 +353,9 @@ namespace MonoMac.CoreGraphics {
 			CGPathAddEllipseInRect (handle, ref m, rect);
 		}
 		
-		[Obsolete ("Use AddEllipseInRect instead")]
-		public void AddElipseInRect (CGAffineTransform m, CGRect rect)
-		{
-			AddEllipseInRect (m, rect);
-		}
-		
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPathAddEllipseInRect(IntPtr path, IntPtr zero, CGRect rect);
-		public void AddElipseInRect (CGRect rect)
+		public void AddEllipseInRect (CGRect rect)
 		{
 			CGPathAddEllipseInRect (handle, IntPtr.Zero, rect);
 		}
@@ -538,11 +529,9 @@ namespace MonoMac.CoreGraphics {
 			return new CGPath (mutable, true);
 		}
 
-#if !MONOMAC
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateCopyByDashingPath (IntPtr handle, ref CGAffineTransform transform, nfloat [] phase, IntPtr count);
 
-		[Since(5,0)]
 		public CGPath CopyByDashingPath (CGAffineTransform transform, nfloat [] phase)
 		{
 			return MakeMutable (CGPathCreateCopyByDashingPath (handle, ref transform, phase, phase == null ? IntPtr.Zero : new IntPtr(phase.Length)));
@@ -551,7 +540,6 @@ namespace MonoMac.CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateCopyByDashingPath (IntPtr handle, IntPtr transform, nfloat [] phase, IntPtr count);
 
-		[Since(5,0)]
 		public CGPath CopyByDashingPath (nfloat [] phase)
 		{
 			return MakeMutable (CGPathCreateCopyByDashingPath (handle, IntPtr.Zero, phase, phase == null ? IntPtr.Zero : new IntPtr(phase.Length)));
@@ -560,7 +548,6 @@ namespace MonoMac.CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateCopyByStrokingPath (IntPtr handle, ref CGAffineTransform transform, nfloat lineWidth, CGLineCap lineCap, CGLineJoin lineJoin, nfloat miterLimit);
 
-		[Since(5,0)]
 		public CGPath CopyByStrokingPath (CGAffineTransform transform, nfloat lineWidth, CGLineCap lineCap, CGLineJoin lineJoin, nfloat miterLimit)
 		{
 			return MakeMutable (CGPathCreateCopyByStrokingPath (handle, ref transform, lineWidth, lineCap, lineJoin, miterLimit));
@@ -569,7 +556,6 @@ namespace MonoMac.CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateCopyByStrokingPath (IntPtr handle, IntPtr zero, nfloat lineWidth, CGLineCap lineCap, CGLineJoin lineJoin, nfloat miterLimit);
 
-		[Since(5,0)]
 		public CGPath CopyByStrokingPath (nfloat lineWidth, CGLineCap lineCap, CGLineJoin lineJoin, nfloat miterLimit)
 		{
 			return MakeMutable (CGPathCreateCopyByStrokingPath (handle, IntPtr.Zero, lineWidth, lineCap, lineJoin, miterLimit));
@@ -581,7 +567,6 @@ namespace MonoMac.CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static IntPtr CGPathCreateWithEllipseInRect (CGRect boundingRect, ref CGAffineTransform transform);
 
-		[Since (5,0)]
 		static public CGPath EllipseFromRect (CGRect boundingRect, CGAffineTransform transform)
 		{
 			return MakeMutable (CGPathCreateWithEllipseInRect (boundingRect, ref transform));
@@ -598,11 +583,9 @@ namespace MonoMac.CoreGraphics {
 			return MakeMutable (CGPathCreateWithRect (rectangle, ref transform));
 		}
 
-		[Since (5,0)]
 		static public CGPath FromRect (CGRect rectangle)
 		{
 			return MakeMutable (CGPathCreateWithRect (rectangle, IntPtr.Zero));
 		}
-#endif
 	}
 }
