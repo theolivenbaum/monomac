@@ -16537,4 +16537,26 @@ namespace MonoMac.AppKit {
 		bool ValidateUserInterfaceItem (NSObject item);
 	}
 
+	partial interface NSResponder {
+		[Export ("wantsScrollEventsForSwipeTrackingOnAxis:")]
+		bool WantsScrollEventsForSwipeTrackingOnAxis (NSEventGestureAxis axis);
+
+		[Export ("supplementalTargetForAction:sender:")]
+		NSObject SupplementalTargetForAction (Selector action, [NullAllowed] NSObject sender);
+
+		[Export ("smartMagnifyWithEvent:")]
+		void SmartMagnify (NSEvent withEvent);
+
+		[Export ("quickLookWithEvent:")]
+		void QuickLook (NSEvent withEvent);
+
+		// From  NSControlEditingSupport category. Needs to be here to make the API easier to be used. issue 4837
+		[Export ("validateProposedFirstResponder:forEvent:")]
+		bool ValidateProposedFirstResponder (NSResponder responder, [NullAllowed] NSEvent forEvent);
+
+		[Mac (10,15)]
+		[Export ("changeModeWithEvent:")]
+		void ChangeMode (NSEvent withEvent);
+	}
+
 }
