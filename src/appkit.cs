@@ -313,10 +313,27 @@ namespace MonoMac.AppKit {
 		[ProbePresence, Export ("NSApplicationLaunchUserNotificationKey")]
 		bool IsLaunchFromUserNotification { get; }
 	}
+	
+	[Mac (10,9)]
+	// [NoMacCatalyst]
+	[Protocol, Model]
+	[BaseType (typeof (NSObject))]
+	public interface NSAppearanceCustomization {
+
+		[Mac (10,9)]
+		[NullAllowed]
+		[Export ("appearance", ArgumentSemantic.Strong)]
+		NSAppearance Appearance { get; set; }
+
+		[Mac (10,9)]
+		[Export ("effectiveAppearance", ArgumentSemantic.Strong)]
+		NSAppearance EffectiveAppearance { get; }
+	}
+	
 
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSApplicationDelegate) })]
 	[DisableDefaultCtor] // An uncaught exception was raised: Creating more than one Application
-	public interface NSApplication : NSWindowRestoration {
+	public interface NSApplication : NSWindowRestoration, NSAppearanceCustomization {
 		[Export ("sharedApplication"), Static, ThreadSafe]
 		NSApplication SharedApplication { get; }
 	
@@ -5983,7 +6000,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSObject))]
 	[Dispose ("__mt_items_var = null;")]
-	public partial interface NSMenu {
+	public partial interface NSMenu : NSAppearanceCustomization {
 		[Export ("initWithTitle:")]
 		IntPtr Constructor (string aTitle);
 
@@ -8942,9 +8959,9 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSResponder))]
-	interface NSPopover {
-		[Export ("appearance")]
-		NSPopoverAppearance Appearance { get; set;  }
+	interface NSPopover : NSAppearanceCustomization {
+		// [Export ("appearance")]
+		// new NSPopoverAppearance Appearance { get; set;  }
 
 		[Export ("behavior")]
 		NSPopoverBehavior Behavior { get; set;  }
@@ -11320,7 +11337,7 @@ namespace MonoMac.AppKit {
 	//64 bit reviewed
 	[BaseType (typeof (NSResponder))]
 	[Dispose ("__mt_tracking_var = null;")]
-	public partial interface NSView : NSDraggingDestination, NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification  {
+	public partial interface NSView : NSDraggingDestination, NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification, NSAppearanceCustomization  {
 		[Export ("initWithFrame:")]
 		IntPtr Constructor (CGRect frameRect);
 
@@ -14729,7 +14746,7 @@ namespace MonoMac.AppKit {
 	
 	//64 bit reviewed
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSWindowDelegate)})]
-	public partial interface NSWindow : NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification {
+	public partial interface NSWindow : NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification, NSAppearanceCustomization {
 		[Static, Export ("frameRectForContentRect:styleMask:")]
 		CGRect FrameRectFor (CGRect contectRect, NSWindowStyle styleMask);
 	
@@ -15511,13 +15528,13 @@ namespace MonoMac.AppKit {
 
 #endif
 
-		[Mavericks]
-		[Export ("effectiveAppearance")]
-		NSAppearance EffectiveAppearance { get; }
+		// [Mavericks]
+		// [Export ("effectiveAppearance")]
+		// NSAppearance EffectiveAppearance { get; }
 		
-		[Mavericks]
-		[Export ("appearance")]
-		NSAppearance Appearance { get; [Export ("setAppearance:")] set; }
+		// [Mavericks]
+		// [Export ("appearance")]
+		// NSAppearance Appearance { get; [Export ("setAppearance:")] set; }
 	}
 
 	public delegate void NSWindowCompletionHandler (NSWindow window, NSError error);
@@ -16526,6 +16543,40 @@ namespace MonoMac.AppKit {
 	
 		[Export ("allowsVibrancy")]
 		bool AllowsVibrancy { get; }
+		
+		[Mac (10, 14)]
+		[Field ("NSAppearanceNameDarkAqua")]
+		NSString NameDarkAqua { get; }
+		
+		[Mac (10, 14)]
+		[Field ("NSAppearanceNameAccessibilityHighContrastAqua")]
+		NSString NameAccessibilityHighContrastAqua { get; }
+
+		[Mac (10, 14)]
+		[Field ("NSAppearanceNameAccessibilityHighContrastDarkAqua")]
+		NSString NameAccessibilityHighContrastDarkAqua { get; }
+
+		[Mac (10, 14)]
+		[Field ("NSAppearanceNameAccessibilityHighContrastVibrantLight")]
+		NSString NameAccessibilityHighContrastVibrantLight { get; }
+
+		[Mac (10, 14)]
+		[Field ("NSAppearanceNameAccessibilityHighContrastVibrantDark")]
+		NSString NameAccessibilityHighContrastVibrantDark { get; }
+
+		[Mac (10,14)]
+		[Export ("bestMatchFromAppearancesWithNames:")]
+		[return: NullAllowed]
+		string FindBestMatch (string[] appearances);
+		
+		[Mac (11, 0)]
+		[Static]
+		[Export ("currentDrawingAppearance", ArgumentSemantic.Strong)]
+		NSAppearance CurrentDrawingAppearance { get; }
+
+		[Mac (11,0)]
+		[Export ("performAsCurrentDrawingAppearance:")]
+		void PerformAsCurrentDrawingAppearance (Action receiver);
 	}
 
 	[Protocol]
