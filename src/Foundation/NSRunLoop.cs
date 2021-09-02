@@ -23,21 +23,6 @@ using System;
 using System.Runtime.InteropServices;
 
 namespace MonoMac.Foundation {
-	public enum NSRunLoopMode {
-		Default,
-		Common,
-#if MONOMAC
-		ConnectionReply = 2,
-		ModalPanel,
-		EventTracking,
-#else
-		// iOS-specific Enums start in 100 to avoid conflicting with future extensions to MonoMac
-		UITracking = 100,
-#endif
-
-		// If it is not part of these enumerations
-		Other = 1000
-	}
 	
 	public partial class NSRunLoop {
 		static NSString GetRealMode (string mode)
@@ -54,7 +39,7 @@ namespace MonoMac.Foundation {
 				return new NSString (mode);
 		}
 
-		static NSString FromEnum (NSRunLoopMode mode)
+		internal static NSString FromEnum (NSRunLoopMode mode)
 		{
 			switch (mode){
 			case NSRunLoopMode.Common:

@@ -381,7 +381,7 @@ namespace MonoMac.AppKit {
 		EventRotate           = (uint)1 << (int)NSEventType.Rotate,
 		EventBeginGesture     = (uint)1 << (int)NSEventType.BeginGesture,
 		EventEndGesture       = (uint)1 << (int)NSEventType.EndGesture,
-		AnyEvent              = UInt32.MaxValue
+		AnyEvent              = UInt64.MaxValue
 	}
 
 	[Flags]

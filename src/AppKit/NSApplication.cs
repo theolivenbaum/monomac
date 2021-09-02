@@ -122,12 +122,6 @@ namespace MonoMac.AppKit
 				throw new AppKitThreadAccessException();
 		}
 
-		// NSEventMask is a superset (64 bits) of the mask that can be used (32 bits)
-		// NSEventMaskFromType is often used to convert from NSEventType to the mask
-		public NSEvent NextEvent(NSEventMask mask, NSDate expiration, string mode, bool deqFlag)
-		{
-			return NextEvent((uint)mask, expiration, mode, deqFlag);
-		}
 
 		public void DiscardEvents(NSEventMask mask, NSEvent lastEvent)
 		{
