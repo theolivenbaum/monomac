@@ -419,8 +419,16 @@ public class BindingTouch
 
 		var si = new ProcessStartInfo(compiler, cargs.ToString())
 		{
-			UseShellExecute = false
+			UseShellExecute = false,
 		};
+		if (si.Environment.ContainsKey("MSBUILD_EXE_PATH"))
+			si.Environment.Remove("MSBUILD_EXE_PATH");
+
+		//foreach (var env in si.Environment)
+		//{
+		//	Console.WriteLine($"{env.Key}={env.Value}");
+		//}
+
 
 		if (verbose)
 			Console.WriteLine("{0} {1}", si.FileName, si.Arguments);
