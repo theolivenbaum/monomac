@@ -14,10 +14,10 @@ namespace MonoMac.CoreAnimation {
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CATransform3D {
-		public float m11, m12, m13, m14;
-		public float m21, m22, m23, m24;
-		public float m31, m32, m33, m34;
-		public float m41, m42, m43, m44;
+		public double m11, m12, m13, m14;
+		public double m21, m22, m23, m24;
+		public double m31, m32, m33, m34;
+		public double m41, m42, m43, m44;
 
 		static public readonly CATransform3D Identity;
 
@@ -58,7 +58,7 @@ namespace MonoMac.CoreAnimation {
 		{
 			unsafe {
 				int code = (int) m11;
-				fixed (float *fp = &m11){
+				fixed (double *fp = &m11){
 					int *ip = (int *) fp;
 					for (int i = 1; i < 16; i++){
 						code = code ^ ip [i];
@@ -70,8 +70,8 @@ namespace MonoMac.CoreAnimation {
 
 		// Transform matrix =  [1 0 0 0; 0 1 0 0; 0 0 1 0; tx ty tz 1]
 		//[DllImport(Constants.QuartzLibrary)]
-		//extern static CATransform3D CATransform3DMakeTranslation (float tx, float ty, float tz);
-		public static CATransform3D MakeTranslation (float tx, float ty, float tz)
+		//extern static CATransform3D CATransform3DMakeTranslation (double tx, double ty, double tz);
+		public static CATransform3D MakeTranslation (double tx, double ty, double tz)
 		{
 			//return CATransform3DMakeTranslation (tx, ty, tz);
 			CATransform3D r = Identity;
@@ -84,8 +84,8 @@ namespace MonoMac.CoreAnimation {
 
 		// Scales matrix = [sx 0 0 0; 0 sy 0 0; 0 0 sz 0; 0 0 0 1]
 		//[DllImport(Constants.QuartzLibrary)]
-		//extern static CATransform3D CATransform3DMakeScale (float sx, float sy, float sz);
-		public static CATransform3D MakeScale (float sx, float sy, float sz)
+		//extern static CATransform3D CATransform3DMakeScale (double sx, double sy, double sz);
+		public static CATransform3D MakeScale (double sx, double sy, double sz)
 		{
 			CATransform3D r = Identity;
 			r.m11 = sx;
@@ -96,29 +96,29 @@ namespace MonoMac.CoreAnimation {
 		}
 		
 		[DllImport(Constants.QuartzLibrary, EntryPoint="CATransform3DMakeRotation")]
-		public extern static CATransform3D MakeRotation (float angle, float x, float y, float z);
+		public extern static CATransform3D MakeRotation (double angle, double x, double y, double z);
 
 		[DllImport(Constants.QuartzLibrary)]
-		extern static CATransform3D CATransform3DTranslate (CATransform3D t, float tx, float ty, float tz);
-		public CATransform3D Translate (float tx, float ty, float tz)
+		extern static CATransform3D CATransform3DTranslate (CATransform3D t, double tx, double ty, double tz);
+		public CATransform3D Translate (double tx, double ty, double tz)
 		{
 			return CATransform3DTranslate (this, tx, ty, tz);
 		}
 		
 		[DllImport(Constants.QuartzLibrary)]
-		extern static CATransform3D CATransform3DScale (CATransform3D t, float sx, float sy, float sz);
-		public CATransform3D Scale (float sx, float sy, float sz)
+		extern static CATransform3D CATransform3DScale (CATransform3D t, double sx, double sy, double sz);
+		public CATransform3D Scale (double sx, double sy, double sz)
 		{
 			return CATransform3DScale (this, sx, sy, sz);
 		}
-		public CATransform3D Scale (float s)
+		public CATransform3D Scale (double s)
 		{
 			return CATransform3DScale (this, s, s, s);
 		}
 		
 		[DllImport(Constants.QuartzLibrary)]
-		extern static CATransform3D CATransform3DRotate (CATransform3D t, float angle, float x, float y, float z);
-		public CATransform3D Rotate (float angle, float x, float y, float z)
+		extern static CATransform3D CATransform3DRotate (CATransform3D t, double angle, double x, double y, double z);
+		public CATransform3D Rotate (double angle, double x, double y, double z)
 		{
 			return CATransform3DRotate (this, angle, x, y, z);
 		}

@@ -467,6 +467,7 @@ namespace MonoMac.Foundation  {
 		None, PrecisionLoss, Underflow, Overflow, DivideByZero
 	}
 	
+	[Flags]
 	public enum NSStringDrawingOptions : nuint {
 		UsesLineFragmentOrigin = (1 << 0),
 		UsesFontLeading = (1 << 1),
