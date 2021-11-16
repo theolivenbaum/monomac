@@ -9,6 +9,7 @@
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
     <BaseDefines Condition="$(BaseDefines) == ''">MONOMAC;MAC64;SDCONVERT</BaseDefines>
     <IsPackable>False</IsPackable>
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
  
   <PropertyGroup>
