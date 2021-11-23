@@ -32,7 +32,7 @@ steps:
     targetType: 'inline'
     workingDirectory: $(Build.SourcesDirectory)
     script: |
-        msbuild MonoMac.sln /t:Restore
+        dotnet restore MonoMac.sln
 
 
 - task: Bash@3
@@ -41,7 +41,7 @@ steps:
     targetType: 'inline'
     workingDirectory: $(Build.SourcesDirectory)
     script: |
-        msbuild MonoMac.sln /t:Build /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+        dotnet build $(Build.SourcesDirectory)/src/MonoMac.csproj /t:Build /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
 
 - task: CmdLine@2
   displayName: 'list build output'
@@ -55,7 +55,7 @@ steps:
     targetType: 'inline'
     workingDirectory: $(Build.SourcesDirectory)
     script: |
-        msbuild -t:pack $(Build.SourcesDirectory)/src/MonoMac.csproj /t:Build /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+        dotnet pack $(Build.SourcesDirectory)/src/MonoMac.csproj /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
 
 - task: CmdLine@2
   displayName: 'list pack output'
