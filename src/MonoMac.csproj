@@ -7,7 +7,15 @@
     <EnableDefaultItems>False</EnableDefaultItems>
     <GeneratedOutputDir Condition="$(GeneratedOutputDir) == ''">$(ArtifactsDir)generated\$(Platform)\</GeneratedOutputDir>
   </PropertyGroup>
-  <PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>MonoMac.Core</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Geoff Norton, Miguel de Icaza, Jonathan Pryor, Michael Hutchinson et al</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DefineConstants>$(BaseDefines)</DefineConstants>
     <NoWarn>3021,0219,0414,114,108,612,618,4014</NoWarn>

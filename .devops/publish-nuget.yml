@@ -1,0 +1,76 @@
+pool:
+  vmImage: 'macOS-latest'
+
+trigger: 
+  branches:
+    include:
+    - master
+
+steps:
+
+- checkout: self
+  submodules: true
+  fetchDepth: 10
+
+- script: |
+    echo "Commit message: $(Build.SourceVersionMessage)"
+
+
+- task: NuGetToolInstaller@1
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 6.0 SDK'
+  inputs:
+    packageType: sdk
+    version: 6.0.100
+    includePreviewVersions: true
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: Bash@3
+  displayName: 'restore solution'
+  inputs:
+    targetType: 'inline'
+    workingDirectory: $(Build.SourcesDirectory)
+    script: |
+        msbuild MonoMac.sln /t:Restore
+
+
+- task: Bash@3
+  displayName: 'build solution'
+  inputs:
+    targetType: 'inline'
+    workingDirectory: $(Build.SourcesDirectory)
+    script: |
+        msbuild MonoMac.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:Platform=x64 /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+
+- task: CmdLine@2
+  displayName: 'list build output'
+  inputs:
+    script: |
+      ls -hR  $(Build.SourcesDirectory)
+
+- task: Bash@3
+  displayName: 'pack MonoMac'
+  inputs:
+    targetType: 'inline'
+    workingDirectory: $(Build.SourcesDirectory)
+    script: |
+        msbuild -t:pack $(Build.SourcesDirectory)/src/MonoMac.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+
+- task: CmdLine@2
+  displayName: 'list pack output'
+  inputs:
+    script: |
+      ls -hR  $(Build.SourcesDirectory)
+
+
+- task: NuGetCommand@2
+  displayName: 'push package to nuget'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/MonoMac.Core.0.0.$(build.buildId).nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'nuget-curiosity'
+
+
+    
