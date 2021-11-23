@@ -68,9 +68,6 @@ steps:
   displayName: 'push package to nuget'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/MonoMac.Core.0.0.$(build.buildId).nupkg'
+    packagesToPush: '$(Build.SourcesDirectory)/src/../artifacts/bin/Release/MonoMac.Core.0.0.$(build.buildId).nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'nuget-curiosity'
-
-
-    
