@@ -41,7 +41,7 @@ steps:
     targetType: 'inline'
     workingDirectory: $(Build.SourcesDirectory)
     script: |
-        msbuild MonoMac.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:Platform=x64 /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+        msbuild MonoMac.sln /t:Build /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
 
 - task: CmdLine@2
   displayName: 'list build output'
@@ -55,7 +55,7 @@ steps:
     targetType: 'inline'
     workingDirectory: $(Build.SourcesDirectory)
     script: |
-        msbuild -t:pack $(Build.SourcesDirectory)/src/MonoMac.csproj /t:Build /p:Configuration=Release /p:Platform=x64 /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
+        msbuild -t:pack $(Build.SourcesDirectory)/src/MonoMac.csproj /t:Build /p:Configuration=Release /p:Platform=AnyCPU /p:Version="0.0.$(build.buildId)" /p:AssemblyVersion="0.0.$(build.buildId)"
 
 - task: CmdLine@2
   displayName: 'list pack output'
